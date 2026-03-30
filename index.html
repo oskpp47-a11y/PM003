@@ -3350,6 +3350,7 @@ if('serviceWorker' in navigator){
 
 /* ── Imprimir ficha ── */
 function printRecord(id){
+  if(typeof requirePerm==='function'&&!requirePerm('printRecord','Imprimir registros requiere una cuenta')) return;
   const r=R.find(x=>x.id===id);if(!r)return;
   const p=P[r.tipo]||{ico:'📋',lbl:r.tipo,clr:'#6b85ad'};
   const win=window.open('','_blank','width=440,height=640');
@@ -3421,6 +3422,7 @@ function printRecord(id){
 
 /* ── Compartir registro ── */
 function shareRecord(id){
+  if(typeof requirePerm==='function'&&!requirePerm('shareRecord','Compartir registros requiere una cuenta')) return;
   const r=R.find(x=>x.id===id);if(!r)return;
   const p=P[r.tipo]||{lbl:r.tipo};
   const txt=`📋 *${r.nombre}*\n🆔 ${r.folio} | ${p.lbl} | ${r.estatus}\n📞 ${r.tel||'Sin tel.'}\n🏠 ${[r.dom,r.num,r.col].filter(Boolean).join(', ')||'Sin domicilio'}${r.seccion?'\n📍 Sec: '+r.seccion:''}${r.area?' · Área: '+r.area:''}${r.ruta?' · Ruta: '+r.ruta:''}`;
@@ -3668,6 +3670,16 @@ document.getElementById('appear-btn').addEventListener('click',function(e){
 const TABS=['inicio','registros','buscar','visitas','estadisticas','descargar','importar','secciones','historial','accesos','general'];
 let curTab='inicio';
 function go(tab){
+  // Permission check for restricted tabs
+  if(typeof can==='function'){
+    const _tabPerms={'accesos':'viewAccessLog','importar':'importData','descargar':'exportData','historial':'editRecord'};
+    const _perm=_tabPerms[tab];
+    if(_perm&&!can(_perm)){
+      const _msgs={'accesos':'La bitácora es solo para el administrador','importar':'Importar requiere una cuenta','descargar':'Exportar requiere una cuenta','historial':'El historial requiere una cuenta'};
+      if(typeof _showGuestUpgrade==='function')_showGuestUpgrade(_msgs[tab]||'Esta sección requiere una cuenta');
+      return;
+    }
+  }
   curTab=tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.getAttribute('onclick')==="go('"+tab+"')"));
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
@@ -4126,6 +4138,7 @@ function removePhoto(e){
 
 /* ===== BACKUP / RESTORE ===== */
 function dlBackupJSON(){
+  if(typeof requirePerm==='function'&&!requirePerm('backupData','Crear respaldo requiere una cuenta')) return;
   const backup={version:'v12',fecha:nowStr(),registros:R,historial:H,visitas:V,eventos:E};
   const json=JSON.stringify(backup,null,2);
   const blob=new Blob([json],{type:'application/json'});
@@ -4152,6 +4165,7 @@ function handleRestore(e){
 }
 let editId=null;
 function openShAdd(){
+  if(typeof requirePerm==='function'&&!requirePerm('addRecord','Agregar registros requiere una cuenta')) return;
   editId=null;
   currentPhoto=null;
   document.getElementById('photo-btn').innerHTML='<span>📷</span><span>Tomar foto o elegir de galería</span>';
@@ -4243,6 +4257,7 @@ function openEditSh(id){
   setTimeout(()=>openSheet('sh-add'),200);
 }
 function doSaveRec(){
+  if(typeof requirePerm==='function'&&!requirePerm('editRecord','Guardar registros requiere una cuenta')) return;
   const folio=document.getElementById('e-folio').value.trim().toUpperCase();
   const tipo=document.getElementById('e-tipo').value;
   const nombre=document.getElementById('e-nombre').value.trim().toUpperCase();
@@ -4486,6 +4501,7 @@ function conf2(t,m,fn,btnTxt='Eliminar'){
 function closeConf(){document.getElementById('conf').classList.remove('on');pendAct=null;}
 document.getElementById('conf-ok').addEventListener('click',function(){if(pendAct){pendAct();closeConf();}});
 function confDel(id){
+  if(typeof requirePerm==='function'&&!requirePerm('deleteRecord','Eliminar registros requiere una cuenta')) return;
   const r=R.find(x=>x.id===id);
   conf2('Eliminar beneficiario',`¿Eliminar a "${r?.nombre}"? No se puede deshacer.`,()=>{
     H.push({id:Date.now(),folio:r.folio,nombre:r.nombre,cambios:'Registro eliminado',motivo:'—',resp:'Usuario',fecha:nowStr(),tipo:'del'});svH();
@@ -4961,7 +4977,9 @@ function renderDL(){
 const COLS=['ID','Folio','Nombre','Programa','Teléfono','Domicilio','Número','Colonia','Sección','Área','Ruta','CURP','F.Nac','Visita','Uso','Estatus','Fecha','Ult.Edición','Obs.','Duplicado'];
 const rowData=r=>[r.id,r.folio,r.nombre,r.tipo,r.tel||'',r.dom||'',r.num||'',r.col||'',r.seccion||'',r.area||'',r.ruta||'',r.curp||'',r.fnac||'',r.visita,r.uso,r.estatus,r.fecha||'',r.ult||'',r.obs||'',r.dup?'SI':'NO'];
 function dlFile(name,url,isBlob=false){const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);if(isBlob)URL.revokeObjectURL(url);},300);}
-function dlCSV(){const rows=[COLS,...R.map(rowData)];const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');dlFile(`Pensionados_${today()}.csv`,'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));snack('⬇️ CSV descargado','⬇️');}
+function dlCSV(){
+  if(typeof requirePerm==='function'&&!requirePerm('exportData','Exportar datos requiere una cuenta')) return;
+  const rows=[COLS,...R.map(rowData)];const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');dlFile(`Pensionados_${today()}.csv`,'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));snack('⬇️ CSV descargado','⬇️');}
 function dlFilteredCSV(){
   // Get currently filtered records (same logic as renderList)
   const fl=R.filter(r=>{
@@ -4984,6 +5002,7 @@ function dlFilteredCSV(){
 function dlHistCSV(){const rows=[['ID','Folio','Nombre','Cambios','Motivo','Resp.','Fecha'],...H.map(h=>[h.id,h.folio,h.nombre,h.cambios,h.motivo,h.resp,h.fecha])];const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');dlFile(`Historial_${today()}.csv`,'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));snack('⬇️ Historial descargado','⬇️');}
 function dlVisCSV(){const rows=[['ID','Título','Fecha','Hora','Resp.','Beneficiarios','Notas'],...V.map(v=>[v.id,v.title,v.date,v.time,v.resp,v.people.map(p=>p.nombre).join('|'),v.notes||''])];const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');dlFile(`Visitas_${today()}.csv`,'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));snack('⬇️ Visitas descargado','⬇️');}
 function dlXLSX(){
+  if(typeof requirePerm==='function'&&!requirePerm('exportData','Exportar datos requiere una cuenta')) return;
   const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const L='ABCDEFGHIJKLMNO';
   const rows=[COLS,...R.map(rowData)];
@@ -5787,6 +5806,10 @@ function doSaveAndNew(){
 let _activeInlineId=null,_activeInlineField=null;
 
 function detSetField(id,field,val){
+  if(typeof requirePerm==='function'){
+    if(field==='visita'&&!requirePerm('markVisit','Marcar visitas requiere una cuenta')) return;
+    if(field!=='visita'&&!requirePerm('editRecord','Editar campos requiere una cuenta')) return;
+  }
   const r=R.find(x=>x.id===id);if(!r)return;
   const prev=r[field];
   r[field]=val;r.ult=nowStr();
@@ -5799,6 +5822,7 @@ function detSetField(id,field,val){
 }
 
 function inlineEdit(id,field,currentVal,inputType,placeholder){
+  if(typeof requirePerm==='function'&&!requirePerm('editInline','Editar campos requiere una cuenta')) return;
   const r=R.find(x=>x.id===id);if(!r)return;
   // If same field already editing, cancel
   if(_activeInlineId===id&&_activeInlineField===field){_cancelInline(id,field,currentVal);return;}
@@ -6456,103 +6480,8 @@ function _showGuestUpgrade(msg){
   );
 }
 
-/* ── Override all restricted functions ── */
-
-// Add record
-const _origOpenShAdd=window.openShAdd;
-function openShAdd(){
-  if(!requirePerm('addRecord','Agregar registros requiere una cuenta')) return;
-  _origOpenShAdd();
-}
-
-// Delete record
-const _origConfDel=window.confDel;
-function confDel(id){
-  if(!requirePerm('deleteRecord','Eliminar registros requiere una cuenta')) return;
-  _origConfDel(id);
-}
-
-// Export functions
-const _origDlCSV=window.dlCSV;
-function dlCSV(){
-  if(!requirePerm('exportData','Exportar datos requiere una cuenta')) return;
-  _origDlCSV();
-}
-const _origDlXLSX=window.dlXLSX;
-function dlXLSX(){
-  if(!requirePerm('exportData','Exportar datos requiere una cuenta')) return;
-  _origDlXLSX();
-}
-const _origDlBackupJSON=window.dlBackupJSON;
-function dlBackupJSON(){
-  if(!requirePerm('backupData','Crear respaldo requiere una cuenta')) return;
-  _origDlBackupJSON();
-}
-
-// Save record
-const _origDoSaveRec=window.doSaveRec;
-function doSaveRec(){
-  if(!requirePerm('editRecord','Guardar registros requiere una cuenta')) return;
-  _origDoSaveRec();
-}
-
-// Inline edit
-const _origInlineEdit=window.inlineEdit;
-function inlineEdit(id,field,...args){
-  if(!requirePerm('editInline','Editar campos requiere una cuenta')) return;
-  _origInlineEdit(id,field,...args);
-}
-const _origInlineEditSelect=window.inlineEditSelect;
-function inlineEditSelect(id,field,...args){
-  if(!requirePerm('editInline','Editar campos requiere una cuenta')) return;
-  _origInlineEditSelect(id,field,...args);
-}
-
-// detSetField (quick visit/status toggles)
-const _origDetSetField=window.detSetField;
-function detSetField(id,field,...args){
-  if(field==='visita'&&!requirePerm('markVisit','Marcar visitas requiere una cuenta')) return;
-  if(field!=='visita'&&!requirePerm('editRecord','Editar registros requiere una cuenta')) return;
-  _origDetSetField(id,field,...args);
-}
-
-// Print & share
-const _origPrintRecord=window.printRecord;
-function printRecord(id){
-  if(!requirePerm('printRecord','Imprimir registros requiere una cuenta')) return;
-  _origPrintRecord(id);
-}
-const _origShareRecord=window.shareRecord;
-function shareRecord(id){
-  if(!requirePerm('shareRecord','Compartir registros requiere una cuenta')) return;
-  _origShareRecord(id);
-}
-
-// Navigation guard for restricted tabs
-const _origGo=window.go;
-function go(tab){
-  const tabPerms={
-    'accesos':  'viewAccessLog',
-    'importar': 'importData',
-    'descargar':'exportData',
-    'historial':'editRecord',
-  };
-  const perm=tabPerms[tab];
-  if(perm&&!can(perm)){
-    const msgs={
-      'accesos':  'La bitácora de accesos es solo para el administrador',
-      'importar': 'Importar datos requiere una cuenta',
-      'descargar':'Exportar datos requiere una cuenta',
-      'historial':'El historial de cambios requiere una cuenta',
-    };
-    _showGuestUpgrade(msgs[tab]||'Esta sección requiere una cuenta');
-    return;
-  }
-  _origGo(tab);
-}
-
-// applyGuestMode kept as alias for compatibility
-function applyGuestMode(g){ _applyGuestRestrictions(g, false); }
+// applyGuestMode kept as alias
+function applyGuestMode(g){ _applyGuestRestrictions(g,false); }
 
 /* ── LOGOUT ── */
 function doLogout(){
@@ -6585,12 +6514,6 @@ function openUserMenu(){
 /* ── Settings helpers ── */
 function togglePassVis(inputId,btn){const el=document.getElementById(inputId);if(!el)return;const isPass=el.type==='password';el.type=isPass?'text':'password';btn.textContent=isPass?'🙈':'👁';}
 function guestGuard(action){if(isGuest()){snack('🔒 No disponible en modo invitado','🔒');return false;}if(action)action();return true;}
-const _origOpenShAdd=window.openShAdd;function openShAdd(){if(isGuest()){snack('🔒 Modo invitado — solo lectura','🔒');return;}_origOpenShAdd();}
-const _origConfDel=window.confDel;function confDel(id){if(isGuest()){snack('🔒 Modo invitado','🔒');return;}_origConfDel(id);}
-const _origDlCSV=window.dlCSV;function dlCSV(){if(isGuest()){snack('🔒 Modo invitado','🔒');return;}_origDlCSV();}
-const _origDlXLSX=window.dlXLSX;function dlXLSX(){if(isGuest()){snack('🔒 Modo invitado','🔒');return;}_origDlXLSX();}
-const _origDlBackupJSON=window.dlBackupJSON;function dlBackupJSON(){if(isGuest()){snack('🔒 Modo invitado','🔒');return;}_origDlBackupJSON();}
-const _origDoSaveRec=window.doSaveRec;function doSaveRec(){if(isGuest()){snack('🔒 Modo invitado','🔒');return;}_origDoSaveRec();}
 
 /* ── Password strength (for creator + register) ── */
 function _pwStrength(val,wrap,lbl,segs){
@@ -6683,8 +6606,6 @@ function toggleClockMode(){_clockMode=(_clockMode+1)%2;startClock();if(navigator
   const lnk=document.getElementById('creator-setup-link');
   if(lnk)lnk.style.display=hasCreds?'none':'block';
   checkLockout();
-})();
-
 })();
 
 /* ═══════════════════════════════════════════════════
