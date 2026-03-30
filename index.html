@@ -2212,6 +2212,179 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .creator-setup-link{text-align:center;margin-top:14px;font-size:11px;color:var(--mut);}
 .creator-setup-link span{color:var(--sft);cursor:pointer;text-decoration:underline;}
 
+
+/* ══════════════════════════════════════
+   ADMIN PANEL CSS v31
+   ══════════════════════════════════════ */
+
+/* Admin nav button special style */
+.nb-admin{position:relative;}
+.nb-admin .nb-svg{stroke:var(--vio)!important;}
+.nb-admin.on .nb-ico-wrap{background:rgba(139,92,246,.15)!important;}
+.nb-admin.on .nb-svg{stroke:var(--vio)!important;filter:drop-shadow(0 0 6px var(--vio))!important;}
+.nb-admin.on{color:var(--vio)!important;}
+
+/* Pulse dot for admin */
+.nb-dot-pulse{
+  position:absolute;top:0;right:-1px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--vio);border:1.5px solid var(--bg);
+  animation:pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot{
+  0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.4);}
+  50%{box-shadow:0 0 0 5px rgba(139,92,246,0);}
+}
+
+/* Admin tab */
+.tab-admin{color:var(--vio)!important;}
+.tab-admin.on{border-bottom-color:var(--vio)!important;color:var(--vio)!important;}
+
+/* Admin hero */
+.adm-hero{
+  background:linear-gradient(135deg,#3b0764,#7c3aed,#c026d3);
+  border-radius:var(--r);padding:18px 16px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 8px 28px rgba(139,92,246,.35);
+  animation:fu .22s ease;
+}
+.adm-hero-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 20% -10%,rgba(255,255,255,.15),transparent);
+  pointer-events:none;
+}
+.adm-hero-left{display:flex;align-items:center;gap:12px;}
+.adm-crown{font-size:28px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));}
+.adm-hero-title{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.4px;}
+.adm-hero-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;}
+.adm-hero-time{
+  font-size:13px;font-weight:800;color:rgba(255,255,255,.9);
+  font-family:'Fira Code',monospace;text-align:right;
+  background:rgba(0,0,0,.2);border-radius:10px;padding:6px 10px;
+}
+
+/* KPI strip */
+.adm-kpi-strip{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;
+  background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:12px 6px;margin-bottom:16px;align-items:center;
+}
+.adm-kpi{text-align:center;}
+.adm-kpi-n{font-size:20px;font-weight:900;font-family:'Fira Code',monospace;line-height:1;margin-bottom:3px;}
+.adm-kpi-l{font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
+.adm-kpi-sep{width:1px;height:30px;background:var(--b1);}
+
+/* Section label */
+.adm-sec-lbl{
+  font-size:10px;font-weight:800;color:var(--sft);
+  text-transform:uppercase;letter-spacing:.7px;
+  margin:18px 0 7px 4px;
+}
+
+/* Admin card */
+.adm-card{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:var(--r);overflow:hidden;margin-bottom:4px;
+}
+
+/* Admin row */
+.adm-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;cursor:pointer;transition:.15s;min-height:52px;
+  -webkit-tap-highlight-color:transparent;
+}
+.adm-row:active{background:var(--c2);}
+.adm-row-div{height:1px;background:var(--b1);margin-left:54px;}
+.adm-row-ico{
+  width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.adm-row-body{flex:1;min-width:0;}
+.adm-row-t{font-size:13px;font-weight:700;letter-spacing:-.1px;}
+.adm-row-s{font-size:11px;color:var(--sft);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.adm-row-chev{font-size:18px;color:var(--mut);font-weight:300;flex-shrink:0;}
+
+/* User row in admin */
+.adm-user-row{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-bottom:1px solid var(--b1);
+  transition:.15s;
+}
+.adm-user-row:last-child{border-bottom:none;}
+.adm-user-av{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.adm-user-body{flex:1;min-width:0;}
+.adm-user-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.adm-user-meta{font-size:10px;color:var(--sft);font-family:'Fira Code',monospace;}
+.adm-user-badge{
+  font-size:9px;font-weight:800;border-radius:6px;
+  padding:2px 8px;flex-shrink:0;
+}
+.adm-user-badge.creator{background:rgba(139,92,246,.15);color:var(--vio);border:1px solid rgba(139,92,246,.3);}
+.adm-user-badge.user{background:rgba(59,130,246,.12);color:var(--a2);border:1px solid rgba(59,130,246,.2);}
+.adm-user-badge.blocked{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2);}
+.adm-user-actions{display:flex;gap:6px;flex-shrink:0;}
+.adm-ua-btn{
+  padding:5px 10px;border-radius:8px;font-size:10px;font-weight:800;
+  border:1.5px solid var(--b2);background:var(--s2);color:var(--sft);
+  cursor:pointer;transition:.15s;font-family:var(--fnt);
+}
+.adm-ua-btn:active{background:var(--b1);}
+.adm-ua-btn.danger{color:var(--red);border-color:rgba(239,68,68,.3);}
+.adm-ua-btn.warn{color:var(--org);border-color:rgba(249,115,22,.3);}
+
+/* Log item */
+.adm-log-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;border-bottom:1px solid var(--b1);
+}
+.adm-log-item:last-child{border-bottom:none;}
+.adm-log-ico{font-size:16px;flex-shrink:0;}
+.adm-log-body{flex:1;min-width:0;}
+.adm-log-type{font-size:12px;font-weight:700;margin-bottom:1px;}
+.adm-log-meta{font-size:10px;color:var(--mut);font-family:'Fira Code',monospace;}
+.adm-log-ts{font-size:10px;color:var(--sft);flex-shrink:0;text-align:right;}
+
+/* Storage bar */
+.adm-store-row{margin-bottom:10px;}
+.adm-store-label{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;}
+.adm-store-bar-bg{background:var(--b1);border-radius:4px;height:5px;overflow:hidden;}
+.adm-store-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.34,1.1,.64,1);}
+
+/* Outline button */
+.adm-btn-outline{
+  width:100%;padding:11px;margin-bottom:4px;
+  border:1.5px solid var(--b2);border-radius:12px;
+  background:none;color:var(--a2);font-size:13px;font-weight:700;
+  cursor:pointer;transition:.15s;font-family:var(--fnt);
+}
+.adm-btn-outline:active{background:var(--s2);}
+
+/* ── 3 MODE BANNERS ── */
+/* Guest already done, add user banner */
+#user-banner{
+  display:none;
+  background:linear-gradient(90deg,rgba(59,130,246,.1),rgba(99,102,241,.1),rgba(59,130,246,.1));
+  background-size:200% 100%;
+  border-bottom:1px solid rgba(59,130,246,.15);
+  color:var(--a2);font-size:11px;font-weight:700;
+  padding:6px 16px;flex-shrink:0;
+  animation:bannerShimmer 6s linear infinite;
+}
+#user-banner.on{display:flex;align-items:center;justify-content:space-between;}
+
+/* Creator status indicator in header */
+.hdr-creator-badge{
+  display:none;background:linear-gradient(135deg,#7c3aed,#c026d3);
+  color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;
+  border-radius:6px;padding:2px 7px;text-transform:uppercase;
+}
+.hdr-creator-badge.on{display:block;}
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -2554,6 +2727,7 @@ if('serviceWorker' in navigator){
   <button class="tab" onclick="go('historial')">Historial</button>
   <button class="tab" onclick="go('accesos')">🔐 Accesos</button>
   <button class="tab" onclick="go('general')">⚙️ General</button>
+  <button class="tab tab-admin" id="tab-admin" onclick="go('admin')" style="display:none">👑 Admin</button>
 </div>
 <div class="main" id="main">
   <!-- INICIO -->
@@ -3023,6 +3197,112 @@ if('serviceWorker' in navigator){
 
     <div style="height:16px"></div>
   </div><!-- /p-general -->
+
+  <!-- ═══ ADMIN PANEL — Solo visible para el Creador ═══ -->
+  <div class="pg" id="p-admin" style="padding-bottom:calc(var(--nh)+var(--sb)+24px)">
+
+    <!-- Admin hero -->
+    <div class="adm-hero">
+      <div class="adm-hero-glow"></div>
+      <div class="adm-hero-left">
+        <div class="adm-crown">👑</div>
+        <div>
+          <div class="adm-hero-title" id="adm-hero-title">Panel Admin</div>
+          <div class="adm-hero-sub" id="adm-hero-sub">Acceso exclusivo · Creador</div>
+        </div>
+      </div>
+      <div class="adm-hero-time" id="adm-hero-time">—</div>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="adm-kpi-strip">
+      <div class="adm-kpi" id="adm-kpi-total">
+        <div class="adm-kpi-n" id="adm-kpi-n-total">0</div>
+        <div class="adm-kpi-l">Registros</div>
+      </div>
+      <div class="adm-kpi-sep"></div>
+      <div class="adm-kpi" id="adm-kpi-users">
+        <div class="adm-kpi-n" id="adm-kpi-n-users" style="color:var(--a2)">0</div>
+        <div class="adm-kpi-l">Usuarios</div>
+      </div>
+      <div class="adm-kpi-sep"></div>
+      <div class="adm-kpi" id="adm-kpi-vis">
+        <div class="adm-kpi-n" id="adm-kpi-n-vis" style="color:var(--grn)">0</div>
+        <div class="adm-kpi-l">Visitados</div>
+      </div>
+      <div class="adm-kpi-sep"></div>
+      <div class="adm-kpi" id="adm-kpi-log">
+        <div class="adm-kpi-n" id="adm-kpi-n-log" style="color:var(--amb)">0</div>
+        <div class="adm-kpi-l">Accesos</div>
+      </div>
+    </div>
+
+    <!-- ── SECCIÓN: Gestión de usuarios ── -->
+    <div class="adm-sec-lbl">👥 Gestión de usuarios</div>
+    <div class="adm-card" id="adm-users-list">
+      <!-- rendered by JS -->
+    </div>
+
+    <!-- ── SECCIÓN: Bitácora de accesos ── -->
+    <div class="adm-sec-lbl">🔐 Bitácora de accesos recientes</div>
+    <div class="adm-card" id="adm-log-preview">
+      <!-- rendered by JS -->
+    </div>
+    <button class="adm-btn-outline" onclick="go('accesos')">Ver bitácora completa →</button>
+
+    <!-- ── SECCIÓN: Almacenamiento ── -->
+    <div class="adm-sec-lbl">💾 Almacenamiento</div>
+    <div class="adm-card">
+      <div id="adm-storage-content"></div>
+    </div>
+
+    <!-- ── SECCIÓN: Configuración de la app ── -->
+    <div class="adm-sec-lbl">⚙️ Configuración</div>
+    <div class="adm-card">
+      <div class="adm-row" onclick="renderThemeG();openSheet('sh-theme')">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">🎨</div>
+        <div class="adm-row-body"><div class="adm-row-t">Tema de color</div><div class="adm-row-s" id="adm-theme-lbl">Cosmos</div></div>
+        <div class="adm-row-chev">›</div>
+      </div>
+      <div class="adm-row-div"></div>
+      <div class="adm-row" onclick="renderAppearSheet();openSheet('sh-appear')">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#0891b2,#06b6d4)">🔡</div>
+        <div class="adm-row-body"><div class="adm-row-t">Apariencia</div><div class="adm-row-s">Fuente · Acento · Brillo</div></div>
+        <div class="adm-row-chev">›</div>
+      </div>
+      <div class="adm-row-div"></div>
+      <div class="adm-row" onclick="showSlide('as-creator');document.getElementById('auth-screen').style.display='flex'">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">👑</div>
+        <div class="adm-row-body"><div class="adm-row-t">Credenciales de administrador</div><div class="adm-row-s" id="adm-creds-lbl">Cambiar usuario / contraseña</div></div>
+        <div class="adm-row-chev">›</div>
+      </div>
+      <div class="adm-row-div"></div>
+      <div class="adm-row" onclick="go('general')">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#374151,#6b7280)">⚙️</div>
+        <div class="adm-row-body"><div class="adm-row-t">Configuración general</div><div class="adm-row-s">Preferencias · Datos · FAQ</div></div>
+        <div class="adm-row-chev">›</div>
+      </div>
+    </div>
+
+    <!-- ── SECCIÓN: Zona peligrosa ── -->
+    <div class="adm-sec-lbl" style="color:var(--red)">⚠️ Zona peligrosa</div>
+    <div class="adm-card">
+      <div class="adm-row" onclick="admResetAllData()">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#7f1d1d,#b91c1c)">🗑️</div>
+        <div class="adm-row-body"><div class="adm-row-t" style="color:var(--red)">Borrar TODOS los datos</div><div class="adm-row-s">No se puede deshacer</div></div>
+        <div class="adm-row-chev" style="color:var(--red)">›</div>
+      </div>
+      <div class="adm-row-div"></div>
+      <div class="adm-row" onclick="admResetUsers()">
+        <div class="adm-row-ico" style="background:linear-gradient(135deg,#78350f,#c2410c)">👥</div>
+        <div class="adm-row-body"><div class="adm-row-t" style="color:var(--org)">Eliminar todos los usuarios</div><div class="adm-row-s">Mantiene los registros de beneficiarios</div></div>
+        <div class="adm-row-chev" style="color:var(--org)">›</div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div><!-- /p-admin -->
+
 </div>
 <button class="fab" id="fab" onclick="openShAdd()" style="width:auto;border-radius:28px;padding:0 22px;gap:8px;font-size:14px;letter-spacing:-.2px"><span style="font-size:20px;line-height:1">＋</span><span style="font-size:13px;font-weight:800">Agregar</span></button>
 <div class="bnav">
@@ -3080,6 +3360,16 @@ if('serviceWorker' in navigator){
       <div class="nb-dot" id="nb-dot-general"></div>
     </div>
     <span>General</span>
+  </button>
+  <!-- ADMIN NAV — hidden until creator login -->
+  <button class="nb nb-admin" id="nb-admin" onclick="go('admin')" style="display:none">
+    <div class="nb-ico-wrap">
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L3 7l9 5 9-5-9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/>
+      </svg>
+      <div class="nb-dot nb-dot-pulse" id="nb-dot-admin"></div>
+    </div>
+    <span>Admin</span>
   </button>
 </div>
 <div class="modal-bg" id="modal-bg"></div>
@@ -3667,15 +3957,15 @@ document.getElementById('appear-btn').addEventListener('click',function(e){
 });
 
 /* ===== NAVIGATION ===== */
-const TABS=['inicio','registros','buscar','visitas','estadisticas','descargar','importar','secciones','historial','accesos','general'];
+const TABS=['inicio','registros','buscar','visitas','estadisticas','descargar','importar','secciones','historial','accesos','general','admin'];
 let curTab='inicio';
 function go(tab){
   // Permission check for restricted tabs
   if(typeof can==='function'){
-    const _tabPerms={'accesos':'viewAccessLog','importar':'importData','descargar':'exportData','historial':'editRecord'};
+    const _tabPerms={'accesos':'viewAccessLog','importar':'importData','descargar':'exportData','historial':'editRecord','admin':'viewAccessLog'};
     const _perm=_tabPerms[tab];
     if(_perm&&!can(_perm)){
-      const _msgs={'accesos':'La bitácora es solo para el administrador','importar':'Importar requiere una cuenta','descargar':'Exportar requiere una cuenta','historial':'El historial requiere una cuenta'};
+      const _msgs={'accesos':'La bitácora es solo para el administrador','importar':'Importar requiere una cuenta','descargar':'Exportar requiere una cuenta','historial':'El historial requiere una cuenta','admin':'El panel de administración es exclusivo del Creador'};
       if(typeof _showGuestUpgrade==='function')_showGuestUpgrade(_msgs[tab]||'Esta sección requiere una cuenta');
       return;
     }
@@ -3687,7 +3977,7 @@ function go(tab){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   const nb=document.getElementById('nb-'+tab);if(nb)nb.classList.add('on');
   document.getElementById('main').scrollTop=0;
-  const noFab=['estadisticas','descargar','historial','secciones','importar','accesos','general'].includes(tab);
+  const noFab=['estadisticas','descargar','historial','secciones','importar','accesos','general','admin'].includes(tab);
   document.getElementById('fab').style.display=noFab?'none':'flex';
   render(tab);
 }
@@ -3703,6 +3993,7 @@ function render(t){
   if(t==='historial')     renderHist();
   if(t==='accesos')       renderAccessLog();
   if(t==='general')       renderGeneral();
+  if(t==='admin')         renderAdminPanel();
 }
 
 /* ===== RECORD CARD ===== */
@@ -6297,15 +6588,9 @@ function _applySession(){
   const creator=isCreator();
   const dn=authDisplayName||authUsername;
 
-  // ── Banners ──
+  // ── Guest banner ──
   const gb=document.getElementById('guest-banner');
-  const ub=document.getElementById('user-banner');
   if(gb)gb.classList.toggle('on',guest);
-  if(ub){
-    ub.classList.toggle('on',!guest&&!creator);
-    const ubn=document.getElementById('user-banner-name');
-    if(ubn&&!guest)ubn.textContent=dn;
-  }
 
   // ── Header user button ──
   const btn=document.getElementById('hdr-user-btn');
@@ -6404,31 +6689,29 @@ function _applyGuestRestrictions(guest, creator){
   const fab=document.getElementById('fab');
   if(fab)fab.style.display=can('addRecord')?'flex':'none';
 
-  // Export tab opacity
+  // Export nav button
   const nbDl=document.getElementById('nb-descargar');
-  if(nbDl)nbDl.style.opacity=can('exportData')?'':'0.35';
+  if(nbDl){nbDl.style.display=can('exportData')?'':'none';nbDl.style.opacity='';}
 
-  // Hide tabs not available to guest
+  // ── ADMIN TAB — only for creator ──
+  const admTab =document.getElementById('tab-admin');
+  const admNb  =document.getElementById('nb-admin');
+  if(admTab) admTab.style.display=creator?'':'none';
+  if(admNb)  admNb.style.display=creator?'':'none';
+
+  // ── Restrict horizontal tabs ──
   const tabRestrictions = {
-    'accesos': !can('viewAccessLog'),
+    'accesos':  !can('viewAccessLog'),
     'importar': !can('importData'),
-    'historial': !can('editRecord'),
+    'historial':!can('editRecord'),
+    'descargar':!can('exportData'),
   };
   Object.entries(tabRestrictions).forEach(([tabName, shouldHide])=>{
     const t=document.querySelector(`.tab[onclick="go('${tabName}')"]`);
     if(t) t.style.display=shouldHide?'none':'';
   });
 
-  // Hide nav buttons
-  const nbRestrictions = {
-    'nb-descargar': !can('exportData'),
-  };
-  Object.entries(nbRestrictions).forEach(([id, hide])=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display=hide?'none':'';
-  });
-
-  // General tab — guests can see limited version
+  // General tab — all modes can access (guest sees limited)
   const genTab=document.querySelector(`.tab[onclick="go('general')"]`);
   if(genTab) genTab.style.display='';
 
@@ -6438,10 +6721,18 @@ function _applyGuestRestrictions(guest, creator){
     el.style.display=can(perm)?'':'none';
   });
 
-  // Add/remove guest-locked class on bulk actions
+  // Add/remove guest-locked class
   document.querySelectorAll('[data-guest-lock]').forEach(el=>{
     el.classList.toggle('guest-locked',guest);
   });
+
+  // ── Update banners based on role ──
+  const ub=document.getElementById('user-banner');
+  const ubn=document.getElementById('user-banner-name');
+  if(ub){
+    ub.classList.toggle('on',!guest&&!creator);
+    if(ubn&&!guest)ubn.textContent=authDisplayName||authUsername;
+  }
 }
 
 // Show guest upgrade prompt with context
@@ -6607,6 +6898,193 @@ function toggleClockMode(){_clockMode=(_clockMode+1)%2;startClock();if(navigator
   if(lnk)lnk.style.display=hasCreds?'none':'block';
   checkLockout();
 })();
+
+
+/* ════════════════════════════════════════════════════
+   ADMIN PANEL JS v31 — Panel exclusivo del Creador
+   ════════════════════════════════════════════════════ */
+
+function renderAdminPanel(){
+  if(!isCreator()){snack('⛔ Acceso solo para administrador','⛔');go('inicio');return;}
+
+  const users   = getUsers();
+  const log     = getAccessLog();
+  const creds   = getAuthCreds();
+  const vis     = R.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
+  const now     = new Date();
+
+  // ── Hero time ──
+  const te=document.getElementById('adm-hero-time');
+  if(te) te.textContent=now.toLocaleString('es-MX',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  const ts=document.getElementById('adm-hero-sub');
+  if(ts) ts.textContent=`${authDisplayName} · Creador`;
+
+  // ── KPIs ──
+  document.getElementById('adm-kpi-n-total').textContent = R.length;
+  document.getElementById('adm-kpi-n-users').textContent = users.length + 1; // +1 for creator
+  document.getElementById('adm-kpi-n-vis').textContent   = vis;
+  document.getElementById('adm-kpi-n-log').textContent   = log.length;
+
+  // ── Theme label ──
+  const t=THEMES.find(x=>x.id===curTheme);
+  const tl=document.getElementById('adm-theme-lbl');
+  if(tl) tl.textContent=t?.nm||curTheme;
+
+  // ── Credentials label ──
+  const cl=document.getElementById('adm-creds-lbl');
+  if(cl) cl.textContent=creds?`@${creds.user}${creds.email?' · '+creds.email.replace(/(.{2}).+(@)/,'$1…$2'):''}`:' Sin cuenta configurada';
+
+  // ── Users list ──
+  _renderAdminUsers(users, creds);
+
+  // ── Log preview (last 5) ──
+  _renderAdminLog(log.slice(0,5));
+
+  // ── Storage ──
+  _renderAdminStorage();
+}
+
+function _renderAdminUsers(users, creds){
+  const el=document.getElementById('adm-users-list');if(!el)return;
+
+  // Build rows: creator first, then registered users
+  let rows='';
+
+  // Creator row
+  rows+=`<div class="adm-user-row">
+    <div class="adm-user-av" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">👑</div>
+    <div class="adm-user-body">
+      <div class="adm-user-name">${authDisplayName}</div>
+      <div class="adm-user-meta">@${creds?.user||'—'} · ${creds?.email||'Sin email'}</div>
+    </div>
+    <span class="adm-user-badge creator">CREADOR</span>
+  </div>`;
+
+  if(!users.length){
+    rows+=`<div style="padding:16px;text-align:center;font-size:12px;color:var(--mut)">
+      Sin usuarios registrados aún
+    </div>`;
+  } else {
+    users.forEach((u,i)=>{
+      const blocked=u.blocked||false;
+      const lastLogin=u.lastLogin?new Date(u.lastLogin).toLocaleDateString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Nunca';
+      rows+=`<div class="adm-row-div"></div>
+      <div class="adm-user-row">
+        <div class="adm-user-av" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">${(u.name||u.username||'?')[0].toUpperCase()}</div>
+        <div class="adm-user-body">
+          <div class="adm-user-name">${u.name||u.username}</div>
+          <div class="adm-user-meta">@${u.username} · Último: ${lastLogin}</div>
+        </div>
+        <div class="adm-user-actions">
+          <button class="adm-ua-btn ${blocked?'warn':''}" onclick="admToggleBlock(${u.id})">${blocked?'🔓':'🔒'}</button>
+          <button class="adm-ua-btn danger" onclick="admDeleteUser(${u.id})">🗑️</button>
+        </div>
+      </div>`;
+    });
+  }
+
+  el.innerHTML=rows;
+}
+
+function _renderAdminLog(entries){
+  const el=document.getElementById('adm-log-preview');if(!el)return;
+  if(!entries.length){
+    el.innerHTML='<div style="padding:14px;text-align:center;font-size:12px;color:var(--mut)">Sin accesos registrados</div>';
+    return;
+  }
+  const TYPE={login:'✅',register:'🆕',otp_ok:'📧',otp_fail:'⚠️',logout:'🚪',guest:'👻',fail:'❌',lockout:'🔒',creator_setup:'👑'};
+  const CLR={login:'var(--grn)',register:'var(--a2)',otp_ok:'var(--a2)',otp_fail:'var(--amb)',logout:'var(--sft)',guest:'var(--amb)',fail:'var(--red)',lockout:'var(--red)',creator_setup:'var(--vio)'};
+  el.innerHTML=entries.map(e=>`
+    <div class="adm-log-item">
+      <div class="adm-log-ico">${TYPE[e.type]||'ℹ️'}</div>
+      <div class="adm-log-body">
+        <div class="adm-log-type" style="color:${CLR[e.type]||'var(--sft)'}">${e.username||'—'}</div>
+        <div class="adm-log-meta">${e.detail||e.type}</div>
+      </div>
+      <div class="adm-log-ts">${(e.ts||'').split(',')[0]||''}</div>
+    </div>`).join('');
+}
+
+function _renderAdminStorage(){
+  const el=document.getElementById('adm-storage-content');if(!el)return;
+  const keys=[
+    {k:'px_v10_r',    lbl:'📋 Registros',    clr:'var(--a)'},
+    {k:'px_v10_h',    lbl:'📝 Historial',    clr:'var(--ind)'},
+    {k:'px_users_v2', lbl:'👥 Usuarios',     clr:'var(--vio)'},
+    {k:'px_access_log_v1',lbl:'🔐 Accesos',  clr:'var(--red)'},
+    {k:'px_streak',   lbl:'🔥 Racha',        clr:'var(--amb)'},
+  ];
+  let totalKB=0;
+  const bars=keys.map(({k,lbl,clr})=>{
+    const raw=localStorage.getItem(k)||'';
+    const kb=((raw.length*2)/1024).toFixed(2);
+    totalKB+=parseFloat(kb);
+    const pct=Math.min(100,parseFloat(kb)/50*100);
+    return `<div class="adm-store-row">
+      <div class="adm-store-label">
+        <span>${lbl}</span>
+        <span style="font-family:'Fira Code',monospace;color:var(--sft)">${kb} KB</span>
+      </div>
+      <div class="adm-store-bar-bg">
+        <div class="adm-store-bar" style="width:${Math.max(1,pct)}%;background:${clr}"></div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=bars.join('')+`
+    <div style="border-top:1px solid var(--b1);padding-top:10px;margin-top:6px;display:flex;justify-content:space-between;font-size:13px;font-weight:800">
+      <span>Total usado</span>
+      <span style="font-family:'Fira Code',monospace;color:var(--a2)">${totalKB.toFixed(2)} KB / ~5 MB</span>
+    </div>`;
+}
+
+/* ── User management actions ── */
+function admToggleBlock(userId){
+  const users=getUsers();
+  const u=users.find(x=>x.id===userId);if(!u)return;
+  u.blocked=!u.blocked;
+  u.lastModified=Date.now();
+  saveUsers(users);
+  logAccess(u.blocked?'user_blocked':'user_unblocked', authUsername, `${u.blocked?'Bloqueó':'Desbloqueó'}: @${u.username}`);
+  snack(u.blocked?`🔒 @${u.username} bloqueado`:`🔓 @${u.username} desbloqueado`, u.blocked?'🔒':'🔓');
+  renderAdminPanel();
+}
+
+function admDeleteUser(userId){
+  const users=getUsers();
+  const u=users.find(x=>x.id===userId);if(!u)return;
+  conf2('Eliminar usuario',`¿Eliminar la cuenta de <b>${u.name||u.username}</b>?<br><br>Sus datos de beneficiarios no se eliminan.`,()=>{
+    const filtered=users.filter(x=>x.id!==userId);
+    saveUsers(filtered);
+    logAccess('user_deleted', authUsername, `Eliminó: @${u.username}`);
+    snack(`🗑️ @${u.username} eliminado`,'🗑️');
+    renderAdminPanel();
+  }, 'Eliminar');
+}
+
+function admResetAllData(){
+  conf2('⚠️ BORRAR TODO','¿Borrar <b>TODOS</b> los registros, historial y usuarios?<br><br>Tu cuenta de administrador se mantiene.',()=>{
+    const keep=['px_auth_v1','px_emailcfg_v1','px_theme','px_accent','px_accent_grad','px_fz','px_bgbright','px_gen_prefs_v1'];
+    const saved={};
+    keep.forEach(k=>{const v=localStorage.getItem(k);if(v)saved[k]=v;});
+    localStorage.clear();
+    Object.entries(saved).forEach(([k,v])=>localStorage.setItem(k,v));
+    R=[];H=[];V=[];E=[];svR();svH();svV();
+    detectDups();upHdr();
+    logAccess('data_reset',authUsername,'Borró todos los datos');
+    snack('🗑️ Datos borrados','🗑️');
+    renderAdminPanel();renderInicio();
+  },'⚠️ Borrar todo');
+}
+
+function admResetUsers(){
+  conf2('Eliminar usuarios','¿Eliminar <b>todas las cuentas</b> de usuarios registrados?<br><br>Los beneficiarios NO se eliminan.',()=>{
+    saveUsers([]);
+    logAccess('users_reset',authUsername,'Eliminó todos los usuarios registrados');
+    snack('👥 Usuarios eliminados','👥');
+    renderAdminPanel();
+  },'Eliminar usuarios');
+}
+
 
 /* ═══════════════════════════════════════════════════
    GENERAL SECTION v30 — Full Implementation
