@@ -2385,6 +2385,75 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
   border-radius:6px;padding:2px 7px;text-transform:uppercase;
 }
 .hdr-creator-badge.on{display:block;}
+
+/* ═══════════════════════════════
+   DETAIL SHEET NAV BAR v31
+   ═══════════════════════════════ */
+
+/* Sticky top bar inside sh-det */
+.det-nav{
+  position:sticky;top:0;
+  display:flex;align-items:center;
+  padding:10px 4px 10px;
+  background:var(--s1);
+  border-bottom:1px solid var(--b1);
+  margin:0 -16px 14px;
+  padding-left:16px;padding-right:16px;
+  z-index:10;
+  gap:8px;
+}
+
+/* Back button */
+.det-nav-back{
+  display:flex;align-items:center;gap:4px;
+  background:none;border:none;
+  color:var(--a2);font-size:14px;font-weight:700;
+  font-family:var(--fnt);cursor:pointer;
+  padding:6px 10px 6px 6px;border-radius:10px;
+  transition:.15s;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.det-nav-back:active{background:var(--b1);transform:scale(.93);}
+.det-nav-back svg{flex-shrink:0;}
+
+/* Title in center */
+.det-nav-title{
+  flex:1;text-align:center;
+  font-size:14px;font-weight:800;letter-spacing:-.3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  padding:0 8px;color:var(--txt);
+}
+
+/* Close X button */
+.det-nav-close{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--s2);border:1px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.15s;flex-shrink:0;
+  color:var(--sft);
+  -webkit-tap-highlight-color:transparent;
+}
+.det-nav-close:active{background:var(--b1);transform:scale(.88);}
+
+/* Swipe hint on hdl — make it feel native */
+#sh-det .hdl{
+  margin-top:8px;
+  opacity:.6;
+}
+
+/* Entrance animation for the nav bar */
+@keyframes detNavIn{
+  from{opacity:0;transform:translateY(-4px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.det-nav{animation:detNavIn .2s ease both;}
+
+/* Back label — shows tab name */
+.det-nav-back-lbl-wrap{
+  font-size:13px;font-weight:700;
+  max-width:80px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -3507,7 +3576,25 @@ if('serviceWorker' in navigator){
   <button type="button" class="btn btn-s mt8" onclick="closeSheet('sh-add')">Cancelar</button>
 </div>
 <!-- SHEET: DETAIL -->
-<div class="sheet" id="sh-det"><div class="hdl"></div><div id="det-body"></div></div>
+<div class="sheet" id="sh-det">
+  <!-- Sticky nav bar inside the detail sheet -->
+  <div class="det-nav" id="det-nav">
+    <button class="det-nav-back" id="det-nav-back" onclick="closeDet()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      <span id="det-nav-back-lbl">Volver</span>
+    </button>
+    <div class="det-nav-title" id="det-nav-title">Detalle</div>
+    <button class="det-nav-close" onclick="closeDet()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="hdl" style="margin-top:0;opacity:0;height:0;margin-bottom:0"></div>
+  <div id="det-body" style="padding-top:4px"></div>
+</div>
 <!-- SHEET: VISIT -->
 <div class="sheet" id="sh-vis">
   <div class="hdl"></div>
@@ -4629,7 +4716,42 @@ function logCh(r,campo,ant,nuevo,motivo){
 }
 
 /* ===== DETAIL ===== */
+// ── Navigation memory — tracks origin tab and scroll position ──
+let _detOriginTab = 'inicio';
+let _detOriginScroll = 0;
+let _detOriginLabel = 'Inicio';
+
+const TAB_LABELS = {
+  inicio:       'Inicio',
+  registros:    'Lista',
+  buscar:       'Búsqueda',
+  visitas:      'Visitas',
+  estadisticas: 'Stats',
+  descargar:    'Exportar',
+  secciones:    'Secciones',
+  historial:    'Historial',
+  accesos:      'Accesos',
+  general:      'General',
+  admin:        'Admin',
+};
+
+function closeDet(){
+  closeSheet('sh-det');
+  // Restore scroll position after sheet closes
+  setTimeout(()=>{
+    const main=document.getElementById('main');
+    if(main) main.scrollTop=_detOriginScroll;
+  }, 320);
+  if(navigator.vibrate) navigator.vibrate(8);
+}
+
 function openDet(id){
+  // Capture where we came from
+  _detOriginTab    = curTab;
+  _detOriginLabel  = TAB_LABELS[curTab] || 'Volver';
+  const main       = document.getElementById('main');
+  _detOriginScroll = main ? main.scrollTop : 0;
+
   const r=R.find(x=>x.id===id);if(!r)return;
   detectDups();
   const p=pg(r.tipo),sc=SC[r.estatus]||'bdg-def';
@@ -4762,6 +4884,18 @@ function openDet(id){
     ${r.dup?`<button type="button" class="btn btn-d mt8" onclick="confDel(${r.id})">🗑️ Eliminar duplicado</button>`:''}
   `;
   openSheet('sh-det');
+
+  // Update nav bar
+  const navTitle = document.getElementById('det-nav-title');
+  const navBack  = document.getElementById('det-nav-back-lbl');
+  if(navTitle) navTitle.textContent = r.nombre;
+  if(navBack)  navBack.textContent  = _detOriginLabel;
+
+  // Scroll the sheet to top
+  setTimeout(()=>{
+    const sheet=document.getElementById('sh-det');
+    if(sheet) sheet.scrollTop=0;
+  }, 50);
 }
 function togDA(w){document.getElementById('dm-'+w).classList.toggle('on');}
 function setDA(id,field,val,e){
