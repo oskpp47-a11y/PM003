@@ -1,13 +1,17 @@
 {
   "name": "Pensionados MX",
-  "short_name": "Pensionados",
-  "description": "Gestión de beneficiarios v30",
+  "short_name": "PensionadosMX",
+  "description": "Sistema de gestión de beneficiarios de programas sociales",
   "start_url": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#080c14",
-  "theme_color": "#05090f",
+  "theme_color": "#080c14",
   "lang": "es",
+  "categories": [
+    "productivity",
+    "government"
+  ],
   "icons": [
     {
       "src": "icon-192.png",
@@ -21,5 +25,7 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
 }

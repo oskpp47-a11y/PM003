@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -2391,58 +2391,179 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
    Posición: debajo del handle, fácil de tocar
    ═══════════════════════════════════════════════ */
 
-/* Bar container — just below the drag handle */
+/* ── Det nav bar — below handle, easy to reach ── */
 .det-nav{
   display:flex;align-items:center;
-  padding:4px 6px 10px;
+  /* More top padding = bar sits lower, better breathing room */
+  padding:10px 10px 12px 8px;
   border-bottom:1px solid var(--b1);
-  margin:0 -16px 14px;
-  padding-left:8px;padding-right:10px;
-  gap:6px;
+  margin:0 -16px 16px;
+  gap:8px;
   background:var(--s1);
 }
 
-/* ‹ Back button — large tap area, text + chevron */
+/* ‹ Back — generous tap zone matching iOS standards */
 .det-nav-back{
-  display:flex;align-items:center;gap:3px;
+  display:flex;align-items:center;gap:4px;
   background:none;border:none;
   color:var(--a2);
-  font-size:15px;font-weight:700;font-family:var(--fnt);
+  font-size:16px;font-weight:700;font-family:var(--fnt);
   cursor:pointer;
-  /* Big tap target — 44pt minimum per Apple HIG */
-  min-width:80px;min-height:44px;
-  padding:0 12px 0 6px;border-radius:12px;
+  min-width:88px;min-height:44px;
+  padding:0 14px 0 4px;border-radius:12px;
   transition:.15s;flex-shrink:0;
   -webkit-tap-highlight-color:transparent;
-  white-space:nowrap;
+  white-space:nowrap;letter-spacing:-.2px;
 }
-.det-nav-back:active{background:rgba(59,130,246,.12);transform:scale(.95);}
-.det-nav-back svg{flex-shrink:0;margin-right:1px;}
+.det-nav-back:active{background:rgba(59,130,246,.12);transform:scale(.94);}
+.det-nav-back svg{flex-shrink:0;}
 
-/* Name — center, bold, truncated */
+/* Name — center */
 .det-nav-title{
   flex:1;text-align:center;
   font-size:13px;font-weight:800;letter-spacing:-.2px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  padding:0 4px;color:var(--txt);
+  padding:0 6px;color:var(--txt);
 }
 
-/* ✕ Close — circle, 44pt tap target */
+/* ✕ Close — rounded square, easy to tap */
 .det-nav-close{
-  /* Big easy target */
-  width:36px;height:44px;
+  width:36px;height:36px;
   display:flex;align-items:center;justify-content:center;
-  border-radius:12px;
-  background:var(--s2);border:1px solid var(--b2);
+  border-radius:10px;
+  background:var(--s2);border:1.5px solid var(--b2);
   cursor:pointer;transition:.2s;flex-shrink:0;
   color:var(--sft);
   -webkit-tap-highlight-color:transparent;
+  /* Real minimum tap zone via padding trick */
+  padding:8px;box-sizing:content-box;
+  margin:-8px -8px -8px 0;
 }
 .det-nav-close:active{
-  background:rgba(239,68,68,.15);
-  border-color:rgba(239,68,68,.3);
-  color:var(--red);
-  transform:scale(.88);
+  background:rgba(239,68,68,.14);
+  border-color:rgba(239,68,68,.35);
+  color:var(--red);transform:scale(.86);
+}
+
+/* ══════════════════════════════════════════════
+   LANDSCAPE SUPPORT v31
+   iPhone horizontal, tablet, all orientations
+   ══════════════════════════════════════════════ */
+
+@media (orientation: landscape) {
+  /* Adjust safe areas for landscape */
+  :root{
+    --st: env(safe-area-inset-top, 0px);
+    --sl: env(safe-area-inset-left, 44px);
+    --sr: env(safe-area-inset-right, 44px);
+    --sb: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Header — compact in landscape */
+  .hdr{
+    padding-top: calc(var(--st) + 4px);
+    padding-bottom: 6px;
+    padding-left: calc(var(--sl) + 12px);
+    padding-right: calc(var(--sr) + 12px);
+  }
+
+  /* Bottom nav — account for iPhone notch sides */
+  .bnav{
+    padding-left: calc(var(--sl) + 4px);
+    padding-right: calc(var(--sr) + 4px);
+    padding-bottom: calc(var(--sb) + 4px);
+  }
+
+  /* Main content — side padding for notch */
+  .main{
+    padding-left: calc(var(--sl) + 14px);
+    padding-right: calc(var(--sr) + 14px);
+  }
+
+  /* Sheets — wider in landscape */
+  .sheet{
+    left: calc(var(--sl));
+    right: calc(var(--sr));
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+  }
+
+  /* Auth screen — side padding */
+  .auth-slide{
+    padding-left: calc(var(--sl) + 20px);
+    padding-right: calc(var(--sr) + 20px);
+  }
+
+  /* Hero card — smaller in landscape */
+  .hero-card{ padding: 14px 16px 12px; }
+  .hero-n{ font-size: 38px !important; }
+
+  /* Quick actions — 2 columns in portrait become 4 in landscape */
+  .quick-bar{ grid-template-columns: repeat(5, 1fr); }
+
+  /* Stat row — more columns */
+  .stat-row3{ grid-template-columns: repeat(5, 1fr); }
+
+  /* Record cards — wider layout */
+  .recs{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rec{ margin-bottom: 0; }
+
+  /* Det grid — 3 columns in landscape */
+  .det-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .det-grid .df.full{ grid-column: 1 / -1; }
+
+  /* Nav tabs — more visible */
+  .tabs{ overflow-x: auto; }
+
+  /* Bottom nav labels — hide in landscape to save space */
+  .nb span:last-child{
+    display: none;
+  }
+  .nb{ padding: 4px 0 2px; }
+  .nb-ico-wrap{ margin-bottom: 0; }
+
+  /* FAB position adjust */
+  .fab{
+    bottom: calc(var(--sb) + 14px);
+    right: calc(var(--sr) + 16px);
+  }
+}
+
+/* Tablet / large screen */
+@media (min-width: 600px) {
+  /* Center content with max-width */
+  .main{ max-width: 600px; margin: 0 auto; }
+  .hdr{ max-width: none; }
+  .bnav{ justify-content: center; }
+  .nb{ max-width: 80px; }
+
+  /* Wider sheets */
+  .sheet{
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(102%);
+    width: min(500px, 100vw);
+    border-radius: 20px 20px 0 0;
+  }
+  .sheet.on{ transform: translateX(-50%) translateY(0); }
+
+  /* Det grid — 2 columns on tablet */
+  .det-grid{ grid-template-columns: 1fr 1fr; }
+
+  /* Record list — 2 columns */
+  .recs{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rec{ margin-bottom: 0; }
+}
+
+/* Very wide (iPad landscape, desktop) */
+@media (min-width: 900px) {
+  .main{ max-width: 700px; }
+  .det-grid{ grid-template-columns: 1fr 1fr 1fr; }
+  .recs{ grid-template-columns: 1fr 1fr 1fr; }
+  .quick-bar{ grid-template-columns: repeat(6, 1fr); }
 }
 </style>
 <script>
@@ -7492,7 +7613,7 @@ function copyAppInfo(){
 </script>
 
 <div class="sw-update-bar" id="sw-update-bar"><span>🔄 Nueva versión disponible</span><button onclick="navigator.serviceWorker.getRegistration().then(r=>{r&&r.waiting&&r.waiting.postMessage({type:'SKIP_WAITING'})});this.closest('[id=sw-update-bar]').style.display='none'" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:8px;padding:5px 13px;cursor:pointer;font-family:var(--fnt)">Actualizar</button></div>
-<div class="pwa-offline" id="pwa-offline">📡 Sin conexión — La app funciona sin internet</div>
+<div class="pwa-offline" id="pwa-offline">📡 Sin conexión — Todos los datos están guardados en tu dispositivo</div>
 <div class="pwa-install-bar" id="pwa-install-bar">
   <div class="pwa-install-txt">📲 Instala Pensionados MX<br><span style="opacity:.8;font-size:10px">Acceso rápido desde tu pantalla</span></div>
   <button class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
