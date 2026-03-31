@@ -2565,6 +2565,45 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
   .recs{ grid-template-columns: 1fr 1fr 1fr; }
   .quick-bar{ grid-template-columns: repeat(6, 1fr); }
 }
+
+/* ── Admin user card styles ── */
+.adm-user-card{ transition:.15s; }
+.adm-user-card:active{ background:var(--c2); }
+
+.adm-user-tags{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;
+}
+.adm-utag{
+  font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;
+  white-space:nowrap;
+}
+.adm-utag.green{ background:rgba(34,197,94,.12);color:var(--grn); }
+.adm-utag.red{   background:rgba(239,68,68,.12); color:var(--red); }
+.adm-utag.amber{ background:rgba(245,158,11,.12);color:var(--amb); }
+.adm-utag.purple{background:rgba(139,92,246,.12);color:var(--vio); }
+.adm-utag.blue{  background:rgba(59,130,246,.12); color:var(--a2);  }
+.adm-utag.gray{  background:var(--s2);            color:var(--sft); }
+
+.adm-user-expand{
+  border-top:1px solid var(--b1);
+  padding:12px 14px;
+  background:var(--s2);
+  animation:fu .2s ease;
+}
+.adm-user-detail-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;
+}
+.adm-ud-item{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:10px;padding:8px 10px;
+}
+.adm-ud-item span{
+  display:block;font-size:9px;font-weight:700;
+  color:var(--mut);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;
+}
+.adm-ud-item{font-size:12px;font-weight:700;color:var(--txt);}
+
+.adm-ua-btn.green{ color:var(--grn);border-color:rgba(34,197,94,.3); }
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -2710,7 +2749,7 @@ if('serviceWorker' in navigator){
       <div class="auth-panel-hdl"></div>
       <button class="auth-back" onclick="showSlide('as-welcome')">‹ Volver</button>
       <div class="auth-panel-title">Crea tu cuenta</div>
-      <div class="auth-panel-sub">Acceso completo a todos los registros</div>
+      <div class="auth-panel-sub">Acceso a los registros · El administrador puede ajustar tus permisos</div>
 
       <div class="auth-err" id="err-register"></div>
       <div class="auth-ok"  id="ok-register"></div>
@@ -6738,7 +6777,14 @@ async function doLogin(){
     if(h===found.hash&&!found.blocked){
       if(btn)btn.classList.remove('loading');
       clearFailedAttempts();
-      logAccess('login',user,'Usuario registrado');
+      // Update login metadata
+      const d=_getDeviceInfo();
+      found.lastLogin   = Date.now();
+      found.loginCount  = (found.loginCount||0)+1;
+      found.device      = d.device;
+      found.browser     = d.browser;
+      saveUsers(users);
+      logAccess('login',user,`Usuario · ${d.device} · Login #${found.loginCount}`);
       startSession('admin',user,found.name||user);
       return;
     }
@@ -6769,9 +6815,25 @@ async function doRegister(){
   }
   const btn=document.getElementById('register-btn');if(btn)btn.classList.add('loading');
   const hash=await hashStr(pass);
-  const newUser={id:Date.now(),name,username:user,hash,createdAt:Date.now(),blocked:false};
+  // Capture device & session info at registration
+  const deviceInfo=_getDeviceInfo();
+  const newUser={
+    id:          Date.now(),
+    name,
+    username:    user,
+    hash,
+    createdAt:   Date.now(),
+    createdDate: new Date().toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+    lastLogin:   Date.now(),
+    loginCount:  1,
+    blocked:     false,
+    approved:    true,   // Auto-approved — admin can change
+    device:      deviceInfo.device,
+    browser:     deviceInfo.browser,
+    actions:     0,
+  };
   users.push(newUser);saveUsers(users);
-  logAccess('register',user,`Nuevo usuario: ${name}`);
+  logAccess('register',user,`Nuevo usuario: ${name} · ${deviceInfo.device}`);
   if(btn)btn.classList.remove('loading');
   ok.textContent='✅ Cuenta creada. Iniciando sesión…';ok.classList.add('on');
   setTimeout(()=>startSession('admin',user,name),900);
@@ -6810,7 +6872,26 @@ async function doCreatorSetup(){
 }
 
 /* ── GUEST ── */
-function doGuest(){logAccess('guest','Invitado','Acceso modo invitado');startSession('guest','Invitado','Invitado');}
+function doGuest(){
+  // Assign or reuse a guest fingerprint for this device
+  let gId=localStorage.getItem('px_guest_device_id');
+  if(!gId){gId='G-'+Date.now().toString(36).toUpperCase();localStorage.setItem('px_guest_device_id',gId);}
+  const d=_getDeviceInfo();
+  // Track guest visits in the log
+  const gLog=JSON.parse(localStorage.getItem('px_guest_log')||'[]');
+  gLog.unshift({
+    id:      gId,
+    ts:      Date.now(),
+    date:    new Date().toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+    device:  d.device,
+    browser: d.browser,
+    visits:  (gLog.filter(g=>g.id===gId).length)+1,
+  });
+  if(gLog.length>200) gLog.splice(200);
+  localStorage.setItem('px_guest_log',JSON.stringify(gLog));
+  logAccess('guest',gId,`Invitado · ${d.device}`);
+  startSession('guest','Invitado','Invitado');
+}
 
 /* ── HELPER: start session ── */
 function startSession(mode,username,displayName){
@@ -6862,7 +6943,21 @@ function _applySession(){
 function can(action){
   if(isCreator()) return true;           // Creator: todo permitido
   if(isGuest()) return GUEST_PERMS[action]===true;
-  return USER_PERMS[action]===true;      // Usuario registrado
+  // Check user-specific role setting
+  const users=getUsers();
+  const u=users.find(x=>x.username===authUsername);
+  const role=u?.role||'full';
+  if(role==='readonly'){
+    // Read-only: can view but not modify
+    const readOnly=['viewList','viewDetail','viewStats','viewSearch','viewSections','viewFullPhone','viewFullCurp'];
+    return readOnly.includes(action);
+  }
+  if(role==='limited'){
+    // Limited: like guest but can see contact data
+    const limited=['viewList','viewDetail','viewStats','viewSearch','viewSections'];
+    return limited.includes(action);
+  }
+  return USER_PERMS[action]===true;      // full access
 }
 
 const GUEST_PERMS = {
@@ -7150,6 +7245,68 @@ function toggleClockMode(){_clockMode=(_clockMode+1)%2;startClock();if(navigator
    ADMIN PANEL JS v31 — Panel exclusivo del Creador
    ════════════════════════════════════════════════════ */
 
+/* ── Admin: expand/collapse user card ── */
+function admExpandUser(userId){
+  const exp=document.getElementById('ucard-exp-'+userId);
+  const arr=document.getElementById('ucard-arr-'+userId);
+  if(!exp)return;
+  const open=exp.style.display==='none';
+  exp.style.display=open?'block':'none';
+  if(arr) arr.textContent=open?'⌄':'›';
+}
+
+/* ── Admin: approve/suspend user ── */
+function admToggleApprove(userId){
+  const users=getUsers();
+  const u=users.find(x=>x.id===userId);if(!u)return;
+  u.approved=u.approved===false?true:false;
+  saveUsers(users);
+  logAccess(u.approved?'user_approved':'user_suspended',authUsername,`${u.approved?'Aprobó':'Suspendió'}: @${u.username}`);
+  snack(u.approved?`✅ @${u.username} aprobado`:`⏸️ @${u.username} suspendido`);
+  renderAdminPanel();
+}
+
+/* ── Admin: set permissions per user ── */
+function admSetRole(userId){
+  const users=getUsers();
+  const u=users.find(x=>x.id===userId);if(!u)return;
+  const roles=[
+    {key:'full',    lbl:'Acceso completo', desc:'Puede editar, exportar y marcar visitas'},
+    {key:'readonly',lbl:'Solo lectura',    desc:'Solo puede ver registros, no editar'},
+    {key:'limited', lbl:'Limitado',        desc:'Ve registros pero sin datos sensibles'},
+  ];
+  const cur=u.role||'full';
+  const html2=roles.map(r=>`
+    <div onclick="admApplyRole(${userId},'${r.key}')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:${cur===r.key?'rgba(59,130,246,.1)':''};border:1px solid ${cur===r.key?'var(--a)':'var(--b2)'};border-radius:12px;cursor:pointer;margin-bottom:8px;transition:.15s">
+      <div style="font-size:20px">${r.key==='full'?'🔓':r.key==='readonly'?'👁️':'🔒'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800;${cur===r.key?'color:var(--a2)':''}">${r.lbl}${cur===r.key?' ✓':''}</div>
+        <div style="font-size:11px;color:var(--sft)">${r.desc}</div>
+      </div>
+    </div>`).join('');
+  conf2(`🎭 Permisos de @${u.username}`, html2, null, null);
+}
+
+function admApplyRole(userId, role){
+  const users=getUsers();
+  const u=users.find(x=>x.id===userId);if(!u)return;
+  u.role=role;
+  saveUsers(users);
+  closeAllSheets();
+  logAccess('role_change',authUsername,`@${u.username} → ${role}`);
+  snack(`🎭 Permisos de @${u.username}: ${role}`,'🎭');
+  renderAdminPanel();
+}
+
+/* ── Admin: clear guest log ── */
+function admClearGuestLog(){
+  conf2('Limpiar visitas de invitados','¿Borrar el historial de visitas de invitados?',()=>{
+    localStorage.removeItem('px_guest_log');
+    snack('🗑️ Historial de invitados limpiado','🗑️');
+    renderAdminPanel();
+  },'Limpiar');
+}
+
 function renderAdminPanel(){
   if(!isCreator()){snack('⛔ Acceso solo para administrador','⛔');go('inicio');return;}
 
@@ -7166,10 +7323,14 @@ function renderAdminPanel(){
   if(ts) ts.textContent=`${authDisplayName} · Creador`;
 
   // ── KPIs ──
+  const gLog2=JSON.parse(localStorage.getItem('px_guest_log')||'[]');
   document.getElementById('adm-kpi-n-total').textContent = R.length;
-  document.getElementById('adm-kpi-n-users').textContent = users.length + 1; // +1 for creator
+  document.getElementById('adm-kpi-n-users').textContent = users.length + 1;
   document.getElementById('adm-kpi-n-vis').textContent   = vis;
   document.getElementById('adm-kpi-n-log').textContent   = log.length;
+  // Update guest KPI if element exists
+  const gEl=document.getElementById('adm-kpi-n-guests');
+  if(gEl) gEl.textContent=new Set(gLog2.map(g=>g.id)).size;
 
   // ── Theme label ──
   const t=THEMES.find(x=>x.id===curTheme);
@@ -7192,41 +7353,107 @@ function renderAdminPanel(){
 
 function _renderAdminUsers(users, creds){
   const el=document.getElementById('adm-users-list');if(!el)return;
+  const gLog=JSON.parse(localStorage.getItem('px_guest_log')||'[]');
+  // Count unique guest devices
+  const uniqueGuests=new Set(gLog.map(g=>g.id)).size;
+  const guestTotal=gLog.length;
+  const lastGuest=gLog[0];
 
-  // Build rows: creator first, then registered users
-  let rows='';
+  // ── Summary strip ──
+  let rows=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 14px;gap:8px;border-bottom:1px solid var(--b1);margin-bottom:2px">
+    <div style="text-align:center">
+      <div style="font-size:20px;font-weight:900;font-family:'Fira Code',monospace;color:var(--vio)">${users.length+1}</div>
+      <div style="font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.4px">Registrados</div>
+    </div>
+    <div style="text-align:center;border-left:1px solid var(--b1);border-right:1px solid var(--b1)">
+      <div style="font-size:20px;font-weight:900;font-family:'Fira Code',monospace;color:var(--amb)">${uniqueGuests}</div>
+      <div style="font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.4px">Dispositivos invitado</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:20px;font-weight:900;font-family:'Fira Code',monospace;color:var(--grn)">${guestTotal}</div>
+      <div style="font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.4px">Visitas invitado</div>
+    </div>
+  </div>`;
 
-  // Creator row
+  // ── Creator row ──
   rows+=`<div class="adm-user-row">
     <div class="adm-user-av" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">👑</div>
     <div class="adm-user-body">
-      <div class="adm-user-name">${authDisplayName}</div>
+      <div class="adm-user-name">${authDisplayName} <span style="font-size:10px;color:var(--vio);font-weight:700">CREADOR</span></div>
       <div class="adm-user-meta">@${creds?.user||'—'} · ${creds?.email||'Sin email'}</div>
+      <div class="adm-user-tags"><span class="adm-utag green">✅ Activo</span><span class="adm-utag purple">Acceso total</span></div>
     </div>
-    <span class="adm-user-badge creator">CREADOR</span>
   </div>`;
 
+  // ── Registered users ──
   if(!users.length){
-    rows+=`<div style="padding:16px;text-align:center;font-size:12px;color:var(--mut)">
-      Sin usuarios registrados aún
+    rows+=`<div class="adm-row-div"></div>
+    <div style="padding:20px;text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">👤</div>
+      <div style="font-size:13px;font-weight:700;color:var(--sft);margin-bottom:4px">Sin usuarios registrados</div>
+      <div style="font-size:11px;color:var(--mut)">Cuando alguien cree una cuenta aparecerá aquí</div>
     </div>`;
   } else {
-    users.forEach((u,i)=>{
+    users.forEach((u)=>{
       const blocked=u.blocked||false;
-      const lastLogin=u.lastLogin?new Date(u.lastLogin).toLocaleDateString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Nunca';
+      const approved=u.approved!==false;
+      const ts=u.lastLogin?new Date(u.lastLogin).toLocaleString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Nunca';
+      const since=u.createdDate||new Date(u.createdAt||0).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+      const logins=u.loginCount||1;
+      const dev=u.device||'—';
       rows+=`<div class="adm-row-div"></div>
-      <div class="adm-user-row">
-        <div class="adm-user-av" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">${(u.name||u.username||'?')[0].toUpperCase()}</div>
-        <div class="adm-user-body">
-          <div class="adm-user-name">${u.name||u.username}</div>
-          <div class="adm-user-meta">@${u.username} · Último: ${lastLogin}</div>
+      <div class="adm-user-card" id="ucard-${u.id}">
+        <div class="adm-user-row" onclick="admExpandUser(${u.id})" style="cursor:pointer">
+          <div class="adm-user-av" style="background:linear-gradient(135deg,${blocked?'#7f1d1d,#b91c1c':'#1e3a8a,#3b82f6'})">${(u.name||u.username||'?')[0].toUpperCase()}</div>
+          <div class="adm-user-body">
+            <div class="adm-user-name">${u.name||u.username} ${blocked?'<span style="font-size:9px;color:var(--red)">BLOQUEADO</span>':!approved?'<span style="font-size:9px;color:var(--amb)">PENDIENTE</span>':''}</div>
+            <div class="adm-user-meta">@${u.username} · Último: ${ts}</div>
+            <div class="adm-user-tags">
+              <span class="adm-utag ${blocked?'red':approved?'green':'amber'}">${blocked?'🔒 Bloqueado':approved?'✅ Activo':'⏳ Pendiente'}</span>
+              <span class="adm-utag gray">${dev}</span>
+              <span class="adm-utag blue">${logins} login${logins!==1?'s':''}</span>
+            </div>
+          </div>
+          <div style="color:var(--mut);font-size:16px;font-weight:300;flex-shrink:0" id="ucard-arr-${u.id}">›</div>
         </div>
-        <div class="adm-user-actions">
-          <button class="adm-ua-btn ${blocked?'warn':''}" onclick="admToggleBlock(${u.id})">${blocked?'🔓':'🔒'}</button>
-          <button class="adm-ua-btn danger" onclick="admDeleteUser(${u.id})">🗑️</button>
+        <!-- Expanded detail (hidden by default) -->
+        <div class="adm-user-expand" id="ucard-exp-${u.id}" style="display:none">
+          <div class="adm-user-detail-grid">
+            <div class="adm-ud-item"><span>📅 Registrado</span>${since}</div>
+            <div class="adm-ud-item"><span>🕐 Último acceso</span>${ts}</div>
+            <div class="adm-ud-item"><span>📱 Dispositivo</span>${u.device||'—'} · ${u.browser||'—'}</div>
+            <div class="adm-ud-item"><span>🔑 Logins</span>${logins} veces</div>
+          </div>
+          <div class="adm-user-actions" style="margin-top:10px;justify-content:flex-start;gap:8px">
+            <button class="adm-ua-btn ${blocked?'warn':''}" onclick="admToggleBlock(${u.id})">${blocked?'🔓 Desbloquear':'🔒 Bloquear'}</button>
+            <button class="adm-ua-btn ${approved?'warn':'green'}" onclick="admToggleApprove(${u.id})">${approved?'⏸️ Suspender':'✅ Aprobar'}</button>
+            <button class="adm-ua-btn" onclick="admSetRole(${u.id})">🎭 Permisos</button>
+            <button class="adm-ua-btn danger" onclick="admDeleteUser(${u.id})">🗑️ Eliminar</button>
+          </div>
         </div>
       </div>`;
     });
+  }
+
+  // ── Guest visits section ──
+  rows+=`<div class="adm-row-div" style="margin-top:6px"></div>
+  <div style="padding:10px 14px 4px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:10px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px">👻 Visitas de invitados</div>
+    <button onclick="admClearGuestLog()" style="background:none;border:none;font-size:10px;color:var(--mut);cursor:pointer;font-family:var(--fnt)">Limpiar</button>
+  </div>`;
+
+  if(!gLog.length){
+    rows+=`<div style="padding:12px 14px 16px;text-align:center;font-size:12px;color:var(--mut)">Sin visitas de invitados aún</div>`;
+  } else {
+    rows+=gLog.slice(0,8).map(g=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;border-top:1px solid var(--b1)">
+        <div style="width:28px;height:28px;border-radius:8px;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">👻</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:var(--sft)">ID: ${g.id}</div>
+          <div style="font-size:10px;color:var(--mut);font-family:'Fira Code',monospace">${g.date} · ${g.device||'—'} · Visita #${g.visits}</div>
+        </div>
+      </div>`).join('');
+    if(gLog.length>8) rows+=`<div style="padding:8px;text-align:center;font-size:11px;color:var(--sft)">${gLog.length-8} visitas más…</div>`;
   }
 
   el.innerHTML=rows;
