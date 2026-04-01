@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<!-- Firebase SDK (cargado dinámicamente solo si el usuario configura sync) -->
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
@@ -2925,6 +2926,11 @@ if('serviceWorker' in navigator){
   </div>
   <div class="hdr-right">
     <div class="hdr-badge" id="hdr-n">0</div>
+    <!-- Sync status indicator -->
+    <div id="hdr-sync-pill" title="Estado de sincronización" onclick="isCreator()&&go('admin')" style="display:none;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;transition:.3s;border:1px solid transparent">
+      <div id="hdr-sync-dot" style="width:6px;height:6px;border-radius:50%;background:#6b7280;flex-shrink:0"></div>
+      <span id="hdr-sync-txt">—</span>
+    </div>
     <div class="hdr-btn" id="appear-btn" title="Apariencia">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </div>
@@ -3519,6 +3525,34 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
+    <!-- ══ SYNC EN TIEMPO REAL ══ -->
+    <div class="adm-card" id="adm-sync-card" style="margin:0 16px 12px;border:1.5px solid rgba(99,102,241,.35);background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(139,92,246,.04));">
+      <div style="padding:14px 16px 0;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:22px">☁️</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:800;letter-spacing:-.2px">Sincronización en Tiempo Real</div>
+          <div style="font-size:11px;color:var(--sft);margin-top:1px">Todos los dispositivos ven los cambios al instante</div>
+        </div>
+        <div id="sync-status-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;flex-shrink:0;transition:.3s"></div>
+      </div>
+      <div style="padding:10px 16px 14px">
+        <div id="sync-status-lbl" style="font-size:11px;font-weight:700;color:var(--sft);margin-bottom:10px">⬤ Sin configurar</div>
+        <div id="sync-cfg-block">
+          <div style="font-size:12px;color:var(--sft);margin-bottom:8px;line-height:1.5">Necesitas un proyecto Firebase gratuito. <span style="color:var(--a2);cursor:pointer;font-weight:700" onclick="admShowFirebaseHelp()">¿Cómo obtenerlo? →</span></div>
+          <textarea id="sync-cfg-input" placeholder='Pega aquí tu configuración de Firebase:&#10;{&#10;  "apiKey": "...",&#10;  "authDomain": "...",&#10;  "projectId": "..."&#10;}' style="width:100%;min-height:90px;background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:10px;font-size:11px;font-family:monospace;color:var(--txt);resize:vertical;box-sizing:border-box;outline:none;line-height:1.5"></textarea>
+          <div id="sync-cfg-err" style="font-size:11px;color:var(--red);margin-top:4px;display:none"></div>
+          <button onclick="admSaveSyncCfg()" style="margin-top:8px;width:100%;padding:10px;background:var(--a);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:-.2px">☁️ Activar sincronización</button>
+        </div>
+        <div id="sync-active-block" style="display:none">
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button onclick="admForcePush()" style="flex:1;padding:9px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:10px;font-size:12px;font-weight:800;color:var(--a2);cursor:pointer">⬆ Subir datos locales</button>
+            <button onclick="admDisableSync()" style="flex:1;padding:9px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;font-size:12px;font-weight:700;color:var(--red);cursor:pointer">🔌 Desconectar</button>
+          </div>
+          <div id="sync-last-lbl" style="font-size:10px;color:var(--sft);margin-top:8px;text-align:center">—</div>
+        </div>
+      </div>
+    </div>
+
     <div style="height:20px"></div>
   </div><!-- /p-admin -->
 
@@ -4073,10 +4107,11 @@ let R=JSON.parse(localStorage.getItem(K.r)||'[]');
 let H=JSON.parse(localStorage.getItem(K.h)||'[]');
 let V=JSON.parse(localStorage.getItem(K.v)||'[]');
 let E=JSON.parse(localStorage.getItem(K.e)||'[]');
-const svR=()=>localStorage.setItem(K.r,JSON.stringify(R));
-const svH=()=>localStorage.setItem(K.h,JSON.stringify(H));
-const svV=()=>localStorage.setItem(K.v,JSON.stringify(V));
-const svE=()=>localStorage.setItem(K.e,JSON.stringify(E));
+// svR/svH/svV/svE also trigger cloud sync if Firebase is active (see sync engine below)
+const svR=()=>{ localStorage.setItem(K.r,JSON.stringify(R)); typeof _scheduleSync==='function'&&_scheduleSync(); };
+const svH=()=>{ localStorage.setItem(K.h,JSON.stringify(H)); typeof _scheduleSync==='function'&&_scheduleSync(); };
+const svV=()=>{ localStorage.setItem(K.v,JSON.stringify(V)); typeof _scheduleSync==='function'&&_scheduleSync(); };
+const svE=()=>{ localStorage.setItem(K.e,JSON.stringify(E)); typeof _scheduleSync==='function'&&_scheduleSync(); };
 
 // ── Section visibility toggle state ──
 let seccionesVisible = localStorage.getItem('px_sec_visible') !== 'false'; // default true
@@ -6528,7 +6563,7 @@ async function hashStr(str){
 /* ── Data getters ── */
 const getAuthCreds  =()=>{try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null');}catch{return null;}};
 const getUsers      =()=>{try{return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}catch{return[];}};
-const saveUsers     =(u)=>localStorage.setItem(USERS_KEY,JSON.stringify(u));
+const saveUsers     =(u)=>{ localStorage.setItem(USERS_KEY,JSON.stringify(u)); typeof _pushUsersToFirestore==='function'&&_syncReady&&!_remoteWrite&&setTimeout(_pushUsersToFirestore,600); };
 const getSession    =()=>{try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');}catch{return null;}};
 const getEmailCfg   =()=>{try{return JSON.parse(localStorage.getItem(EMAILCFG_KEY)||'null');}catch{return null;}};
 const getAccessLog  =()=>{try{return JSON.parse(localStorage.getItem(ELOG_KEY)||'[]');}catch{return[];}};
@@ -7930,6 +7965,269 @@ function hidePWABar(){
   document.getElementById('pwa-install-bar').classList.remove('show');
   localStorage.setItem('pwa_install_dismissed','1');
 }
+
+/* ═══════════════════════════════════════════════════════════
+   🔥 SINCRONIZACIÓN EN TIEMPO REAL — Firebase Firestore v32
+   ═══════════════════════════════════════════════════════════ */
+const SYNC_KEY   = 'px_firebase_cfg_v1';
+const SYNC_COL   = 'pensionados_app';
+const SYNC_DOC   = 'datos';
+const SYNC_USR   = 'usuarios';
+
+let _fbApp       = null;   // Firebase app instance
+let _fbDB        = null;   // Firestore instance
+let _syncReady   = false;  // Firebase initialized and connected
+let _remoteWrite = false;  // Flag to avoid write loops
+let _syncTimer   = null;   // Debounce timer
+let _unsubData   = null;   // onSnapshot unsubscribe for data
+let _unsubUsers  = null;   // onSnapshot unsubscribe for users
+let _lastSync    = null;   // Timestamp of last successful sync
+
+/* ── Load Firebase SDK dynamically ── */
+function _loadFirebaseSDK(){
+  return new Promise((resolve, reject)=>{
+    if(window.firebase){ resolve(); return; }
+    const base='https://www.gstatic.com/firebasejs/10.12.2/';
+    let loaded=0;
+    const scripts=[
+      base+'firebase-app-compat.js',
+      base+'firebase-firestore-compat.js',
+    ];
+    scripts.forEach(src=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.onload=()=>{ if(++loaded===scripts.length) resolve(); };
+      s.onerror=()=>reject(new Error('No se pudo cargar Firebase SDK'));
+      document.head.appendChild(s);
+    });
+  });
+}
+
+/* ── Update header sync pill ── */
+function _setSyncUI(state){ // 'off'|'connecting'|'online'|'error'
+  const dot=document.getElementById('hdr-sync-dot');
+  const txt=document.getElementById('hdr-sync-txt');
+  const pill=document.getElementById('hdr-sync-pill');
+  const admDot=document.getElementById('sync-status-dot');
+  const admLbl=document.getElementById('sync-status-lbl');
+  const cfgBlock=document.getElementById('sync-cfg-block');
+  const activeBlock=document.getElementById('sync-active-block');
+  if(!dot) return;
+  const map={
+    off:        {color:'#6b7280', label:'Sin sync',   bg:'rgba(107,114,128,.1)', border:'rgba(107,114,128,.2)', show:false},
+    connecting: {color:'#f59e0b', label:'Conectando', bg:'rgba(245,158,11,.1)',  border:'rgba(245,158,11,.3)',  show:true},
+    online:     {color:'#22c55e', label:'En vivo 🟢', bg:'rgba(34,197,94,.1)',   border:'rgba(34,197,94,.3)',   show:true},
+    error:      {color:'#ef4444', label:'Sin conexión',bg:'rgba(239,68,68,.08)', border:'rgba(239,68,68,.25)',  show:true},
+  };
+  const s=map[state]||map.off;
+  dot.style.background=s.color;
+  txt.textContent=s.label;
+  pill.style.display=s.show?'flex':'none';
+  pill.style.background=s.bg;
+  pill.style.borderColor=s.border;
+  pill.style.color=s.color;
+  if(admDot){admDot.style.background=s.color;}
+  if(admLbl){
+    const labels={off:'⬤ Sin configurar',connecting:'⬤ Conectando…',online:'⬤ En línea — sincronización activa',error:'⬤ Sin conexión — reconectando…'};
+    admLbl.style.color=s.color;
+    admLbl.textContent=labels[state]||'';
+  }
+  const active=state==='online'||state==='error'||state==='connecting';
+  if(cfgBlock)  cfgBlock.style.display=active?'none':'block';
+  if(activeBlock)activeBlock.style.display=active?'block':'none';
+}
+
+/* ── Apply remote data to local state ── */
+function _applyRemoteData(data){
+  if(!data) return;
+  _remoteWrite=true;
+  try{
+    if(Array.isArray(data.registros)){ R=data.registros; localStorage.setItem(K.r,JSON.stringify(R)); }
+    if(Array.isArray(data.historial)){ H=data.historial; localStorage.setItem(K.h,JSON.stringify(H)); }
+    if(Array.isArray(data.visitas))  { V=data.visitas;   localStorage.setItem(K.v,JSON.stringify(V)); }
+    if(Array.isArray(data.eventos))  { E=data.eventos;   localStorage.setItem(K.e,JSON.stringify(E)); }
+    _lastSync=new Date();
+    const el=document.getElementById('sync-last-lbl');
+    if(el) el.textContent='Última sync: '+_lastSync.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    detectDups();upHdr();
+    renderInicio();
+    renderChips();
+    if(curTab==='registros')   renderList();
+    if(curTab==='historial')   renderHist();
+    if(curTab==='visitas')     renderVis();
+    if(curTab==='estadisticas')renderEst?.();
+    snack('🔄 Datos actualizados','🔄',1800);
+  }finally{ _remoteWrite=false; }
+}
+
+function _applyRemoteUsers(data){
+  if(!data) return;
+  try{
+    if(Array.isArray(data.lista)){
+      // Merge: keep local hashes if passwords differ (security)
+      const local=getUsers();
+      const merged=data.lista.map(ru=>{
+        const lu=local.find(u=>u.username===ru.username);
+        return lu ? {...ru, hash:lu.hash} : ru;
+      });
+      saveUsers(merged);
+    }
+  }catch(e){ console.warn('applyRemoteUsers:',e); }
+}
+
+/* ── Write all data to Firestore (debounced) ── */
+function _scheduleSync(){
+  if(!_syncReady||_remoteWrite) return;
+  clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(()=>_pushToFirestore(), 800);
+}
+
+async function _pushToFirestore(){
+  if(!_syncReady||!_fbDB) return;
+  try{
+    await _fbDB.collection(SYNC_COL).doc(SYNC_DOC).set({
+      registros: R,
+      historial: H,
+      visitas:   V,
+      eventos:   E,
+      updatedAt: Date.now(),
+      updatedBy: authUsername||'—',
+    });
+    _lastSync=new Date();
+    const el=document.getElementById('sync-last-lbl');
+    if(el) el.textContent='Guardado: '+_lastSync.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }catch(e){
+    console.warn('Firestore push error:',e);
+    _setSyncUI('error');
+  }
+}
+
+async function _pushUsersToFirestore(){
+  if(!_syncReady||!_fbDB) return;
+  try{
+    await _fbDB.collection(SYNC_COL).doc(SYNC_USR).set({
+      lista: getUsers(),
+      updatedAt: Date.now(),
+    });
+  }catch(e){ console.warn('Users push error:',e); }
+}
+
+/* ── Main Firebase init ── */
+async function initFirebaseSync(cfg){
+  _setSyncUI('connecting');
+  try{
+    await _loadFirebaseSDK();
+    // Terminate existing app if any
+    if(_fbApp){ try{ await _fbApp.delete(); }catch{} }
+    _fbApp=firebase.initializeApp(cfg, 'pensionados_sync_'+Date.now());
+    _fbDB=_fbApp.firestore();
+    // Enable offline persistence
+    try{ await _fbDB.enablePersistence({synchronizeTabs:true}); }catch(e){
+      if(e.code!=='failed-precondition'&&e.code!=='unimplemented') console.warn('Persistence:',e);
+    }
+    // Listen to data document
+    if(_unsubData) _unsubData();
+    _unsubData=_fbDB.collection(SYNC_COL).doc(SYNC_DOC)
+      .onSnapshot(snap=>{
+        _setSyncUI('online');
+        _syncReady=true;
+        if(snap.exists){ _applyRemoteData(snap.data()); }
+        else{ _pushToFirestore(); } // First device — push local data
+      }, err=>{ console.warn('onSnapshot data:',err); _setSyncUI('error'); });
+    // Listen to users document
+    if(_unsubUsers) _unsubUsers();
+    _unsubUsers=_fbDB.collection(SYNC_COL).doc(SYNC_USR)
+      .onSnapshot(snap=>{ if(snap.exists) _applyRemoteUsers(snap.data()); },
+      err=>console.warn('onSnapshot users:',err));
+    _syncReady=true;
+    _setSyncUI('online');
+    return true;
+  }catch(e){
+    console.error('Firebase init error:',e);
+    _setSyncUI('error');
+    return false;
+  }
+}
+
+/* ── Auto-init on load if config saved ── */
+(function(){
+  try{
+    const raw=localStorage.getItem(SYNC_KEY);
+    if(!raw) return;
+    const cfg=JSON.parse(raw);
+    if(cfg&&cfg.projectId) initFirebaseSync(cfg);
+  }catch{}
+})();
+
+/* sv* and saveUsers are already patched at their declaration above to call _scheduleSync() */
+
+/* ── Admin panel actions ── */
+async function admSaveSyncCfg(){
+  const raw=(document.getElementById('sync-cfg-input').value||'').trim();
+  const errEl=document.getElementById('sync-cfg-err');
+  errEl.style.display='none';
+  let cfg;
+  try{
+    // Accept both JSON object and firebase.initializeApp({...}) format
+    const cleaned=raw
+      .replace(/^[\s\S]*?({)/,'$1')  // strip leading text before {
+      .replace(/\}\s*[^}]*$/,'}')    // strip trailing text after }
+      .replace(/(['"])?([a-zA-Z_][a-zA-Z0-9_]*)(['"])?:/g,'"$2":') // unquoted keys
+      .replace(/,\s*}/g,'}');        // trailing commas
+    cfg=JSON.parse(cleaned);
+  }catch(e){
+    errEl.textContent='❌ JSON inválido — asegúrate de copiar la configuración completa';
+    errEl.style.display='block'; return;
+  }
+  if(!cfg.projectId||!cfg.apiKey){
+    errEl.textContent='❌ Falta projectId o apiKey — copia la configuración completa de Firebase';
+    errEl.style.display='block'; return;
+  }
+  localStorage.setItem(SYNC_KEY,JSON.stringify(cfg));
+  const ok=await initFirebaseSync(cfg);
+  if(ok){ snack('✅ Sincronización activada','✅'); renderAdminPanel(); }
+  else  { errEl.textContent='❌ No se pudo conectar — revisa la configuración'; errEl.style.display='block'; }
+}
+
+async function admForcePush(){
+  if(!_syncReady){ snack('⚠️ Sync no está activa','⚠️'); return; }
+  await _pushToFirestore();
+  await _pushUsersToFirestore();
+  snack('⬆ Datos subidos a la nube','⬆');
+}
+
+function admDisableSync(){
+  conf2('Desconectar Sync','¿Desactivar la sincronización en tiempo real? Los datos locales se conservan.',()=>{
+    if(_unsubData)  _unsubData();
+    if(_unsubUsers) _unsubUsers();
+    if(_fbApp){ try{ _fbApp.delete(); }catch{} }
+    _fbApp=null; _fbDB=null; _syncReady=false;
+    localStorage.removeItem(SYNC_KEY);
+    _setSyncUI('off');
+    snack('🔌 Sincronización desactivada');
+    renderAdminPanel();
+  },'Desconectar');
+}
+
+function admShowFirebaseHelp(){
+  conf2('☁️ Cómo crear tu base de datos gratis',
+    `<div style="font-size:13px;line-height:1.8;padding:4px 0">
+      <b>Paso 1:</b> Ve a <span style="color:var(--a2);font-weight:700">console.firebase.google.com</span><br>
+      <b>Paso 2:</b> Crear proyecto → elige nombre → sin Analytics<br>
+      <b>Paso 3:</b> En el panel, toca <b>⚙️ Configuración del proyecto</b><br>
+      <b>Paso 4:</b> Baja a <b>"Tus apps"</b> → toca <b>&lt;/&gt;</b> (Web)<br>
+      <b>Paso 5:</b> Registra la app (nombre cualquiera)<br>
+      <b>Paso 6:</b> Copia el bloque <code>firebaseConfig = { … }</code><br>
+      <b>Paso 7:</b> En el menú izquierdo → <b>Firestore Database → Crear base de datos → Modo prueba</b><br>
+      <b>Paso 8:</b> Regresa aquí y pega la configuración<br>
+      <br><div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px;font-size:11px">
+      ✅ Plan gratuito: 50,000 lecturas/día · 20,000 escrituras/día · 1 GB almacenamiento<br>
+      ✅ Sin tarjeta de crédito necesaria
+      </div>
+    </div>`,
+    null, null);
+}
+
 </script>
 </body>
 </html>
