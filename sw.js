@@ -1,7 +1,7 @@
 // Pensionados MX — Service Worker v31
 // Estrategia: Cache First para assets, Network First para datos
-const CACHE_NAME   = 'pensionados-v32';
-const CACHE_STATIC = 'pensionados-static-v32';
+const CACHE_NAME   = 'pensionados-v31';
+const CACHE_STATIC = 'pensionados-static-v31';
 
 // Assets que siempre se cachean
 const STATIC_ASSETS = [
