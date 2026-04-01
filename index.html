@@ -6881,26 +6881,28 @@ async function doCreatorSetup(){
 
 /* ── GUEST ── */
 function doGuest(){
-  // Disable all buttons immediately to prevent double-tap freeze
-  document.querySelectorAll('.aw-btn,.aw-btn-secondary,.auth-btn').forEach(b=>{b.disabled=true;b.style.opacity='.55';});
-  // Assign or reuse a guest fingerprint for this device
-  let gId=localStorage.getItem('px_guest_device_id');
-  if(!gId){gId='G-'+Date.now().toString(36).toUpperCase();localStorage.setItem('px_guest_device_id',gId);}
-  const d=_getDeviceInfo();
-  // Track guest visits in the log
-  const gLog=JSON.parse(localStorage.getItem('px_guest_log')||'[]');
-  gLog.unshift({
-    id:      gId,
-    ts:      Date.now(),
-    date:    new Date().toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
-    device:  d.device,
-    browser: d.browser,
-    visits:  (gLog.filter(g=>g.id===gId).length)+1,
+  // Disable all auth buttons to prevent double-tap
+  document.querySelectorAll('.aw-btn-primary,.aw-btn-secondary,.aw-btn-ghost,.auth-btn').forEach(b=>{
+    b.disabled=true; b.style.opacity='.55'; b.style.pointerEvents='none';
   });
-  if(gLog.length>200) gLog.splice(200);
-  localStorage.setItem('px_guest_log',JSON.stringify(gLog));
-  logAccess('guest',gId,`Invitado · ${d.device}`);
-  // Small defer so the button state paints before the heavy session init
+  try{
+    let gId=localStorage.getItem('px_guest_device_id');
+    if(!gId){gId='G-'+Date.now().toString(36).toUpperCase();localStorage.setItem('px_guest_device_id',gId);}
+    const d=_getDeviceInfo();
+    const gLog=JSON.parse(localStorage.getItem('px_guest_log')||'[]');
+    gLog.unshift({
+      id:      gId,
+      ts:      Date.now(),
+      date:    new Date().toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+      device:  d.device,
+      browser: d.browser,
+      visits:  (gLog.filter(g=>g.id===gId).length)+1,
+    });
+    if(gLog.length>200) gLog.splice(200);
+    localStorage.setItem('px_guest_log',JSON.stringify(gLog));
+    logAccess('guest',gId,`Invitado · ${d.device}`);
+  }catch(e){ console.warn('doGuest log:',e); }
+  // Small defer so button state paints before session init
   setTimeout(()=>startSession('guest','Invitado','Invitado'), 30);
 }
 
@@ -6918,26 +6920,26 @@ function startSession(mode,username,displayName){
   _applySession();
 }
 function _hideAuthScreen(){
-  // Show a brief loading overlay while the app initializes
-  let overlay=document.getElementById('_session_overlay');
-  if(!overlay){
-    overlay=document.createElement('div');
-    overlay.id='_session_overlay';
-    overlay.style.cssText='position:fixed;inset:0;background:var(--bg,#0f0f0f);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .35s ease';
-    overlay.innerHTML='<div style="text-align:center"><div style="font-size:36px;margin-bottom:12px;animation:spin 1s linear infinite">⚙️</div><div style="font-size:13px;color:var(--sft,#888);font-weight:600;letter-spacing:.3px">Cargando…</div></div>';
-    document.body.appendChild(overlay);
-    // Add spin keyframe if not present
-    if(!document.getElementById('_spin_style')){
-      const st=document.createElement('style');
-      st.id='_spin_style';
-      st.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
-      document.head.appendChild(st);
-    }
-  }
-  overlay.style.opacity='1';
-  overlay.style.display='flex';
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-shell').style.display='flex';
+  // Show a lightweight loading bar at the top while the app renders
+  let bar=document.getElementById('_load_bar');
+  if(!bar){
+    bar=document.createElement('div');
+    bar.id='_load_bar';
+    bar.style.cssText='position:fixed;top:0;left:0;height:3px;width:0%;background:var(--a,#6366f1);z-index:9999;transition:width .4s ease,opacity .3s ease;border-radius:0 2px 2px 0;';
+    document.body.appendChild(bar);
+  }
+  bar.style.opacity='1';
+  // Animate bar to 70% immediately, finish after renders
+  requestAnimationFrame(()=>{ bar.style.width='70%'; });
+}
+
+function _dismissLoadBar(){
+  const bar=document.getElementById('_load_bar');
+  if(!bar) return;
+  bar.style.width='100%';
+  setTimeout(()=>{ bar.style.opacity='0'; setTimeout(()=>{ bar.style.width='0%'; },320); }, 120);
 }
 
 function _applySession(){
@@ -6945,9 +6947,9 @@ function _applySession(){
   const creator=isCreator();
   const dn=authDisplayName||authUsername;
 
-  // ── Fast visual updates (no DOM scan) — do immediately ──
+  // ── Fast visual updates — do immediately so the shell looks right ──
   const gb=document.getElementById('guest-banner');
-  if(gb)gb.classList.toggle('on',guest);
+  if(gb) gb.classList.toggle('on',guest);
 
   const btn=document.getElementById('hdr-user-btn');
   if(btn){
@@ -6957,31 +6959,21 @@ function _applySession(){
   }
   document.title=guest?'Pensionados MX — Invitado 👻':creator?`Pensionados MX — ${dn} 👑`:`Pensionados MX — ${dn}`;
 
-  // ── Defer all heavy DOM work so the browser can paint the shell first ──
+  // ── Defer heavy DOM work — give browser one frame to paint the shell ──
   requestAnimationFrame(()=>{
-    // Phase 1: permissions & restrictions (DOM scan)
-    _applyGuestRestrictions(guest, creator);
+    try{ _applyGuestRestrictions(guest, creator); }catch(e){ console.warn('restrictions:',e); }
 
-    // Phase 2: data rendering — split across two microtasks to stay responsive
     setTimeout(()=>{
-      detectDups();
-      upHdr();
-      selDay=today();
-      _updateStreak();
-      renderChips();
-      renderSFPills();
+      try{
+        detectDups(); upHdr(); selDay=today();
+        _updateStreak(); renderChips(); renderSFPills();
+      }catch(e){ console.warn('render phase1:',e); }
     }, 0);
 
     setTimeout(()=>{
-      renderInicio();
-      // Dismiss loading overlay smoothly once everything is painted
-      requestAnimationFrame(()=>{
-        const ov=document.getElementById('_session_overlay');
-        if(ov){
-          ov.style.opacity='0';
-          setTimeout(()=>{ov.style.display='none';},380);
-        }
-      });
+      try{ renderInicio(); }catch(e){ console.warn('renderInicio:',e); }
+      // Always dismiss the bar — even if renders threw
+      _dismissLoadBar();
     }, 40);
   });
 }
