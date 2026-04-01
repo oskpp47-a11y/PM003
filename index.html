@@ -6745,26 +6745,30 @@ function resetOTPStep(){
 /* ── CREATOR LOGIN (admin único) ── */
 async function doLogin(){
   if(checkLockout())return;
+  const btn=document.getElementById('login-btn');
+  if(btn&&btn.dataset.busy==='1') return;
+  if(btn){btn.dataset.busy='1';btn.classList.add('loading');btn.disabled=true;}
+  const unlock=()=>{if(btn){btn.dataset.busy='';btn.classList.remove('loading');btn.disabled=false;}};
+
   const user=(document.getElementById('l-user').value||'').trim().toLowerCase();
   const pass=document.getElementById('l-pass').value||'';
   const err=document.getElementById('err-login');
-  if(!user||!pass){err.textContent='⚠️ Ingresa usuario y contraseña';err.classList.add('on');return;}
+  if(!user||!pass){err.textContent='⚠️ Ingresa usuario y contraseña';err.classList.add('on');unlock();return;}
   err.classList.remove('on');
-  const btn=document.getElementById('login-btn');if(btn)btn.classList.add('loading');
   // Check creator first
   const creds=getAuthCreds();
   if(creds&&user===creds.user){
     const h=await hashStr(pass);
     if(h===creds.hash){
       clearFailedAttempts();
-      if(btn)btn.classList.remove('loading');
+      unlock();
       const cfg=getEmailCfg();
       const otpRequired=cfg&&cfg.otpRequired&&creds.email;
       if(otpRequired){
         const sent=await initiateOTP('creator',user,user,creds.email);
-        if(!sent){logAccess('login',user,'Creator directo');startSession('creator',user,user);}
+        if(!sent){logAccess('login',user,'Creator directo');setTimeout(()=>startSession('creator',user,user),30);}
       } else {
-        logAccess('login',user,'Creator');startSession('creator',user,user);
+        logAccess('login',user,'Creator');setTimeout(()=>startSession('creator',user,user),30);
       }
       return;
     }
@@ -6775,7 +6779,7 @@ async function doLogin(){
   if(found){
     const h=await hashStr(pass);
     if(h===found.hash&&!found.blocked){
-      if(btn)btn.classList.remove('loading');
+      unlock();
       clearFailedAttempts();
       // Update login metadata
       const d=_getDeviceInfo();
@@ -6785,11 +6789,11 @@ async function doLogin(){
       found.browser     = d.browser;
       saveUsers(users);
       logAccess('login',user,`Usuario · ${d.device} · Login #${found.loginCount}`);
-      startSession('admin',user,found.name||user);
+      setTimeout(()=>startSession('admin',user,found.name||user),30);
       return;
     }
   }
-  if(btn)btn.classList.remove('loading');
+  unlock();
   err.textContent='❌ Usuario o contraseña incorrectos';err.classList.add('on');
   document.getElementById('l-pass').value='';document.getElementById('l-pass').focus();
   recordFailedAttempt(user||'desconocido');
@@ -6797,6 +6801,12 @@ async function doLogin(){
 
 /* ── REGISTER new user ── */
 async function doRegister(){
+  const btn=document.getElementById('register-btn');
+  // Prevent double-tap: lock button immediately before any async work
+  if(btn&&btn.dataset.busy==='1') return;
+  if(btn){btn.dataset.busy='1';btn.classList.add('loading');btn.disabled=true;}
+  const unlock=()=>{if(btn){btn.dataset.busy='';btn.classList.remove('loading');btn.disabled=false;}};
+
   const name=(document.getElementById('r-name').value||'').trim();
   const user=(document.getElementById('r-user').value||'').trim().toLowerCase();
   const pass=document.getElementById('r-pass').value||'';
@@ -6804,16 +6814,15 @@ async function doRegister(){
   const err=document.getElementById('err-register');
   const ok=document.getElementById('ok-register');
   err.classList.remove('on');ok.classList.remove('on');
-  if(!name){err.textContent='⚠️ Ingresa tu nombre';err.classList.add('on');return;}
-  if(!user||user.length<3){err.textContent='⚠️ Usuario: mínimo 3 caracteres';err.classList.add('on');return;}
-  if(!pass||pass.length<6){err.textContent='⚠️ Contraseña: mínimo 6 caracteres';err.classList.add('on');return;}
-  if(pass!==pass2){err.textContent='❌ Las contraseñas no coinciden';err.classList.add('on');return;}
+  if(!name){err.textContent='⚠️ Ingresa tu nombre';err.classList.add('on');unlock();return;}
+  if(!user||user.length<3){err.textContent='⚠️ Usuario: mínimo 3 caracteres';err.classList.add('on');unlock();return;}
+  if(!pass||pass.length<6){err.textContent='⚠️ Contraseña: mínimo 6 caracteres';err.classList.add('on');unlock();return;}
+  if(pass!==pass2){err.textContent='❌ Las contraseñas no coinciden';err.classList.add('on');unlock();return;}
   // Check if username taken
   const users=getUsers();const creds=getAuthCreds();
   if(users.find(u=>u.username===user)||(creds&&creds.user===user)){
-    err.textContent='❌ Ese nombre de usuario ya existe';err.classList.add('on');return;
+    err.textContent='❌ Ese nombre de usuario ya existe';err.classList.add('on');unlock();return;
   }
-  const btn=document.getElementById('register-btn');if(btn)btn.classList.add('loading');
   const hash=await hashStr(pass);
   // Capture device & session info at registration
   const deviceInfo=_getDeviceInfo();
@@ -6834,7 +6843,6 @@ async function doRegister(){
   };
   users.push(newUser);saveUsers(users);
   logAccess('register',user,`Nuevo usuario: ${name} · ${deviceInfo.device}`);
-  if(btn)btn.classList.remove('loading');
   ok.textContent='✅ Cuenta creada. Iniciando sesión…';ok.classList.add('on');
   setTimeout(()=>startSession('admin',user,name),900);
 }
@@ -6873,6 +6881,8 @@ async function doCreatorSetup(){
 
 /* ── GUEST ── */
 function doGuest(){
+  // Disable all buttons immediately to prevent double-tap freeze
+  document.querySelectorAll('.aw-btn,.aw-btn-secondary,.auth-btn').forEach(b=>{b.disabled=true;b.style.opacity='.55';});
   // Assign or reuse a guest fingerprint for this device
   let gId=localStorage.getItem('px_guest_device_id');
   if(!gId){gId='G-'+Date.now().toString(36).toUpperCase();localStorage.setItem('px_guest_device_id',gId);}
@@ -6890,7 +6900,8 @@ function doGuest(){
   if(gLog.length>200) gLog.splice(200);
   localStorage.setItem('px_guest_log',JSON.stringify(gLog));
   logAccess('guest',gId,`Invitado · ${d.device}`);
-  startSession('guest','Invitado','Invitado');
+  // Small defer so the button state paints before the heavy session init
+  setTimeout(()=>startSession('guest','Invitado','Invitado'), 30);
 }
 
 /* ── HELPER: start session ── */
@@ -6907,32 +6918,72 @@ function startSession(mode,username,displayName){
   _applySession();
 }
 function _hideAuthScreen(){
+  // Show a brief loading overlay while the app initializes
+  let overlay=document.getElementById('_session_overlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='_session_overlay';
+    overlay.style.cssText='position:fixed;inset:0;background:var(--bg,#0f0f0f);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .35s ease';
+    overlay.innerHTML='<div style="text-align:center"><div style="font-size:36px;margin-bottom:12px;animation:spin 1s linear infinite">⚙️</div><div style="font-size:13px;color:var(--sft,#888);font-weight:600;letter-spacing:.3px">Cargando…</div></div>';
+    document.body.appendChild(overlay);
+    // Add spin keyframe if not present
+    if(!document.getElementById('_spin_style')){
+      const st=document.createElement('style');
+      st.id='_spin_style';
+      st.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+      document.head.appendChild(st);
+    }
+  }
+  overlay.style.opacity='1';
+  overlay.style.display='flex';
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-shell').style.display='flex';
 }
+
 function _applySession(){
   const guest=isGuest();
   const creator=isCreator();
   const dn=authDisplayName||authUsername;
 
-  // ── Guest banner ──
+  // ── Fast visual updates (no DOM scan) — do immediately ──
   const gb=document.getElementById('guest-banner');
   if(gb)gb.classList.toggle('on',guest);
 
-  // ── Header user button ──
   const btn=document.getElementById('hdr-user-btn');
   if(btn){
     btn.textContent=guest?'👻':creator?'👑':dn[0]?.toUpperCase()||'U';
     btn.title=guest?'Invitado':dn;
     btn.className='hdr-user'+(guest?' guest-mode':creator?' creator-mode':'');
   }
-
-  // ── Apply all guest restrictions ──
-  _applyGuestRestrictions(guest, creator);
-
   document.title=guest?'Pensionados MX — Invitado 👻':creator?`Pensionados MX — ${dn} 👑`:`Pensionados MX — ${dn}`;
-  _updateStreak();detectDups();upHdr();selDay=today();
-  renderInicio();renderChips();renderSFPills();
+
+  // ── Defer all heavy DOM work so the browser can paint the shell first ──
+  requestAnimationFrame(()=>{
+    // Phase 1: permissions & restrictions (DOM scan)
+    _applyGuestRestrictions(guest, creator);
+
+    // Phase 2: data rendering — split across two microtasks to stay responsive
+    setTimeout(()=>{
+      detectDups();
+      upHdr();
+      selDay=today();
+      _updateStreak();
+      renderChips();
+      renderSFPills();
+    }, 0);
+
+    setTimeout(()=>{
+      renderInicio();
+      // Dismiss loading overlay smoothly once everything is painted
+      requestAnimationFrame(()=>{
+        const ov=document.getElementById('_session_overlay');
+        if(ov){
+          ov.style.opacity='0';
+          setTimeout(()=>{ov.style.display='none';},380);
+        }
+      });
+    }, 40);
+  });
 }
 
 /* ════════════════════════════════════════════════
