@@ -2710,6 +2710,82 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .rec-qt-btn.visit{color:var(--grn);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06);}
 .rec-qt-btn.call{color:var(--a2);border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.06);}
 .rec-qt-btn.edit{color:var(--amb);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06);}
+
+/* ════════════════════════════════════
+   ONLINE PRESENCE CSS v31
+   ════════════════════════════════════ */
+
+/* Online users section in admin */
+.presence-strip{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:var(--r);overflow:hidden;margin-bottom:4px;
+}
+.presence-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px 10px;border-bottom:1px solid var(--b1);
+}
+.presence-title{font-size:13px;font-weight:800;}
+.presence-count{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--grn);
+}
+.presence-live-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--grn);
+  box-shadow:0 0 0 0 rgba(34,197,94,.5);
+  animation:presencePulse 2s ease-in-out infinite;
+}
+@keyframes presencePulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.5);}
+  70%{box-shadow:0 0 0 8px rgba(34,197,94,0);}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+}
+
+.presence-user-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-top:1px solid var(--b1);
+  animation:fu .2s ease;
+}
+.presence-av{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#fff;
+  flex-shrink:0;position:relative;
+}
+.presence-online-ring{
+  position:absolute;inset:-2px;border-radius:12px;
+  border:2px solid var(--grn);
+  animation:presencePulse 2s ease-in-out infinite;
+}
+.presence-body{flex:1;min-width:0;}
+.presence-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.presence-meta{font-size:10px;color:var(--sft);font-family:'Fira Code',monospace;}
+.presence-status{
+  font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:6px;
+  flex-shrink:0;
+}
+.presence-status.online{background:rgba(34,197,94,.12);color:var(--grn);}
+.presence-status.away{background:rgba(245,158,11,.12);color:var(--amb);}
+.presence-status.guest{background:rgba(245,158,11,.1);color:var(--amb);}
+
+/* Header presence indicator — shows count next to user avatar */
+.hdr-presence-badge{
+  position:absolute;top:-3px;right:-3px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--grn);border:2px solid var(--bg);
+  font-size:7px;font-weight:900;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  display:none;
+}
+.hdr-presence-badge.show{display:flex;}
+#hdr-user-btn{position:relative;}
+
+/* Online indicator in p-admin KPI */
+.adm-kpi-n.online-count{
+  color:var(--grn);
+  position:relative;
+}
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -3041,7 +3117,9 @@ if('serviceWorker' in navigator){
     <div class="hdr-btn" id="theme-btn" title="Cambiar tema">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </div>
-    <div class="hdr-user" id="hdr-user-btn" onclick="openUserMenu()" title="Mi cuenta">U</div>
+    <div class="hdr-user" id="hdr-user-btn" onclick="openUserMenu()" title="Mi cuenta">U
+      <div class="hdr-presence-badge" id="hdr-presence-badge"></div>
+    </div>
   </div>
 </div>
 <div class="tabs" id="tabs">
@@ -3628,6 +3706,28 @@ if('serviceWorker' in navigator){
       <div class="adm-kpi" id="adm-kpi-log">
         <div class="adm-kpi-n" id="adm-kpi-n-log" style="color:var(--amb)">0</div>
         <div class="adm-kpi-l">Accesos</div>
+      </div>
+      <div class="adm-kpi-sep"></div>
+      <div class="adm-kpi" id="adm-kpi-online" onclick="go('admin')" style="cursor:pointer">
+        <div class="adm-kpi-n online-count" id="adm-kpi-n-online">0</div>
+        <div class="adm-kpi-l" style="color:var(--grn)">En línea</div>
+      </div>
+    </div>
+
+    <!-- ── SECCIÓN: Usuarios en línea ahora ── -->
+    <div class="adm-sec-lbl" id="adm-online-lbl">🟢 En línea ahora <span id="adm-online-count" style="color:var(--grn);font-family:'Fira Code',monospace">0</span></div>
+    <div class="presence-strip" id="adm-presence-strip">
+      <div class="presence-header">
+        <div class="presence-title">Usuarios activos</div>
+        <div class="presence-count">
+          <div class="presence-live-dot"></div>
+          <span id="presence-live-label">Tiempo real</span>
+        </div>
+      </div>
+      <div id="adm-online-list">
+        <div style="padding:16px;text-align:center;font-size:12px;color:var(--mut)">
+          Conecta Firebase para ver usuarios en línea
+        </div>
       </div>
     </div>
 
@@ -4449,6 +4549,8 @@ function go(tab){
     }
   }
   curTab=tab;
+  // Update presence with current tab
+  if(typeof presenceUpdateTab==='function') presenceUpdateTab(tab);
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.getAttribute('onclick')==="go('"+tab+"')"));
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.getElementById('p-'+tab).classList.add('on');
@@ -7362,6 +7464,7 @@ function applyGuestMode(g){ _applyGuestRestrictions(g,false); }
 /* ── LOGOUT ── */
 function doLogout(){
   logAccess('logout',authUsername,'Cierre de sesión');
+  presenceStop();  // Remove online presence
   authMode='';authUsername='';authDisplayName='';
   sessionStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(REMEMBER_KEY);
@@ -7572,9 +7675,15 @@ function renderAdminPanel(){
   document.getElementById('adm-kpi-n-users').textContent = users.length + 1;
   document.getElementById('adm-kpi-n-vis').textContent   = vis;
   document.getElementById('adm-kpi-n-log').textContent   = log.length;
-  // Update guest KPI if element exists
   const gEl=document.getElementById('adm-kpi-n-guests');
   if(gEl) gEl.textContent=new Set(gLog2.map(g=>g.id)).size;
+  const onlineEl=document.getElementById('adm-kpi-n-online');
+  if(onlineEl) onlineEl.textContent=_onlineUsers.length;
+  if(_onlineUsers.length>0) _renderPresence();
+  else if(!fbIsConfigured()){
+    const listEl=document.getElementById('adm-online-list');
+    if(listEl) listEl.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:var(--mut)">Conecta Firebase para ver usuarios en tiempo real</div>';
+  }
 
   // ── Theme label ──
   const t=THEMES.find(x=>x.id===curTheme);
@@ -7990,6 +8099,9 @@ function fbStartListeners(){
   // Stop old listeners
   if(_fbUnsubR){_fbUnsubR();_fbUnsubR=null;}
   // Listen to records changes
+  // Start presence tracking
+  presenceStart();
+
   _fbUnsubR=_fbDb.collection(projectId).doc('records')
     .onSnapshot(snap=>{
       if(!snap.exists)return;
@@ -8032,6 +8144,7 @@ function fbDisconnect(){
   conf2('Desconectar Firebase','¿Dejar de sincronizar con la nube?<br><br>Los datos locales no se borran.',()=>{
     if(_fbUnsubR){_fbUnsubR();_fbUnsubR=null;}
     if(_fbUnsubH){_fbUnsubH();_fbUnsubH=null;}
+    presenceStop();
     localStorage.removeItem(FB_CONFIG_KEY);
     localStorage.removeItem(FB_PROJECT_KEY);
     localStorage.removeItem(FB_SYNC_KEY);
@@ -8159,7 +8272,7 @@ async function fbAutoInit(){
   try{
     await fbInit(config);
     fbUpdateUI(true);
-    fbStartListeners();
+    fbStartListeners();   // This also calls presenceStart()
     // Auto-pull if not creator
     if(!isCreator()) await fbPullData();
   }catch(e){
@@ -8378,6 +8491,162 @@ function _toggleRecTray(id){
   document.querySelectorAll('.rec-quick-tray.open').forEach(t=>{if(t!==tray)t.classList.remove('open');});
   if(isOpen){ openDet(id); }
   else { tray.classList.add('open'); if(navigator.vibrate)navigator.vibrate(8); }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   PRESENCIA EN TIEMPO REAL v31
+   Quién está conectado ahora mismo — via Firebase
+   ════════════════════════════════════════════════════════════ */
+
+const PRESENCE_TTL     = 90000;   // 90 seconds — considered "online"
+const PRESENCE_INTERVAL= 30000;   // Heartbeat every 30s
+let _presenceInterval  = null;
+let _presenceUnsubscribe = null;
+let _myPresenceRef     = null;
+let _onlineUsers       = [];      // Cache of online users
+
+/* ── Write my presence to Firestore ── */
+async function presenceHeartbeat(){
+  if(!_fbDb||!fbIsConfigured()) return;
+  const config=fbGetConfig();
+  if(!config) return;
+  const projectId=config.projectId;
+  const uid=isGuest()
+    ? (localStorage.getItem('px_guest_device_id')||'guest-unknown')
+    : authUsername;
+  const d=_getDeviceInfo();
+  const presenceData={
+    uid,
+    displayName:  isGuest()?'Invitado':authDisplayName||authUsername,
+    role:         authMode,          // 'creator'|'admin'|'guest'
+    device:       d.device,
+    browser:      d.browser,
+    lastSeen:     Date.now(),
+    tab:          curTab,
+    app:          'PensionadosMX v31',
+  };
+  try{
+    _myPresenceRef=_fbDb
+      .collection(projectId)
+      .doc('_presence')
+      .collection('users')
+      .doc(uid);
+    await _myPresenceRef.set(presenceData,{merge:true});
+  }catch(e){ console.warn('Presence write:',e); }
+}
+
+/* ── Remove my presence on logout/close ── */
+async function presenceRemove(){
+  if(_myPresenceRef){
+    try{ await _myPresenceRef.delete(); }catch{}
+    _myPresenceRef=null;
+  }
+}
+
+/* ── Listen to all online users ── */
+function presenceStartListener(){
+  if(!_fbDb||!fbIsConfigured()) return;
+  const config=fbGetConfig();if(!config)return;
+  const projectId=config.projectId;
+  if(_presenceUnsubscribe){ _presenceUnsubscribe(); _presenceUnsubscribe=null; }
+  _presenceUnsubscribe=_fbDb
+    .collection(projectId).doc('_presence').collection('users')
+    .onSnapshot(snap=>{
+      const now=Date.now();
+      _onlineUsers=[];
+      snap.forEach(doc=>{
+        const d=doc.data();
+        if(now-d.lastSeen < PRESENCE_TTL){
+          _onlineUsers.push(d);
+        }
+      });
+      _renderPresence();
+      // Notify creator when someone new joins
+      if(typeof isCreator==='function'&&isCreator()&&_onlineUsers.length>(_prevJoinCount||0)&&(_prevJoinCount||0)>0){
+        const sorted=_onlineUsers.slice().sort((a,b)=>b.lastSeen-a.lastSeen);
+        const newest=sorted[0];
+        if(newest&&(Date.now()-newest.lastSeen)<8000&&newest.uid!==authUsername){
+          snack('🟢 '+(newest.displayName||'Alguien')+' entró a la app','🟢');
+        }
+      }
+      window._prevJoinCount=_onlineUsers.length;
+    },err=>console.warn('Presence listener:',err));
+}
+
+/* ── Render online users everywhere ── */
+function _renderPresence(){
+  const count=_onlineUsers.length;
+  // ── KPI badge ──
+  const kpiEl=document.getElementById('adm-kpi-n-online');
+  if(kpiEl) kpiEl.textContent=count;
+  // ── Header badge ──
+  const hdrBadge=document.getElementById('hdr-presence-badge');
+  if(hdrBadge){
+    hdrBadge.textContent=count>9?'9+':count;
+    hdrBadge.classList.toggle('show',count>1); // >1 because I'm also online
+  }
+  // ── Admin online label ──
+  const lbl=document.getElementById('adm-online-count');
+  if(lbl) lbl.textContent=count;
+  // ── Admin online list ──
+  const listEl=document.getElementById('adm-online-list');
+  if(!listEl) return;
+  if(!count){
+    listEl.innerHTML='<div style="padding:14px;text-align:center;font-size:12px;color:var(--mut)">Nadie más en línea ahora</div>';
+    return;
+  }
+  const now=Date.now();
+  listEl.innerHTML=_onlineUsers.map(u=>{
+    const ago=Math.round((now-u.lastSeen)/1000);
+    const agoStr=ago<10?'Ahora mismo':ago<60?`${ago}s`:ago<3600?`${Math.round(ago/60)}min`:'Hace rato';
+    const roleColors={creator:'linear-gradient(135deg,#7c3aed,#c026d3)',admin:'linear-gradient(135deg,#1e3a8a,#3b82f6)',guest:'linear-gradient(135deg,#78350f,#b45309)'};
+    const roleIcons={creator:'👑',admin:'👤',guest:'👻'};
+    const isMe=u.uid===authUsername||(isGuest()&&u.role==='guest'&&u.uid===localStorage.getItem('px_guest_device_id'));
+    const tabLabels={inicio:'🏠 Inicio',registros:'📋 Lista',buscar:'🔍 Búsqueda',visitas:'🚗 Visitas',estadisticas:'📊 Stats',general:'⚙️ General',admin:'👑 Admin'};
+    const tabLbl=tabLabels[u.tab]||u.tab||'—';
+    return `<div class="presence-user-row">
+      <div class="presence-av" style="background:${roleColors[u.role]||roleColors.admin}">
+        ${roleIcons[u.role]||'👤'}
+        <div class="presence-online-ring"></div>
+      </div>
+      <div class="presence-body">
+        <div class="presence-name">${u.displayName||u.uid}${isMe?' <span style="font-size:9px;color:var(--sft)">(tú)</span>':''}</div>
+        <div class="presence-meta">${u.device||'—'} · ${tabLbl} · ${agoStr}</div>
+      </div>
+      <span class="presence-status ${u.role==='guest'?'guest':'online'}">${u.role==='creator'?'👑 Admin':u.role==='guest'?'👻 Invitado':'👤 Usuario'}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ── Start full presence system ── */
+async function presenceStart(){
+  if(!fbIsConfigured()||!_fbDb) return;
+  // Write initial presence
+  await presenceHeartbeat();
+  // Start heartbeat
+  if(_presenceInterval) clearInterval(_presenceInterval);
+  _presenceInterval=setInterval(presenceHeartbeat, PRESENCE_INTERVAL);
+  // Listen to others
+  presenceStartListener();
+  // Remove on page unload
+  window.addEventListener('beforeunload', presenceRemove);
+  // Update tab info when navigating
+  const _origGoOuter=window._origGoForPresence||go;
+  window._origGoForPresence=_origGoOuter;
+}
+
+/* ── Stop presence ── */
+function presenceStop(){
+  if(_presenceInterval){ clearInterval(_presenceInterval); _presenceInterval=null; }
+  if(_presenceUnsubscribe){ _presenceUnsubscribe(); _presenceUnsubscribe=null; }
+  presenceRemove();
+}
+
+/* ── Update tab on navigation ── */
+function presenceUpdateTab(tab){
+  if(!_myPresenceRef) return;
+  _myPresenceRef.update({tab, lastSeen:Date.now()}).catch(()=>{});
 }
 
 /* ═══════════════════════════════════════════════════
