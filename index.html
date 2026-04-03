@@ -2629,6 +2629,87 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .fb-dot-error      .fb-sync-dot,.fb-sync-dot.fb-dot-error{background:var(--red);}
 .fb-dot-error      .fb-sync-ring,.fb-sync-dot.fb-dot-error .fb-sync-ring{border-color:var(--red);}
 @keyframes fbSpin{to{transform:rotate(360deg);}}
+
+/* ── Swipe gestures on record cards ── */
+.rec-wrap{
+  position:relative;overflow:hidden;
+  border-radius:var(--r);margin-bottom:8px;
+}
+.rec-swipe-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;
+  border-radius:var(--r);
+  padding:0 20px;
+  font-size:14px;font-weight:800;
+  pointer-events:none;
+  opacity:0;transition:opacity .15s;
+}
+.rec-swipe-bg.left{
+  background:linear-gradient(90deg,transparent,rgba(239,68,68,.85));
+  justify-content:flex-end;color:#fff;
+}
+.rec-swipe-bg.right{
+  background:linear-gradient(90deg,rgba(34,197,94,.85),transparent);
+  justify-content:flex-start;color:#fff;
+}
+.rec-swipe-bg.show{opacity:1;}
+.rec{
+  position:relative;z-index:1;margin-bottom:0;
+  touch-action:pan-y;
+  transition:transform .15s ease, box-shadow .15s;
+  will-change:transform;
+}
+.rec.swiping{transition:none;}
+
+/* ── Pull to refresh indicator ── */
+.ptr-indicator{
+  position:absolute;top:-44px;left:50%;transform:translateX(-50%);
+  width:36px;height:36px;border-radius:50%;
+  background:var(--card);border:1px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.2);
+  transition:top .15s;z-index:50;pointer-events:none;
+}
+.ptr-indicator.pulling{top:8px;}
+.ptr-indicator.refreshing{top:8px;animation:ptrSpin 1s linear infinite;}
+@keyframes ptrSpin{to{transform:translateX(-50%) rotate(360deg);}}
+
+/* ── Enhanced record card v31 ── */
+.rec-status-strip{
+  height:3px;width:100%;
+  border-radius:3px 3px 0 0;
+  flex-shrink:0;
+}
+.rec-last-visit{
+  display:inline-flex;align-items:center;gap:3px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);
+  border-radius:6px;padding:2px 7px;
+  font-size:9px;font-weight:800;color:var(--grn);
+  margin-top:3px;
+}
+.rec-last-visit.warn{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--amb);}
+.rec-last-visit.hot{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:var(--red);}
+
+/* Quick actions tray (long press hint) */
+.rec-quick-tray{
+  display:flex;gap:4px;padding:6px 12px 8px;
+  border-top:1px solid var(--b1);
+  background:var(--s2);
+  overflow:hidden;max-height:0;
+  transition:max-height .25s ease, padding .25s;
+}
+.rec-quick-tray.open{max-height:60px;padding:6px 12px 8px;}
+.rec-qt-btn{
+  flex:1;padding:7px 4px;border-radius:10px;
+  border:1.5px solid var(--b2);background:var(--card);
+  font-size:10px;font-weight:800;color:var(--sft);
+  cursor:pointer;transition:.15s;text-align:center;
+  font-family:var(--fnt);
+}
+.rec-qt-btn:active{transform:scale(.93);}
+.rec-qt-btn.visit{color:var(--grn);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06);}
+.rec-qt-btn.call{color:var(--a2);border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.06);}
+.rec-qt-btn.edit{color:var(--amb);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06);}
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -3321,6 +3402,15 @@ if('serviceWorker' in navigator){
     <!-- ── GRUPO 3: Preferencias ── -->
     <div class="gen-group-label">⚙️ Preferencias</div>
     <div class="gen-group">
+      <div class="gen-row" onclick="toggleNotifications()">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">🔔</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Notificaciones</div>
+          <div class="gen-row-sub" id="gen-notif-sub">Cumpleaños · Meta diaria · Pendientes</div>
+        </div>
+        <div class="gen-toggle" id="tog-notif"><div class="gen-toggle-knob"></div></div>
+      </div>
+      <div class="gen-row-div"></div>
       <div class="gen-row" onclick="toggleGenPref('haptic')">
         <div class="gen-row-ico" style="background:linear-gradient(135deg,#78350f,#f97316)">📳</div>
         <div class="gen-row-body">
@@ -4254,6 +4344,7 @@ function snack(msg,ico='✓'){
 
 /* ===== THEMES ===== */
 const THEMES=[
+  {id:'auto',    nm:'Automático 🌗',bg:'#080c14',bar:'#6366f1',dots:['#60a5fa','#6366f1','#22c55e']},
   {id:'cosmos',  nm:'Cosmos',     bg:'#04080f',bar:'#4d9eff',dots:['#60a5fa','#6366f1','#22c55e']},
   {id:'aurora',  nm:'Aurora',     bg:'#03100a',bar:'#10b981',dots:['#34d399','#0d9488','#22c55e']},
   {id:'solar',   nm:'Solar',      bg:'#0f0900',bar:'#f59e0b',dots:['#fbbf24','#f97316','#ef4444']},
@@ -4263,19 +4354,39 @@ const THEMES=[
   {id:'carbon', nm:'Carbón 🌑',  bg:'#0a0a0a', bar:'#e2e8f0',dots:['#94a3b8','#64748b','#3b82f6']},
   {id:'campo',   nm:'Día Campo ☀️',bg:'#f2f7f0',bar:'#1a7820',dots:['#1a7820','#166030','#0e6824']},
 ];
-let curTheme=localStorage.getItem('px_theme')||'cosmos';
+let curTheme=localStorage.getItem('px_theme')||'auto';
 (()=>{
-  document.documentElement.setAttribute('data-theme',curTheme);
-  const t=THEMES.find(x=>x.id===curTheme);
-  if(t)document.getElementById('meta-tc').content=t.bg;
+  // Auto mode: follow iPhone system dark/light
+  function resolveTheme(raw){
+    if(raw==='auto'||!raw){
+      const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return dark?'cosmos':'arctic';
+    }
+    return raw;
+  }
+  const resolved=resolveTheme(curTheme);
+  document.documentElement.setAttribute('data-theme',resolved);
+  const t=THEMES.find(x=>x.id===resolved);
+  if(t){const el=document.getElementById('meta-tc');if(el)el.content=t.bg;}
+  // Listen for system changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{
+    if(curTheme==='auto') applyTheme('auto');
+  });
 })();
 function applyTheme(id){
   curTheme=id;
-  document.documentElement.setAttribute('data-theme',id);
-  const t=THEMES.find(x=>x.id===id);
-  if(t)document.getElementById('meta-tc').content=t.bg;
+  let resolved=id;
+  if(id==='auto'){
+    const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+    resolved=dark?'cosmos':'arctic';
+  }
+  document.documentElement.setAttribute('data-theme',resolved);
+  const t=THEMES.find(x=>x.id===resolved);
+  const el=document.getElementById('meta-tc');if(el&&t)el.content=t.bg;
   localStorage.setItem('px_theme',id);
-  renderThemeG();snack('🎨 Tema: '+t?.nm,'🎨');
+  renderThemeG();
+  if(id==='auto')snack('🌗 Tema automático (sigue tu iPhone)','🌗');
+  else snack('🎨 Tema: '+(t?.nm||id),'🎨');
 }
 function renderThemeG(){
   const el=document.getElementById('theme-g');if(!el)return;
@@ -4350,7 +4461,7 @@ function go(tab){
 }
 function render(t){
   if(t==='inicio')        renderInicio();
-  if(t==='registros')     renderList();
+  if(t==='registros')     {renderList();setTimeout(_wrapRecsForSwipe,100);}
   if(t==='buscar')        initSrch();
   if(t==='visitas')       renderVis();
   if(t==='estadisticas')  renderStats();
@@ -4391,7 +4502,7 @@ function recCard(r){
     :`<div class="av" style="background:${p.bg};color:${p.clr};width:56px;height:56px;border-radius:14px">${ini(r.nombre)}</div>`;
   return `<div class="rec${r.dup?' dup':''} ${estCls}">
     <div class="rec-bar" style="background:${p.clr}40;border-bottom:2px solid ${p.clr}60"></div>
-    <div class="rec-body" data-id="${r.id}" onclick="batchMode?toggleBatchRec(${r.id}):openDet(${r.id})" oncontextmenu="if(!batchMode){enterBatch();toggleBatchRec(${r.id});}return false;">
+    <div class="rec-body" data-id="${r.id}" onclick="batchMode?toggleBatchRec(${r.id}):_toggleRecTray(${r.id})" oncontextmenu="if(!batchMode){enterBatch();toggleBatchRec(${r.id});}return false;">
       <div class="rec-top">
         ${avatarHtml}
         <div class="rec-meta">
@@ -7064,6 +7175,8 @@ function _applySession(){
   renderInicio();renderChips();renderSFPills();
   // Auto-connect Firebase if configured
   setTimeout(fbAutoInit, 800);
+  // Check daily notifications (after 2s delay)
+  setTimeout(checkDailyNotifications, 2000);
 }
 
 /* ════════════════════════════════════════════════
@@ -8055,6 +8168,218 @@ async function fbAutoInit(){
   }
 }
 
+
+/* ════════════════════════════════════════════════
+   NOTIFICACIONES LOCALES v31
+   Cumpleaños · Meta diaria · Recordatorios
+   ════════════════════════════════════════════════ */
+
+const NOTIF_KEY = 'px_notif_prefs';
+
+function getNotifPrefs(){
+  return JSON.parse(localStorage.getItem(NOTIF_KEY)||'{"birthday":true,"goal":true,"pending":true}');
+}
+
+async function requestNotifPermission(){
+  if(!('Notification' in window)) return false;
+  if(Notification.permission==='granted') return true;
+  const result=await Notification.requestPermission();
+  return result==='granted';
+}
+
+function sendLocalNotif(title, body, icon='icon-192.png', tag='pm-notif'){
+  if(Notification.permission!=='granted') return;
+  const n=new Notification(title,{body,icon,tag,badge:'icon-192.png',vibrate:[200,100,200]});
+  n.onclick=()=>{window.focus();n.close();};
+}
+
+function checkDailyNotifications(){
+  if(Notification.permission!=='granted') return;
+  const prefs=getNotifPrefs();
+  const today=new Date();
+  const todayStr=today.toISOString().slice(0,10);
+  const lastCheck=localStorage.getItem('px_notif_last_check');
+  if(lastCheck===todayStr) return; // Already checked today
+  localStorage.setItem('px_notif_last_check',todayStr);
+
+  const mm=today.getMonth()+1, dd=today.getDate();
+
+  // 🎂 Birthday notifications
+  if(prefs.birthday){
+    const cumples=R.filter(r=>{
+      if(!r.fnac) return false;
+      const parts=r.fnac.split('-');
+      return parseInt(parts[1])===mm && parseInt(parts[2])===dd;
+    });
+    if(cumples.length===1){
+      sendLocalNotif('🎂 Cumpleaños hoy',`${cumples[0].nombre} cumple años hoy`,'icon-192.png','birthday');
+    } else if(cumples.length>1){
+      sendLocalNotif('🎂 Cumpleaños hoy',`${cumples.length} beneficiarios cumplen años hoy`,'icon-192.png','birthday');
+    }
+  }
+
+  // 🎯 Goal reminder (afternoon)
+  if(prefs.goal && today.getHours()>=14){
+    const m=_getMeta();
+    const vis=R.filter(r=>{
+      if(!r.ult) return false;
+      return r.ult.startsWith(todayStr) && (r.visita==='Si'||r.visita==='Sí');
+    }).length;
+    if(m.goal>0 && vis<m.goal){
+      const left=m.goal-vis;
+      sendLocalNotif('🎯 Meta del día',`Te faltan ${left} visita${left!==1?'s':''} para cumplir tu meta`,'icon-192.png','goal');
+    }
+  }
+
+  // ⏳ Pending visits (more than 7 days old)
+  if(prefs.pending){
+    const oldPending=R.filter(r=>{
+      if(r.visita!=='Pendiente'||!r.fecha) return false;
+      const diff=(Date.now()-new Date(r.fecha+'T00:00:00').getTime())/(1000*60*60*24);
+      return diff>7;
+    }).length;
+    if(oldPending>0){
+      sendLocalNotif('⏳ Visitas pendientes',`${oldPending} beneficiario${oldPending!==1?'s tienen':' tiene'} más de 7 días sin visitar`,'icon-192.png','pending');
+    }
+  }
+}
+
+async function toggleNotifications(){
+  if(Notification.permission==='denied'){
+    conf2('Notificaciones bloqueadas','Las notificaciones están bloqueadas en iOS.<br><br>Para activarlas:<br>Ajustes → Safari → Notificaciones → PensionadosMX',null,null);
+    return;
+  }
+  const granted=await requestNotifPermission();
+  if(granted){
+    snack('🔔 Notificaciones activadas','🔔');
+    // Test notification
+    setTimeout(()=>sendLocalNotif('✅ PensionadosMX','Las notificaciones están activadas'),500);
+    checkDailyNotifications();
+  } else {
+    snack('❌ Permiso denegado','❌');
+  }
+  renderGeneral();
+}
+
+
+/* ════════════════════════════════════════════════
+   SWIPE GESTURES v31
+   ← Desliza izquierda para eliminar
+   → Desliza derecha para marcar visitado
+   ════════════════════════════════════════════════ */
+
+const SWIPE_THRESHOLD = 80;  // px needed to trigger action
+const SWIPE_MAX = 140;       // max drag distance
+
+function initSwipeOnRec(recEl, recordId){
+  if(!recEl || recEl.dataset.swipeInit) return;
+  recEl.dataset.swipeInit='1';
+
+  // Create background layers
+  const wrap=recEl.closest('.rec-wrap');
+  if(!wrap) return;
+  let bgLeft=wrap.querySelector('.rec-swipe-bg.left');
+  let bgRight=wrap.querySelector('.rec-swipe-bg.right');
+  if(!bgLeft){
+    bgLeft=document.createElement('div');
+    bgLeft.className='rec-swipe-bg left';
+    bgLeft.innerHTML='🗑️ Eliminar';
+    wrap.prepend(bgLeft);
+  }
+  if(!bgRight){
+    bgRight=document.createElement('div');
+    bgRight.className='rec-swipe-bg right';
+    bgRight.innerHTML='✅ Visitado';
+    wrap.prepend(bgRight);
+  }
+
+  let startX=0, startY=0, currentX=0, dragging=false, axis=null;
+
+  function onStart(e){
+    const touch=e.touches?.[0]||e;
+    startX=touch.clientX; startY=touch.clientY;
+    currentX=0; dragging=true; axis=null;
+    recEl.classList.add('swiping');
+  }
+  function onMove(e){
+    if(!dragging) return;
+    const touch=e.touches?.[0]||e;
+    const dx=touch.clientX-startX;
+    const dy=touch.clientY-startY;
+    if(!axis){
+      if(Math.abs(dx)<5&&Math.abs(dy)<5) return;
+      axis=Math.abs(dx)>Math.abs(dy)?'x':'y';
+    }
+    if(axis!=='x') return;
+    e.preventDefault();
+    currentX=Math.max(-SWIPE_MAX,Math.min(SWIPE_MAX,dx));
+    recEl.style.transform=`translateX(${currentX}px)`;
+    // Show bg based on direction
+    if(currentX < -20){
+      bgLeft.classList.add('show'); bgRight.classList.remove('show');
+      bgLeft.style.opacity=Math.min(1,Math.abs(currentX)/SWIPE_THRESHOLD).toString();
+    } else if(currentX > 20){
+      bgRight.classList.add('show'); bgLeft.classList.remove('show');
+      bgRight.style.opacity=Math.min(1,currentX/SWIPE_THRESHOLD).toString();
+    } else {
+      bgLeft.classList.remove('show'); bgRight.classList.remove('show');
+    }
+  }
+  function onEnd(){
+    if(!dragging) return;
+    dragging=false; axis=null;
+    recEl.classList.remove('swiping');
+    recEl.style.transform='';
+    bgLeft.classList.remove('show'); bgRight.classList.remove('show');
+    bgLeft.style.opacity=''; bgRight.style.opacity='';
+    // Trigger action if past threshold
+    if(currentX < -SWIPE_THRESHOLD){
+      // Swipe left → delete (with haptic)
+      if(navigator.vibrate) navigator.vibrate([30,20,30]);
+      if(can('deleteRecord')) confDel(recordId);
+      else _showGuestUpgrade('Eliminar registros requiere una cuenta');
+    } else if(currentX > SWIPE_THRESHOLD){
+      // Swipe right → mark visited (with haptic)
+      if(navigator.vibrate) navigator.vibrate(25);
+      if(can('markVisit')) detSetField(recordId,'visita','Si');
+      else _showGuestUpgrade('Marcar visitas requiere una cuenta');
+    }
+    currentX=0;
+  }
+
+  recEl.addEventListener('touchstart', onStart, {passive:true});
+  recEl.addEventListener('touchmove',  onMove,  {passive:false});
+  recEl.addEventListener('touchend',   onEnd,   {passive:true});
+}
+
+// Wrap all records with swipe container after render
+function _wrapRecsForSwipe(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.recs .rec').forEach(el=>{
+      const id=parseInt(el.querySelector('[data-id]')?.dataset.id||el.dataset.id||'0');
+      if(!id) return;
+      if(el.closest('.rec-wrap')) { initSwipeOnRec(el, id); return; }
+      const wrap=document.createElement('div');
+      wrap.className='rec-wrap';
+      el.parentNode.insertBefore(wrap, el);
+      wrap.appendChild(el);
+      initSwipeOnRec(el, id);
+    });
+  });
+}
+
+
+function _toggleRecTray(id){
+  // Double tap = open detail, single tap = show quick tray
+  const tray=document.getElementById('rqt-'+id);
+  if(!tray){ openDet(id); return; }
+  const isOpen=tray.classList.contains('open');
+  // Close all other trays
+  document.querySelectorAll('.rec-quick-tray.open').forEach(t=>{if(t!==tray)t.classList.remove('open');});
+  if(isOpen){ openDet(id); }
+  else { tray.classList.add('open'); if(navigator.vibrate)navigator.vibrate(8); }
+}
+
 /* ═══════════════════════════════════════════════════
    GENERAL SECTION v30 — Full Implementation
    ═══════════════════════════════════════════════════ */
@@ -8119,6 +8444,12 @@ function renderGeneral(){
     const el=document.getElementById('tog-'+k);
     if(el) el.classList.toggle('on',!!p[k]);
   });
+  // Notification toggle
+  const notifTog=document.getElementById('tog-notif');
+  const notifSub=document.getElementById('gen-notif-sub');
+  const notifGranted='Notification' in window && Notification.permission==='granted';
+  if(notifTog) notifTog.classList.toggle('on',notifGranted);
+  if(notifSub) notifSub.textContent=notifGranted?'✅ Activadas — cumpleaños, meta, pendientes':'Toca para activar alertas diarias';
 
   // Meta sub-label
   const m=_getMeta();
@@ -8345,6 +8676,65 @@ function copyAppInfo(){
   <button class="pwa-install-close" onclick="hidePWABar()">✕</button>
 </div>
 <script>
+/* ════════════════════════════════════════════════
+   PULL-TO-REFRESH v31
+   Desliza hacia abajo en Inicio para actualizar
+   ════════════════════════════════════════════════ */
+
+(function initPullToRefresh(){
+  const mainEl=document.getElementById('main');
+  if(!mainEl) return;
+
+  // Create indicator
+  const ptr=document.createElement('div');
+  ptr.className='ptr-indicator'; ptr.id='ptr-indicator';
+  ptr.innerHTML='↓'; mainEl.style.position='relative';
+  mainEl.prepend(ptr);
+
+  let startY=0, pulling=false, triggered=false;
+  const THRESHOLD=60;
+
+  mainEl.addEventListener('touchstart',e=>{
+    if(mainEl.scrollTop>10) return; // Only when at top
+    startY=e.touches[0].clientY; pulling=true; triggered=false;
+  },{passive:true});
+
+  mainEl.addEventListener('touchmove',e=>{
+    if(!pulling||mainEl.scrollTop>2) return;
+    const dy=e.touches[0].clientY-startY;
+    if(dy<10) return;
+    ptr.classList.add('pulling');
+    if(dy>THRESHOLD&&!triggered){
+      ptr.innerHTML='↻';triggered=true;
+      if(navigator.vibrate) navigator.vibrate(15);
+    } else if(dy<=THRESHOLD){
+      ptr.innerHTML='↓';triggered=false;
+    }
+  },{passive:true});
+
+  mainEl.addEventListener('touchend',()=>{
+    if(!pulling) return; pulling=false;
+    if(triggered){
+      ptr.classList.add('refreshing');ptr.innerHTML='↻';
+      // Refresh action
+      setTimeout(()=>{
+        if(typeof fbIsConfigured==='function'&&fbIsConfigured()&&!isCreator()){
+          fbPullData().then(()=>{
+            ptr.classList.remove('refreshing','pulling');ptr.innerHTML='↓';
+            snack('☁️ Datos actualizados','☁️');
+          });
+        } else {
+          detectDups();upHdr();renderInicio();
+          ptr.classList.remove('refreshing','pulling');ptr.innerHTML='↓';
+          snack('✅ Actualizado','✅');
+        }
+      },600);
+    } else {
+      ptr.classList.remove('pulling');ptr.innerHTML='↓';
+    }
+  },{passive:true});
+})();
+
 // Offline detection
 window.addEventListener('online',  ()=>document.getElementById('pwa-offline').classList.remove('show'));
 // ── v23: Fix teclado iOS ──
