@@ -11413,7 +11413,7 @@ function setScanStatus(msg,type=''){
 
 let _pidStream = null;
 let _pidImageB64 = null;  // base64 jpeg captured
-let _pidHasProg = true;   // toggle state
+// pid program handled via select#pid-tipo-sel
 
 /* ── Open / Close ── */
 function openPhotoIDScanner(){
@@ -11634,10 +11634,11 @@ function _showPIDResult(data, dataURL){
   // CURP auto-parse if available
   if(data.curp){ try{ onCURPInput(data.curp); }catch{} }
 
-  // Reset program toggle
-  _pidHasProg = true;
-  _updatePIDProgToggle();
-  document.getElementById('pid-tipo-sel').value = '';
+  // Reset program select
+  const tipoSel = document.getElementById('pid-tipo-sel');
+  if(tipoSel){ tipoSel.value=''; tipoSel.style.borderColor='var(--b2)'; }
+  const note = document.getElementById('pid-no-prog-note');
+  if(note) note.style.display='none';
   document.getElementById('pid-folio-inp').value = '';
 
   // Show result overlay
@@ -11645,24 +11646,11 @@ function _showPIDResult(data, dataURL){
 }
 
 /* ── Program toggle ── */
-function setPIDHasProg(val){
-  _pidHasProg = val;
-  _updatePIDProgToggle();
-}
-
-function _updatePIDProgToggle(){
-  const si = document.getElementById('pid-hasprog-si');
-  const no = document.getElementById('pid-hasprog-no');
-  const sel = document.getElementById('pid-prog-selector');
-  if(_pidHasProg){
-    si?.classList.add('pid-prog-tg-active');
-    no?.classList.remove('pid-prog-tg-active');
-    if(sel) sel.style.display = 'block';
-  }else{
-    no?.classList.add('pid-prog-tg-active');
-    si?.classList.remove('pid-prog-tg-active');
-    if(sel) sel.style.display = 'none';
-  }
+function onPIDTipoChange(sel){
+  const note = document.getElementById('pid-no-prog-note');
+  if(note) note.style.display = sel.value === 'NINGUNO' ? 'block' : 'none';
+  // Visual border feedback
+  sel.style.borderColor = sel.value === 'NINGUNO' ? 'rgba(248,113,113,.6)' : sel.value ? 'var(--ind)' : 'var(--b2)';
 }
 
 /* ── Save record ── */
@@ -11672,8 +11660,8 @@ function savePIDRecord(){
   const nombre = (document.getElementById('pid-f-nombre')?.value||'').trim().toUpperCase();
   if(!nombre){ snack('⚠️ El nombre es requerido','⚠️'); return; }
 
-  const tipo = _pidHasProg ? (document.getElementById('pid-tipo-sel')?.value||'') : 'SIN_PROGRAMA';
-  if(_pidHasProg && !tipo){ snack('⚠️ Selecciona el programa','⚠️'); return; }
+  const tipo = (document.getElementById('pid-tipo-sel')?.value||'');
+  if(!tipo){ snack('⚠️ Selecciona el programa o "No tiene programa"','⚠️'); return; }
 
   const curp = (document.getElementById('pid-f-curp')?.value||'').trim().toUpperCase();
   const fnac = document.getElementById('pid-f-fnac')?.value || '';
@@ -11690,7 +11678,7 @@ function savePIDRecord(){
   const rec = {
     id: newId,
     folio,
-    tipo: _pidHasProg ? tipo : '',
+    tipo: tipo === 'NINGUNO' ? '' : tipo,
     nombre,
     curp,
     fnac,
@@ -11703,8 +11691,8 @@ function savePIDRecord(){
     ruta: '',
     visita: 'Pendiente',
     uso: 'Mexico',
-    estatus: _pidHasProg ? 'Activo' : 'Sin programa',
-    obs: _pidHasProg ? '' : 'Sin programa al momento del registro',
+    estatus: tipo === 'NINGUNO' ? 'Sin programa' : 'Activo',
+    obs: tipo === 'NINGUNO' ? 'Sin programa al momento del registro' : '',
     photo: _pidImageB64 ? ('data:image/jpeg;base64,' + _pidImageB64) : null,
     txtColor: '',
     fecha: today(),
@@ -11717,7 +11705,7 @@ function savePIDRecord(){
     id: Date.now(),
     folio,
     nombre,
-    cambios: 'Beneficiario registrado vía escáner de foto · ID #' + newId + (_pidHasProg ? ' · Programa: '+tipo : ' · Sin programa'),
+    cambios: 'Beneficiario registrado vía escáner de foto · ID #' + newId + (tipo === 'NINGUNO' ? ' · Sin programa' : ' · Programa: '+tipo),
     motivo: 'Scanner de credencial',
     resp: 'Usuario',
     fecha: nowStr(),
@@ -13126,27 +13114,23 @@ function copyAppInfo(){
     <!-- Separador -->
     <div style="border-top:1.5px solid var(--b2);margin:14px 0 12px"></div>
 
-    <!-- ¿Tiene programa? -->
+    <!-- Programa -->
     <div style="font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📋 Registro del programa</div>
 
     <div style="margin-bottom:10px">
-      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">¿Tiene programa activo?</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px" id="pid-hasprog-tg">
-        <button type="button" class="pid-prog-tg-btn pid-prog-tg-active" id="pid-hasprog-si" onclick="setPIDHasProg(true)">✅ Sí tiene</button>
-        <button type="button" class="pid-prog-tg-btn" id="pid-hasprog-no" onclick="setPIDHasProg(false)">❌ Sin programa</button>
-      </div>
-    </div>
-
-    <div id="pid-prog-selector" style="margin-bottom:10px">
       <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Programa</label>
-      <select id="pid-tipo-sel" style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;-webkit-appearance:none">
+      <select id="pid-tipo-sel" onchange="onPIDTipoChange(this)" style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;-webkit-appearance:none;transition:.2s">
         <option value="">— Seleccionar programa —</option>
+        <option value="NINGUNO">❌ No tiene programa</option>
         <option value="PAM">👴 PAM – Pensión para el Bienestar (Adulto Mayor)</option>
         <option value="PCD">♿ PCD – Pensión para Personas con Discapacidad</option>
         <option value="JCF">🎓 JCF – Jóvenes Construyendo el Futuro</option>
         <option value="MT">👩 MT – Madres Trabajadoras</option>
         <option value="BBJ">📚 BBJ – Becas Benito Juárez</option>
       </select>
+      <div id="pid-no-prog-note" style="display:none;margin-top:6px;padding:8px 12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;font-size:11px;font-weight:700;color:#f87171">
+        Se registrará con estatus "Sin programa"
+      </div>
     </div>
 
     <div style="margin-bottom:12px">
