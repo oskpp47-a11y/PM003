@@ -3517,6 +3517,64 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .scan-use-btn:active{transform:scale(.97);}
 .scan-retry-btn{width:100%;padding:10px;border-radius:14px;background:var(--s2);border:1px solid var(--b2);color:var(--sft);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt);margin-top:8px;}
 
+/* ── PHOTO-ID SCANNER v35 ── */
+.pid-overlay{position:fixed;inset:0;z-index:550;background:#000;display:none;flex-direction:column;}
+.pid-overlay.on{display:flex;}
+.pid-hdr{padding:calc(var(--st)+10px) 16px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);}
+.pid-hdr-title{flex:1;font-size:15px;font-weight:800;color:#fff;}
+.pid-hdr-close{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pid-video-wrap{flex:1;position:relative;overflow:hidden;background:#000;}
+.pid-video{width:100%;height:100%;object-fit:cover;display:block;}
+.pid-guide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;gap:0;}
+.pid-guide-label{color:rgba(255,255,255,.7);font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;background:rgba(0,0,0,.5);padding:4px 12px;border-radius:20px;}
+.pid-card-frame{position:relative;width:min(88vw,340px);aspect-ratio:1.586;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);}
+.pid-card-border{position:absolute;inset:0;border:2.5px solid rgba(255,255,255,.9);border-radius:10px;box-shadow:0 0 0 1px rgba(99,102,241,.6),inset 0 0 0 1px rgba(99,102,241,.3);}
+@keyframes pidCornerGlow{0%,100%{opacity:.7;}50%{opacity:1;}}
+.pid-corner{position:absolute;width:22px;height:22px;border-color:#6366f1;border-style:solid;border-width:0;animation:pidCornerGlow 2s ease-in-out infinite;}
+.pid-corner.tl{top:-1px;left:-1px;border-top-width:3.5px;border-left-width:3.5px;border-radius:8px 0 0 0;}
+.pid-corner.tr{top:-1px;right:-1px;border-top-width:3.5px;border-right-width:3.5px;border-radius:0 8px 0 0;}
+.pid-corner.bl{bottom:-1px;left:-1px;border-bottom-width:3.5px;border-left-width:3.5px;border-radius:0 0 0 8px;}
+.pid-corner.br{bottom:-1px;right:-1px;border-bottom-width:3.5px;border-right-width:3.5px;border-radius:0 0 8px 0;}
+@keyframes pidScan{0%{top:4px;opacity:1;}48%{opacity:1;}50%{top:calc(100% - 4px);opacity:0;}51%{top:4px;opacity:0;}55%{opacity:1;}100%{top:4px;}}
+.pid-scan-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(90deg,transparent,#818cf8,#c4b5fd,#818cf8,transparent);border-radius:2px;animation:pidScan 2s ease-in-out infinite;box-shadow:0 0 10px rgba(129,140,248,.9);}
+.pid-hint{color:rgba(255,255,255,.65);font-size:11px;font-weight:600;margin-top:10px;text-align:center;background:rgba(0,0,0,.5);padding:4px 14px;border-radius:20px;}
+.pid-footer{padding:16px 16px calc(16px + var(--sb));background:rgba(0,0,0,.8);backdrop-filter:blur(10px);flex-shrink:0;}
+.pid-capture-btn{width:100%;padding:15px;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-size:16px;font-weight:800;cursor:pointer;font-family:var(--fnt);display:flex;align-items:center;justify-content:center;gap:10px;transition:.15s;}
+.pid-capture-btn:active{transform:scale(.97);}
+.pid-capture-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.pid-file-btn{width:100%;margin-top:8px;padding:10px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fnt);text-align:center;}
+.pid-file-btn:active{background:rgba(255,255,255,.18);}
+.pid-side-note{font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px;}
+.pid-prog-tg-btn{padding:10px 8px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;border:1.5px solid var(--b2);background:var(--s2);color:var(--sft);font-family:var(--fnt);transition:.15s;}
+.pid-prog-tg-btn.pid-prog-tg-active{background:var(--ind);border-color:var(--ind);color:#fff;}
+.pid-res-field-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1);}
+.pid-res-field-row:last-child{border-bottom:none;}
+.pid-res-lbl{font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;flex-shrink:0;width:72px;}
+.pid-res-inp{flex:1;background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:5px 8px;color:var(--txt);font-size:13px;font-weight:600;font-family:var(--fnt);outline:none;min-width:0;}
+.pid-res-inp:focus{border-color:var(--ind);}
+/* Processing state */
+.pid-processing{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);}
+.pid-processing.on{display:flex;}
+@keyframes pidPulse{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.08);opacity:1;}}
+.pid-proc-ico{font-size:48px;animation:pidPulse 1.5s ease-in-out infinite;margin-bottom:16px;}
+.pid-proc-label{color:#fff;font-size:15px;font-weight:800;margin-bottom:6px;}
+.pid-proc-sub{color:rgba(255,255,255,.5);font-size:12px;font-weight:600;}
+/* Result sheet (reuses scan-result-sheet styles, but with photo preview) */
+.pid-result-overlay{position:fixed;inset:0;z-index:650;background:rgba(0,0,0,.7);display:none;align-items:flex-end;}
+.pid-result-overlay.on{display:flex;}
+.pid-result-sheet{background:var(--bg);border-radius:24px 24px 0 0;padding:20px 16px calc(20px + var(--sb));width:100%;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);max-height:88vh;overflow-y:auto;}
+.pid-photo-thumb{width:100%;aspect-ratio:1.586;object-fit:cover;border-radius:10px;margin-bottom:14px;border:1.5px solid var(--b2);}
+.pid-conf-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;border-radius:12px;padding:3px 10px;margin-left:8px;}
+.pid-conf-high{background:#0d2a18;color:#4ade80;}
+.pid-conf-med{background:#1e1a08;color:#fbbf24;}
+.pid-conf-low{background:#2a0e0e;color:#f87171;}
+/* Form scan buttons side by side */
+.scan-btns-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.scan-form-btn-half{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.1));border:1.5px dashed rgba(99,102,241,.4);border-radius:var(--r);cursor:pointer;font-size:11px;font-weight:800;color:var(--a2);transition:.15s;font-family:var(--fnt);text-align:center;}
+.scan-form-btn-half:active{background:rgba(99,102,241,.2);transform:scale(.97);}
+.scan-form-btn-half .sfb-ico{font-size:22px;}
+.scan-form-btn-half .sfb-new{font-size:9px;font-weight:800;background:rgba(99,102,241,.3);color:var(--a3);border-radius:6px;padding:2px 7px;}
+
 /* Scan button in form */
 .scan-form-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.1));border:1.5px dashed rgba(99,102,241,.4);border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:800;color:var(--a2);margin-bottom:14px;transition:.15s;font-family:var(--fnt);}
 .scan-form-btn:active{background:rgba(99,102,241,.2);transform:scale(.98);}
@@ -5055,11 +5113,18 @@ if('serviceWorker' in navigator){
   </div>
   <div class="fg" style="margin-top:14px"><label class="fl">Folio</label><input class="fi" id="e-folio" placeholder="F-0001"/></div>
   <div class="fg">
-    <button type="button" class="scan-form-btn" id="scan-form-btn" onclick="openIDScanner()">
-      <span class="scan-form-btn-ico">📷</span>
-      <span>Escanear INE / CURP / QR</span>
-      <span style="font-size:10px;font-weight:700;background:rgba(99,102,241,.3);color:var(--a3);border-radius:8px;padding:2px 8px;">NUEVO</span>
-    </button>
+    <div class="scan-btns-row" id="scan-btns-row">
+      <button type="button" class="scan-form-btn-half" id="scan-form-btn" onclick="openIDScanner()">
+        <span class="sfb-ico">🔲</span>
+        <span>Escanear QR / Código</span>
+        <span class="sfb-new">INE · CURP · PDF417</span>
+      </button>
+      <button type="button" class="scan-form-btn-half" id="pid-form-btn" onclick="openPhotoIDScanner()">
+        <span class="sfb-ico">📸</span>
+        <span>Fotografiar Credencial</span>
+        <span class="sfb-new">IA · Nuevo beneficiario</span>
+      </button>
+    </div>
   </div>
   <div class="fg">
     <label class="fl">Foto (opcional)</label>
@@ -11340,6 +11405,353 @@ function setScanStatus(msg,type=''){
   el.className='scan-status-txt'+(type?' '+type:'');
 }
 
+/* ═══════════════════════════════════════════════════
+   PHOTO ID SCANNER v35 — Claude Vision OCR
+   Toma foto de la credencial → IA extrae datos →
+   Hoja de guardado rápido con selector de programa
+   ═══════════════════════════════════════════════════ */
+
+let _pidStream = null;
+let _pidImageB64 = null;  // base64 jpeg captured
+let _pidHasProg = true;   // toggle state
+
+/* ── Open / Close ── */
+function openPhotoIDScanner(){
+  const ov = document.getElementById('pid-overlay');
+  if(!ov) return;
+  _pidImageB64 = null;
+  document.getElementById('pid-processing').classList.remove('on');
+  document.getElementById('pid-capture-btn').disabled = false;
+  ov.classList.add('on');
+  _startPIDCamera();
+}
+
+function closePhotoIDScanner(){
+  _stopPIDCamera();
+  document.getElementById('pid-overlay')?.classList.remove('on');
+}
+
+function closePIDResult(){
+  document.getElementById('pid-result-overlay')?.classList.remove('on');
+}
+
+function retryPIDPhoto(){
+  closePIDResult();
+  openPhotoIDScanner();
+}
+
+/* ── Camera ── */
+async function _startPIDCamera(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} }
+    });
+    _pidStream = stream;
+    const v = document.getElementById('pid-video');
+    v.srcObject = stream;
+    v.play();
+  }catch(err){
+    snack('⚠️ Sin acceso a la cámara — usa "Elegir de galería"','⚠️');
+    console.warn('PID camera error:', err);
+  }
+}
+
+function _stopPIDCamera(){
+  if(_pidStream){ _pidStream.getTracks().forEach(t=>t.stop()); _pidStream=null; }
+}
+
+/* ── Capture ── */
+function capturePhotoID(){
+  const video = document.getElementById('pid-video');
+  const canvas = document.getElementById('pid-canvas');
+  if(!video || video.readyState < 2){
+    snack('⚠️ Cámara no lista','⚠️');
+    return;
+  }
+  // Draw video frame to canvas
+  canvas.width = video.videoWidth || 1280;
+  canvas.height = video.videoHeight || 720;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // Get base64 jpeg (0.88 quality — balance tamaño/calidad)
+  const dataURL = canvas.toDataURL('image/jpeg', 0.88);
+  _pidImageB64 = dataURL.split(',')[1];
+  _stopPIDCamera();
+  _processPIDImage(dataURL);
+}
+
+function handlePIDFile(event){
+  const file = event.target.files?.[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    const dataURL = e.target.result;
+    _pidImageB64 = dataURL.split(',')[1];
+    _stopPIDCamera();
+    _processPIDImage(dataURL);
+  };
+  reader.readAsDataURL(file);
+  // Reset input
+  event.target.value = '';
+}
+
+/* ── Process with Claude Vision ── */
+async function _processPIDImage(dataURL){
+  // Show processing state
+  document.getElementById('pid-processing').classList.add('on');
+  document.getElementById('pid-capture-btn').disabled = true;
+
+  const apiKey = getAIKey();
+  if(!apiKey){
+    _hidePIDProcessing();
+    // No API key: show empty editable fields so user fills manually
+    _showPIDResult({confianza:'baja',_noai:true}, dataURL);
+    return;
+  }
+
+  const prompt = `Eres un sistema OCR especializado en credenciales de identidad mexicanas (INE/IFE, CURP, pasaporte).
+
+Analiza la imagen de esta credencial y extrae TODOS los datos visibles. Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markdown, sin bloques de código.
+
+El JSON debe tener EXACTAMENTE esta estructura (usa null para campos no encontrados):
+{
+  "nombre": "APELLIDO1 APELLIDO2 NOMBRE(S) en mayúsculas",
+  "curp": "18 caracteres CURP o null",
+  "fnac": "YYYY-MM-DD o null",
+  "sexo": "Masculino o Femenino o null",
+  "dom": "calle y número o null",
+  "col": "colonia o null",
+  "municipio": "municipio o null",
+  "estado": "estado o null",
+  "seccion": "número de sección electoral o null",
+  "clave": "clave de elector 18-20 chars o null",
+  "tel": "teléfono o null",
+  "confianza": "alta | media | baja",
+  "tipo_doc": "INE | IFE | CURP | PASAPORTE | OTRO"
+}`;
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method: 'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages:[{
+          role:'user',
+          content:[
+            { type:'image', source:{ type:'base64', media_type:'image/jpeg', data: _pidImageB64 } },
+            { type:'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    const data = await res.json();
+    _hidePIDProcessing();
+
+    if(data.error){
+      const msg = data.error.type === 'authentication_error'
+        ? '🔑 API Key inválida — ve al Asistente IA y corrígela'
+        : `⚠️ Error IA: ${data.error.message||'Inténtalo de nuevo'}`;
+      snack(msg,'⚠️');
+      closePhotoIDScanner();
+      return;
+    }
+
+    const rawText = data?.content?.[0]?.text || '';
+    let extracted = {};
+    try{
+      // Strip any accidental markdown
+      const clean = rawText.replace(/```json|```/g,'').trim();
+      extracted = JSON.parse(clean);
+    }catch(e){
+      console.warn('PID JSON parse error:', e, rawText);
+      snack('⚠️ No se pudo leer el formato de la IA','⚠️');
+      extracted = {};
+    }
+
+    _showPIDResult(extracted, dataURL);
+
+  }catch(err){
+    _hidePIDProcessing();
+    snack('⚠️ Error de conexión al analizar','⚠️');
+    console.warn('PID fetch error:', err);
+    closePhotoIDScanner();
+  }
+}
+
+function _hidePIDProcessing(){
+  document.getElementById('pid-processing')?.classList.remove('on');
+  document.getElementById('pid-capture-btn').disabled = false;
+}
+
+/* ── Show result ── */
+function _showPIDResult(data, dataURL){
+  // Close camera overlay
+  document.getElementById('pid-overlay')?.classList.remove('on');
+
+  // Show thumbnail
+  const thumb = document.getElementById('pid-thumb');
+  if(dataURL){ thumb.src = dataURL; thumb.style.display='block'; }
+  else{ thumb.style.display='none'; }
+
+  // Confidence badge / no-AI notice
+  const isNoAI = !!data._noai;
+  const conf = data.confianza || 'media';
+  const confMap = { alta:'pid-conf-high', media:'pid-conf-med', baja:'pid-conf-low' };
+  const confLabel = { alta:'Alta confianza ✅', media:'Confianza media ⚠️', baja:'Revisa los datos' };
+  document.getElementById('pid-res-sub').innerHTML = isNoAI
+    ? '⚠️ Sin API Key — llena los campos manualmente &nbsp;<button onclick="openAI();setTimeout(openAIKeySheet,300)" style="font-size:10px;font-weight:800;background:rgba(99,102,241,.3);color:var(--a3);border:none;border-radius:6px;padding:2px 8px;cursor:pointer">🔑 Configurar</button>'
+    : `Revisa y completa antes de guardar &nbsp;<span class="pid-conf-badge ${confMap[conf]}">${confLabel[conf]}</span>`;
+
+  // Fields to show / edit
+  const fields = [
+    { key:'nombre', lbl:'Nombre', ph:'APELLIDO APELLIDO NOMBRE', full:true },
+    { key:'curp',   lbl:'CURP',   ph:'XXXX000000XXXXXX00', mono:true },
+    { key:'fnac',   lbl:'Nacimiento', ph:'YYYY-MM-DD', type:'date' },
+    { key:'dom',    lbl:'Domicilio', ph:'Calle / Av.' },
+    { key:'col',    lbl:'Colonia',  ph:'Colonia' },
+    { key:'seccion',lbl:'Sección',  ph:'0000', mono:true },
+    { key:'tel',    lbl:'Teléfono', ph:'492-000-0000', mono:true },
+  ];
+
+  const fieldsEl = document.getElementById('pid-res-fields');
+  fieldsEl.innerHTML = fields.map(f=>`
+    <div class="pid-res-field-row">
+      <span class="pid-res-lbl">${f.lbl}</span>
+      <input class="pid-res-inp${f.mono?' mono':''}" id="pid-f-${f.key}"
+        type="${f.type||'text'}" placeholder="${f.ph}"
+        value="${_esc(data[f.key]||'')}"
+        ${f.full?'style="font-weight:700"':''} />
+    </div>`).join('');
+
+  // CURP auto-parse if available
+  if(data.curp){ try{ onCURPInput(data.curp); }catch{} }
+
+  // Reset program toggle
+  _pidHasProg = true;
+  _updatePIDProgToggle();
+  document.getElementById('pid-tipo-sel').value = '';
+  document.getElementById('pid-folio-inp').value = '';
+
+  // Show result overlay
+  document.getElementById('pid-result-overlay').classList.add('on');
+}
+
+/* ── Program toggle ── */
+function setPIDHasProg(val){
+  _pidHasProg = val;
+  _updatePIDProgToggle();
+}
+
+function _updatePIDProgToggle(){
+  const si = document.getElementById('pid-hasprog-si');
+  const no = document.getElementById('pid-hasprog-no');
+  const sel = document.getElementById('pid-prog-selector');
+  if(_pidHasProg){
+    si?.classList.add('pid-prog-tg-active');
+    no?.classList.remove('pid-prog-tg-active');
+    if(sel) sel.style.display = 'block';
+  }else{
+    no?.classList.add('pid-prog-tg-active');
+    si?.classList.remove('pid-prog-tg-active');
+    if(sel) sel.style.display = 'none';
+  }
+}
+
+/* ── Save record ── */
+function savePIDRecord(){
+  if(typeof requirePerm==='function' && !requirePerm('editRecord','Guardar registros requiere una cuenta')) return;
+
+  const nombre = (document.getElementById('pid-f-nombre')?.value||'').trim().toUpperCase();
+  if(!nombre){ snack('⚠️ El nombre es requerido','⚠️'); return; }
+
+  const tipo = _pidHasProg ? (document.getElementById('pid-tipo-sel')?.value||'') : 'SIN_PROGRAMA';
+  if(_pidHasProg && !tipo){ snack('⚠️ Selecciona el programa','⚠️'); return; }
+
+  const curp = (document.getElementById('pid-f-curp')?.value||'').trim().toUpperCase();
+  const fnac = document.getElementById('pid-f-fnac')?.value || '';
+  const dom  = (document.getElementById('pid-f-dom')?.value||'').trim();
+  const col  = (document.getElementById('pid-f-col')?.value||'').trim();
+  const sec  = (document.getElementById('pid-f-seccion')?.value||'').trim();
+  const tel  = (document.getElementById('pid-f-tel')?.value||'').trim();
+  const folioRaw = (document.getElementById('pid-folio-inp')?.value||'').trim().toUpperCase();
+
+  // Auto-generate folio if empty
+  const folio = folioRaw || ('F-' + String(nxtId()).padStart(4,'0'));
+
+  const newId = nxtId();
+  const rec = {
+    id: newId,
+    folio,
+    tipo: _pidHasProg ? tipo : '',
+    nombre,
+    curp,
+    fnac,
+    tel,
+    dom,
+    num: '',
+    col,
+    seccion: sec,
+    area: '',
+    ruta: '',
+    visita: 'Pendiente',
+    uso: 'Mexico',
+    estatus: _pidHasProg ? 'Activo' : 'Sin programa',
+    obs: _pidHasProg ? '' : 'Sin programa al momento del registro',
+    photo: _pidImageB64 ? ('data:image/jpeg;base64,' + _pidImageB64) : null,
+    txtColor: '',
+    fecha: today(),
+    ult: '',
+    dup: false,
+  };
+
+  R.push(rec);
+  H.push({
+    id: Date.now(),
+    folio,
+    nombre,
+    cambios: 'Beneficiario registrado vía escáner de foto · ID #' + newId + (_pidHasProg ? ' · Programa: '+tipo : ' · Sin programa'),
+    motivo: 'Scanner de credencial',
+    resp: 'Usuario',
+    fecha: nowStr(),
+    tipo: 'new'
+  });
+
+  detectDups(); svR(); svH();
+  render(curTab); upHdr();
+
+  document.getElementById('pid-result-overlay')?.classList.remove('on');
+  snack('✅ ' + nombre.split(' ')[0] + ' registrado correctamente','✅');
+}
+
+/* ── Helper ── */
+function _esc(str){ return String(str||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+/* Ensure pid-form-btn shows in add/edit mode same as scan-form-btn */
+(function patchPIDBtns(){
+  const check=()=>{
+    if(typeof window.openShAdd==='function'&&!window._v35PIDBtnPatched){
+      window._v35PIDBtnPatched=true;
+      const origAdd=window.openShAdd;
+      window.openShAdd=function(){
+        origAdd.apply(this,arguments);
+        const r=document.getElementById('scan-btns-row');
+        if(r)r.style.display='grid';
+      };
+    }
+  };
+  setTimeout(check,300); setTimeout(check,900);
+})();
+
+/* ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── */
+
 /* Ensure scan button shows/hides when editing vs adding */
 (function patchScanBtn(){
   const check=()=>{
@@ -12649,6 +13061,102 @@ function copyAppInfo(){
     </details>
     <button class="scan-use-btn" onclick="applyScanResult()">✅ Usar estos datos</button>
     <button class="scan-retry-btn" onclick="retryScan()">🔄 Escanear de nuevo</button>
+  </div>
+</div>
+
+<!-- ═══ PHOTO ID SCANNER v35 ═══ -->
+<div class="pid-overlay" id="pid-overlay">
+  <div class="pid-hdr">
+    <div style="font-size:22px">📸</div>
+    <div class="pid-hdr-title">Fotografiar Credencial</div>
+    <button class="pid-hdr-close" onclick="closePhotoIDScanner()">✕</button>
+  </div>
+  <div class="pid-video-wrap" id="pid-video-wrap" style="position:relative;flex:1;overflow:hidden;background:#000">
+    <video class="pid-video" id="pid-video" playsinline autoplay muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    <div class="pid-guide">
+      <div class="pid-guide-label">Coloca la credencial dentro del marco</div>
+      <div class="pid-card-frame">
+        <div class="pid-card-border">
+          <div class="pid-corner tl"></div>
+          <div class="pid-corner tr"></div>
+          <div class="pid-corner bl"></div>
+          <div class="pid-corner br"></div>
+          <div class="pid-scan-line" id="pid-scan-line"></div>
+        </div>
+      </div>
+      <div class="pid-hint">📋 Frente de la credencial · buena iluminación</div>
+    </div>
+    <!-- Processing overlay -->
+    <div class="pid-processing" id="pid-processing">
+      <div class="pid-proc-ico">🤖</div>
+      <div class="pid-proc-label">Analizando con IA…</div>
+      <div class="pid-proc-sub">Extrayendo datos de la credencial</div>
+    </div>
+  </div>
+  <div class="pid-footer">
+    <button class="pid-capture-btn" id="pid-capture-btn" onclick="capturePhotoID()">
+      <span style="font-size:22px">📸</span>
+      <span>Capturar foto</span>
+    </button>
+    <button class="pid-file-btn" onclick="document.getElementById('pid-file-inp').click()">🖼 Elegir de galería</button>
+    <input type="file" id="pid-file-inp" accept="image/*" style="display:none" onchange="handlePIDFile(event)"/>
+    <canvas id="pid-canvas" style="display:none"></canvas>
+    <div class="pid-side-note">La imagen se analiza localmente con tu API Key de Anthropic</div>
+  </div>
+</div>
+
+<!-- Photo ID quick-save result sheet -->
+<div class="pid-result-overlay" id="pid-result-overlay">
+  <div class="pid-result-sheet">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <div style="font-size:20px">✅</div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:800">Datos detectados</div>
+        <div style="font-size:11px;color:var(--sft)" id="pid-res-sub">Revisa y completa antes de guardar</div>
+      </div>
+      <button onclick="closePIDResult()" style="background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--sft);cursor:pointer">✕</button>
+    </div>
+
+    <!-- Foto miniatura -->
+    <img id="pid-thumb" class="pid-photo-thumb" src="" alt="Foto credencial" style="display:none"/>
+
+    <!-- Campos extraídos editables -->
+    <div id="pid-res-fields"></div>
+
+    <!-- Separador -->
+    <div style="border-top:1.5px solid var(--b2);margin:14px 0 12px"></div>
+
+    <!-- ¿Tiene programa? -->
+    <div style="font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📋 Registro del programa</div>
+
+    <div style="margin-bottom:10px">
+      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">¿Tiene programa activo?</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px" id="pid-hasprog-tg">
+        <button type="button" class="pid-prog-tg-btn pid-prog-tg-active" id="pid-hasprog-si" onclick="setPIDHasProg(true)">✅ Sí tiene</button>
+        <button type="button" class="pid-prog-tg-btn" id="pid-hasprog-no" onclick="setPIDHasProg(false)">❌ Sin programa</button>
+      </div>
+    </div>
+
+    <div id="pid-prog-selector" style="margin-bottom:10px">
+      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Programa</label>
+      <select id="pid-tipo-sel" style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;-webkit-appearance:none">
+        <option value="">— Seleccionar programa —</option>
+        <option value="PAM">👴 PAM – Pensión para el Bienestar (Adulto Mayor)</option>
+        <option value="PCD">♿ PCD – Pensión para Personas con Discapacidad</option>
+        <option value="JCF">🎓 JCF – Jóvenes Construyendo el Futuro</option>
+        <option value="MT">👩 MT – Madres Trabajadoras</option>
+        <option value="BBJ">📚 BBJ – Becas Benito Juárez</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Folio (opcional)</label>
+      <input id="pid-folio-inp" type="text" placeholder="F-0001 (se asigna automático si se deja vacío)"
+        style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;box-sizing:border-box"/>
+    </div>
+
+    <button class="scan-use-btn" onclick="savePIDRecord()" style="margin-top:0">💾 Guardar beneficiario</button>
+    <button class="scan-retry-btn" onclick="retryPIDPhoto()">📸 Tomar otra foto</button>
   </div>
 </div>
 
