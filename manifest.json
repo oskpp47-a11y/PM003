@@ -1,7 +1,7 @@
 {
-  "name": "Pensionados MX",
+  "name": "Pensionados MX v32",
   "short_name": "PensionadosMX",
-  "description": "Sistema de gestión de beneficiarios de programas sociales",
+  "description": "Sistema de gestión de beneficiarios con IA integrada",
   "start_url": "./",
   "display": "standalone",
   "orientation": "any",

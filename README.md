@@ -1,4 +1,4 @@
-# 🛡️ Pensionados MX v31
+# 🛡️ Pensionados MX v32
 
 App web progresiva (PWA) para gestión de beneficiarios de programas sociales.  
 Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
@@ -47,16 +47,15 @@ Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
 
 ---
 
-## ✨ Novedades v31
+## ✨ Novedades v32 — Edición Suprema
 
-- Sistema de auth completamente reescrito (3 roles)
-- Pantallas de bienvenida / login / registro / invitado independientes
-- Ícono SVG profesional en la barra de navegación inferior
-- Reloj en tiempo real en el encabezado (toca para cambiar 12h/24h)
-- Limitaciones completas para modo invitado
-- Teléfono y CURP enmascarados para invitados
-- Modal de upgrade al intentar funciones restringidas
-- Sección General rediseñada con perfil, estadísticas y FAQ
+- **🤖 Asistente IA integrado** — Chat con Claude que analiza tu base de datos en tiempo real. Pregunta en lenguaje natural: ¿Quién visitar hoy? ¿Cuántos activos hay? ¿Cuál sección tiene menos cobertura?
+- **🏆 Sistema de logros** — 10 badges desbloqueables por hitos (10 registros, 50 visitas, racha de 7 días, 80% cobertura, etc.)
+- **🎯 Cola de prioridad inteligente** — Algoritmo que rankea automáticamente a quién visitar hoy según días sin actualizar, estatus y cumpleaños
+- **🗺️ Mapa de calor de cobertura** — Grid visual por sección con colores según % visitado (🔴<30% 🟡30-60% 🔵60-99% 🟢100%)
+- **💡 Insights IA en dashboard** — Chip rotativo con análisis automático de tu base de datos
+- **🎉 Confeti al cumplir meta** — Celebración animada cuando alcanzas tu meta de visitas diaria
+- **🔢 Contadores animados** — Todos los números hacen animación suave al actualizarse
 
 ---
 
@@ -65,3 +64,4 @@ Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
 - iPhone: iOS 14+ / Safari
 - Android: Chrome 90+
 - Sin conexión a internet requerida después de la primera carga
+- **Asistente IA**: Requiere conexión a internet solo cuando uses el chat

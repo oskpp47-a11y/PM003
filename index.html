@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Pensionados MX"/>
 <meta name="theme-color" id="meta-tc" content="#05090f"/>
-<title>Pensionados MX v30</title>
+<title>Pensionados MX v32</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ========== THEMES ========== */
@@ -2786,6 +2786,902 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
   color:var(--grn);
   position:relative;
 }
+
+/* ════════════════════════════════════════
+   EXPORT & FILE SCANNER CSS v31
+   ════════════════════════════════════════ */
+
+/* Section label */
+.exp-section-lbl{
+  font-size:10px;font-weight:800;color:var(--sft);
+  text-transform:uppercase;letter-spacing:.7px;
+  margin:0 0 8px 2px;
+}
+
+/* Filter card */
+.exp-filter-card{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:var(--r);padding:14px;margin-bottom:10px;
+}
+.exp-filter-row{display:flex;gap:10px;align-items:flex-end;}
+.exp-filter-field{flex:1;display:flex;flex-direction:column;gap:4px;}
+.exp-filter-lbl{font-size:10px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.4px;}
+.exp-date-in{
+  width:100%;padding:10px 12px;
+  background:var(--s2);border:1.5px solid var(--b2);
+  border-radius:12px;color:var(--txt);
+  font-size:14px;font-family:var(--fnt);outline:none;
+  transition:.18s;-webkit-appearance:none;
+  color-scheme:dark;
+}
+.exp-date-in:focus{border-color:var(--a);background:var(--s1);}
+.exp-sel{
+  flex:1;padding:9px 12px;
+  background:var(--s2);border:1.5px solid var(--b2);
+  border-radius:12px;color:var(--txt);
+  font-size:12px;font-family:var(--fnt);outline:none;
+  -webkit-appearance:none;cursor:pointer;
+}
+
+/* Quick presets */
+.exp-presets{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:2px;}
+.exp-preset{
+  flex:none;padding:6px 12px;border-radius:20px;
+  font-size:11px;font-weight:800;
+  border:1.5px solid var(--b2);background:var(--s2);color:var(--mut);
+  cursor:pointer;transition:.15s;white-space:nowrap;font-family:var(--fnt);
+}
+.exp-preset.on{background:var(--a);border-color:var(--a);color:#fff;}
+.exp-preset:active{transform:scale(.93);}
+
+/* Preview bar */
+.exp-preview-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--s2);border:1px solid var(--b1);
+  border-radius:10px;padding:9px 14px;margin-bottom:10px;
+  font-size:13px;font-weight:700;
+}
+.exp-date-range{font-size:11px;color:var(--sft);}
+
+/* Export buttons grid */
+.exp-btns-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:8px;margin-bottom:4px;
+}
+.exp-btn{
+  background:var(--card);border:1.5px solid var(--b2);
+  border-radius:14px;padding:14px 6px 12px;
+  text-align:center;cursor:pointer;transition:.15s;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.exp-btn:active{transform:scale(.93);background:var(--c2);}
+.exp-btn-xl{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.05);}
+.exp-btn-csv{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.05);}
+.exp-btn-ico{font-size:22px;line-height:1;}
+.exp-btn-lbl{font-size:11px;font-weight:800;}
+.exp-btn-sub{font-size:9px;color:var(--mut);}
+
+/* File drop zone */
+.exp-file-zone{
+  border:2px dashed var(--b2);border-radius:var(--r);
+  background:var(--card);transition:.2s;
+  margin-bottom:4px;
+}
+.exp-file-zone.dragover{border-color:var(--a);background:rgba(59,130,246,.06);}
+.exp-file-zone-inner{
+  padding:28px 20px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.exp-file-ico{font-size:36px;line-height:1;}
+.exp-file-title{font-size:15px;font-weight:800;}
+.exp-file-sub{font-size:12px;color:var(--sft);}
+.exp-file-btn{
+  background:var(--lg);color:#fff;
+  border:none;border-radius:14px;
+  padding:12px 24px;font-size:14px;font-weight:800;
+  cursor:pointer;font-family:var(--fnt);
+  box-shadow:0 4px 16px rgba(59,130,246,.35);
+  transition:.15s;margin-top:4px;
+}
+.exp-file-btn:active{transform:scale(.96);}
+.exp-file-types{
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:4px;
+}
+.exp-file-types span{
+  background:var(--s2);border:1px solid var(--b2);
+  border-radius:6px;padding:2px 8px;
+  font-size:10px;font-weight:700;color:var(--sft);
+}
+
+/* Scanned file item */
+.exp-file-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:12px;padding:11px 13px;margin-bottom:7px;
+  transition:.15s;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.exp-file-item:active{background:var(--c2);}
+.exp-file-item.selected{
+  border-color:var(--a);
+  background:rgba(59,130,246,.06);
+}
+.exp-file-item.hidden-by-filter{display:none;}
+.exp-file-type-ico{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.exp-file-body{flex:1;min-width:0;}
+.exp-file-name{
+  font-size:13px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:3px;
+}
+.exp-file-meta{font-size:10px;color:var(--sft);font-family:'Fira Code',monospace;}
+.exp-file-chk{
+  width:22px;height:22px;border-radius:6px;
+  border:2px solid var(--b2);background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;flex-shrink:0;transition:.15s;
+}
+.exp-file-item.selected .exp-file-chk{
+  background:var(--a);border-color:var(--a);color:#fff;
+}
+
+/* Select all bar */
+.exp-sel-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 2px;margin-bottom:6px;
+}
+.exp-sel-bar-txt{font-size:12px;font-weight:700;color:var(--sft);}
+.exp-sel-all-btn{
+  background:none;border:none;color:var(--a2);
+  font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fnt);
+}
+
+/* ════════════════════════════════════════════════════
+   800% MEJORAS CSS v31
+   ════════════════════════════════════════════════════ */
+
+/* ── 1. Smooth page transitions ── */
+.pg{
+  animation:none;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.pg.on{
+  animation:pgSlideIn .22s cubic-bezier(.25,.46,.45,.94) both;
+}
+@keyframes pgSlideIn{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── 2. Skeleton loaders ── */
+.skel{
+  background:linear-gradient(90deg,var(--s2) 25%,var(--b1) 50%,var(--s2) 75%);
+  background-size:200% 100%;
+  animation:skelShimmer 1.4s ease-in-out infinite;
+  border-radius:8px;
+}
+@keyframes skelShimmer{
+  0%{background-position:200% 0;}
+  100%{background-position:-200% 0;}
+}
+.skel-rec{
+  height:72px;border-radius:14px;margin-bottom:8px;
+}
+.skel-line{height:14px;margin-bottom:8px;}
+.skel-line.short{width:60%;}
+.skel-line.med{width:80%;}
+.skel-circle{border-radius:50%;}
+
+/* ── 3. Form validation feedback ── */
+.fi.valid{
+  border-color:rgba(34,197,94,.5)!important;
+  background:rgba(34,197,94,.04)!important;
+}
+.fi.invalid{
+  border-color:rgba(239,68,68,.6)!important;
+  background:rgba(239,68,68,.05)!important;
+  animation:shake .35s ease;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}
+  60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
+.field-err-msg{
+  font-size:11px;font-weight:700;color:var(--red);
+  margin-top:4px;display:none;padding-left:4px;
+}
+.field-err-msg.show{display:block;animation:fu .15s ease;}
+.field-ok-ico{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:14px;opacity:0;transition:.2s;
+}
+.fi.valid ~ .field-ok-ico{opacity:1;}
+.fi-wrap{position:relative;}
+
+/* ── 4. Nav count badges ── */
+.nb-count{
+  position:absolute;top:0;right:0;
+  min-width:16px;height:16px;border-radius:8px;
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;border:2px solid var(--bg);
+  display:none;pointer-events:none;
+}
+.nb-count.show{display:flex;}
+#nb-registros{position:relative;}
+#nb-visitas{position:relative;}
+
+/* ── 5. Batch visit mark button ── */
+.batch-vis-bar{
+  position:sticky;bottom:calc(var(--nh)+var(--sb)+10px);
+  left:0;right:0;z-index:100;
+  background:var(--lg);color:#fff;
+  border-radius:20px;padding:13px 20px;
+  display:none;align-items:center;justify-content:space-between;
+  box-shadow:0 8px 28px rgba(59,130,246,.4);
+  margin:8px 0;font-weight:800;font-size:14px;
+  animation:floatNavIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.batch-vis-bar.show{display:flex;}
+.batch-vis-confirm{
+  background:rgba(255,255,255,.2);border:none;color:#fff;
+  border-radius:12px;padding:7px 16px;font-weight:800;
+  font-size:13px;cursor:pointer;font-family:var(--fnt);
+}
+
+/* ── 6. Confetti particles ── */
+.confetti-particle{
+  position:fixed;pointer-events:none;z-index:9999;
+  width:8px;height:8px;border-radius:2px;
+  animation:confettiFall var(--dur,1.5s) ease-in forwards;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(100vh) rotate(var(--rot,720deg));opacity:0;}
+}
+
+/* ── 7. Search recent items ── */
+.srch-recent-lbl{
+  font-size:10px;font-weight:800;color:var(--mut);
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:12px 16px 6px;
+}
+.srch-recent-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;cursor:pointer;transition:.12s;
+  font-size:14px;
+}
+.srch-recent-item:active{background:var(--c2);}
+.srch-recent-ico{font-size:16px;color:var(--sft);}
+.srch-recent-txt{flex:1;font-weight:600;}
+.srch-recent-del{
+  font-size:16px;color:var(--mut);padding:4px 6px;
+  border-radius:6px;cursor:pointer;
+}
+
+/* ── 8. Haptic feedback hint class ── */
+.haptic-tap{-webkit-tap-highlight-color:transparent;}
+
+/* ── 9. Record card micro-improvements ── */
+.rec{
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.rec:active{
+  transform:scale(.985);
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+
+/* ── 10. Better empty states ── */
+.empty-state-v2{
+  display:flex;flex-direction:column;align-items:center;
+  padding:48px 24px;text-align:center;
+}
+.empty-state-v2 .es-illo{
+  font-size:56px;margin-bottom:16px;
+  animation:esBob 3s ease-in-out infinite;
+}
+@keyframes esBob{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.empty-state-v2 .es-title{
+  font-size:18px;font-weight:900;margin-bottom:8px;letter-spacing:-.3px;
+}
+.empty-state-v2 .es-sub{
+  font-size:13px;color:var(--sft);line-height:1.6;max-width:260px;
+}
+.empty-state-v2 .es-btn{
+  margin-top:20px;background:var(--lg);color:#fff;
+  border:none;border-radius:16px;padding:13px 28px;
+  font-size:14px;font-weight:800;cursor:pointer;
+  font-family:var(--fnt);box-shadow:0 4px 16px rgba(59,130,246,.35);
+  transition:.15s;
+}
+.empty-state-v2 .es-btn:active{transform:scale(.95);}
+
+/* ── 11. Quick stats bar on home ── */
+.quick-stats-bar{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:6px;margin-bottom:12px;
+}
+.qs-item{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:14px;padding:12px 10px 10px;
+  text-align:center;cursor:pointer;transition:.15s;
+}
+.qs-item:active{transform:scale(.94);}
+.qs-n{font-size:22px;font-weight:900;font-family:'Fira Code',monospace;line-height:1;}
+.qs-l{font-size:9px;font-weight:700;color:var(--sft);text-transform:uppercase;letter-spacing:.4px;margin-top:3px;}
+.qs-item.vis{border-color:rgba(34,197,94,.3);}
+.qs-item.vis .qs-n{color:var(--grn);}
+.qs-item.pend{border-color:rgba(245,158,11,.3);}
+.qs-item.pend .qs-n{color:var(--amb);}
+.qs-item.prog{border-color:rgba(99,102,241,.3);}
+.qs-item.prog .qs-n{color:var(--ind);}
+
+/* ── 12. Filter quick-jump chips on home ── */
+.home-filter-chips{
+  display:flex;gap:6px;overflow-x:auto;padding:0 0 8px;
+  scrollbar-width:none;margin-bottom:4px;
+}
+.home-filter-chips::-webkit-scrollbar{display:none;}
+.hfc{
+  flex:none;padding:7px 14px;border-radius:20px;
+  font-size:12px;font-weight:800;border:1.5px solid var(--b2);
+  background:var(--card);color:var(--sft);
+  cursor:pointer;white-space:nowrap;transition:.15s;
+}
+.hfc:active{transform:scale(.92);}
+.hfc.act{background:var(--a);border-color:var(--a);color:#fff;}
+.hfc.grn{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--grn);}
+.hfc.amb{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--amb);}
+.hfc.red{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--red);}
+.hfc.vio{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.3);color:var(--vio);}
+
+/* ════════════════════════════════════════════════════
+   30 MEJORAS CSS v31
+   ════════════════════════════════════════════════════ */
+
+/* 1. Long-press context menu */
+.ctx-menu{
+  position:fixed;z-index:800;
+  background:var(--card);border:1px solid var(--b2);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 16px 48px rgba(0,0,0,.55);
+  min-width:180px;
+  animation:ctxIn .18s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes ctxIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+.ctx-item{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 16px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:.12s;border-bottom:1px solid var(--b1);
+}
+.ctx-item:last-child{border-bottom:none;}
+.ctx-item:active{background:var(--c2);}
+.ctx-item.danger{color:var(--red);}
+.ctx-item.success{color:var(--grn);}
+.ctx-item.info{color:var(--a2);}
+.ctx-ico{font-size:18px;flex-shrink:0;}
+.ctx-overlay{position:fixed;inset:0;z-index:799;}
+
+/* 2. Animated counters */
+.count-anim{
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.count-anim.bump{transform:scale(1.25);}
+
+/* 3. Duplicate record button */
+.dup-rec-btn{
+  background:rgba(99,102,241,.1);border:1.5px solid rgba(99,102,241,.3);
+  color:var(--ind);border-radius:12px;
+  padding:8px 14px;font-size:12px;font-weight:800;
+  cursor:pointer;font-family:var(--fnt);transition:.15s;
+}
+.dup-rec-btn:active{transform:scale(.94);}
+
+/* 4. Autocomplete dropdown */
+.autocomplete-wrap{position:relative;}
+.autocomplete-list{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;
+  background:var(--card);border:1px solid var(--b2);border-radius:14px;
+  overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.35);
+  max-height:160px;overflow-y:auto;
+}
+.ac-item{
+  padding:11px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.1s;
+  border-bottom:1px solid var(--b1);
+}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:active,.ac-item:hover{background:var(--c2);}
+.ac-highlight{color:var(--a2);font-weight:800;}
+
+/* 5. Session timeout bar */
+.session-bar{
+  position:fixed;top:0;left:0;right:0;z-index:9990;
+  background:rgba(245,158,11,.95);color:#000;
+  font-size:12px;font-weight:800;padding:10px 16px;
+  display:none;align-items:center;justify-content:space-between;gap:10px;
+  backdrop-filter:blur(8px);
+}
+.session-bar.show{display:flex;}
+.session-bar-ext{
+  background:rgba(0,0,0,.15);border:none;border-radius:10px;
+  padding:6px 14px;font-size:11px;font-weight:900;
+  cursor:pointer;font-family:var(--fnt);color:#000;
+}
+
+/* 6. Coverage progress by section */
+.sec-cov-row{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 0;border-bottom:1px solid var(--b1);
+}
+.sec-cov-row:last-child{border-bottom:none;}
+.sec-cov-lbl{font-size:12px;font-weight:700;width:70px;flex-shrink:0;}
+.sec-cov-bar-wrap{flex:1;background:var(--b1);border-radius:4px;height:7px;overflow:hidden;}
+.sec-cov-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.34,1.1,.64,1);}
+.sec-cov-pct{font-size:11px;font-weight:800;font-family:'Fira Code',monospace;width:36px;text-align:right;flex-shrink:0;}
+
+/* 7. Top colonias ranking */
+.top-col-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;border-bottom:1px solid var(--b1);
+}
+.top-col-item:last-child{border-bottom:none;}
+.top-col-rank{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--s2);font-size:10px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;color:var(--mut);
+}
+.top-col-rank.gold{background:rgba(251,191,36,.2);color:#fbbf24;}
+.top-col-rank.silver{background:rgba(148,163,184,.2);color:#94a3b8;}
+.top-col-rank.bronze{background:rgba(180,120,60,.2);color:#b4783c;}
+.top-col-name{flex:1;font-size:13px;font-weight:700;}
+.top-col-n{font-size:13px;font-weight:900;font-family:'Fira Code',monospace;color:var(--a2);}
+
+/* 8. Monthly chart bars */
+.month-chart{
+  display:flex;gap:4px;align-items:flex-end;
+  height:80px;padding:0 2px;
+}
+.mc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.mc-bar{width:100%;border-radius:4px 4px 0 0;min-height:3px;transition:height .6s cubic-bezier(.34,1.1,.64,1);}
+.mc-lbl{font-size:8px;font-weight:700;color:var(--mut);text-transform:uppercase;}
+.mc-n{font-size:8px;font-weight:800;color:var(--sft);}
+
+/* 9. Floating quick-edit in list */
+.rec-qedit-row{
+  display:flex;gap:5px;padding:6px 12px 8px;
+  border-top:1px solid var(--b1);background:var(--s2);
+  overflow:hidden;max-height:0;transition:max-height .2s ease,padding .2s;
+}
+.rec-qedit-row.open{max-height:50px;padding:6px 12px 8px;}
+.rec-qe-input{
+  flex:1;padding:7px 10px;border-radius:10px;
+  background:var(--card);border:1.5px solid var(--b2);
+  color:var(--txt);font-size:12px;font-family:var(--fnt);
+  outline:none;min-width:0;
+}
+.rec-qe-input:focus{border-color:var(--a);}
+.rec-qe-save{
+  background:var(--a);color:#fff;border:none;
+  border-radius:10px;padding:7px 14px;font-size:12px;
+  font-weight:800;cursor:pointer;font-family:var(--fnt);
+  flex-shrink:0;
+}
+
+/* 10. Backup reminder toast */
+.backup-reminder{
+  position:fixed;bottom:calc(var(--nh)+var(--sb)+60px);
+  left:12px;right:12px;z-index:700;
+  background:linear-gradient(135deg,#1e3a8a,#1e40af);
+  color:#fff;border-radius:16px;padding:13px 16px;
+  display:none;align-items:center;gap:12px;
+  box-shadow:0 8px 28px rgba(30,58,138,.5);
+  animation:snackIn .3s ease;
+}
+.backup-reminder.show{display:flex;}
+.backup-reminder-ico{font-size:24px;flex-shrink:0;}
+.backup-reminder-body{flex:1;}
+.backup-reminder-title{font-size:13px;font-weight:800;margin-bottom:2px;}
+.backup-reminder-sub{font-size:11px;opacity:.8;}
+.backup-reminder-btn{
+  background:rgba(255,255,255,.2);border:none;color:#fff;
+  border-radius:10px;padding:7px 14px;font-size:12px;
+  font-weight:800;cursor:pointer;font-family:var(--fnt);flex-shrink:0;
+}
+
+/* 11. Stats section improvements */
+.stat-section-lbl{
+  font-size:10px;font-weight:800;color:var(--sft);
+  text-transform:uppercase;letter-spacing:.6px;
+  margin:16px 0 8px 2px;
+}
+.stat-kpi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;margin-bottom:12px;
+}
+.stat-kpi{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:14px;padding:12px 10px;text-align:center;
+  cursor:pointer;transition:.15s;
+}
+.stat-kpi:active{transform:scale(.94);}
+.stat-kpi-n{font-size:22px;font-weight:900;font-family:'Fira Code',monospace;line-height:1;}
+.stat-kpi-l{font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;margin-top:3px;}
+
+/* 12. Record color label */
+.rec-color-dots{
+  display:flex;gap:6px;flex-wrap:wrap;padding:4px 0;
+}
+.rec-color-dot{
+  width:24px;height:24px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:.15s;
+}
+.rec-color-dot.selected{border-color:var(--txt);transform:scale(1.2);}
+.rec-color-dot:active{transform:scale(1.1);}
+
+/* 13. Pull-down to close sheet gesture hint */
+#sh-det .hdl{cursor:grab;}
+#sh-det .hdl:active{cursor:grabbing;}
+
+/* 14. Field hint text */
+.fi-hint{font-size:10px;color:var(--sft);margin-top:3px;padding-left:2px;}
+
+/* 15. Animated stat numbers */
+@keyframes countUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.stat-num-anim{animation:countUp .4s ease both;}
+
+/* 16. Map link button */
+.map-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(59,130,246,.1);border:1.5px solid rgba(59,130,246,.25);
+  color:var(--a2);border-radius:12px;padding:8px 14px;
+  font-size:12px;font-weight:800;cursor:pointer;transition:.15s;
+  text-decoration:none;font-family:var(--fnt);
+}
+.map-btn:active{transform:scale(.94);}
+
+/* 17. Age filter slider */
+.age-filter-wrap{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 0;
+}
+.age-range-input{
+  flex:1;-webkit-appearance:none;height:4px;
+  border-radius:2px;background:var(--b2);outline:none;cursor:pointer;
+}
+.age-range-input::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--a);box-shadow:0 2px 8px rgba(59,130,246,.4);cursor:pointer;
+}
+.age-filter-lbl{font-size:12px;font-weight:700;width:60px;text-align:center;color:var(--a2);}
+
+/* 18. Success animation on record save */
+@keyframes successPop{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.06);}
+  70%{transform:scale(.97);}
+  100%{transform:scale(1);}
+}
+.save-success-anim{animation:successPop .4s cubic-bezier(.34,1.56,.64,1);}
+
+/* 19. Improved badge colors */
+.bdg-act{background:rgba(34,197,94,.14);color:#4ade80;border:1px solid rgba(34,197,94,.25);}
+.bdg-inact{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+.bdg-pend{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
+
+/* 20. Usage analytics sparkline */
+.sparkline{height:32px;display:flex;align-items:flex-end;gap:2px;}
+.spark-bar{flex:1;border-radius:2px 2px 0 0;min-height:2px;transition:.4s;}
+
+/* ═══ v32 SUPREMA ═══ */
+@keyframes countUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.cnt-animate{animation:countUp .5s cubic-bezier(.34,1.56,.64,1) both;}
+.ai-fab{position:fixed;bottom:calc(var(--nh)+var(--sb)+14px);right:14px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(99,102,241,.55);z-index:200;transition:.2s;-webkit-tap-highlight-color:transparent;}
+.ai-fab:active{transform:scale(.88);}
+.ai-fab-pulse{position:absolute;width:100%;height:100%;border-radius:50%;background:rgba(99,102,241,.4);animation:aiFabPulse 2s ease-in-out infinite;}
+@keyframes aiFabPulse{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.35);opacity:0;}}
+.ai-sheet{position:fixed;inset:0;z-index:400;display:none;flex-direction:column;background:var(--bg);}
+.ai-sheet.on{display:flex;}
+.ai-hdr{padding:calc(var(--st)+8px) 16px 10px;background:linear-gradient(135deg,#312e81,#4c1d95);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ai-hdr-ico{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ai-hdr-info{flex:1;}
+.ai-hdr-title{font-size:15px;font-weight:800;color:#fff;}
+.ai-hdr-sub{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;}
+.ai-hdr-close{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ai-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px;}
+.ai-msg{display:flex;gap:8px;margin-bottom:12px;animation:aiMsgIn .3s ease both;}
+@keyframes aiMsgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.ai-msg-user{flex-direction:row-reverse;}
+.ai-bubble{max-width:82%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.5;font-weight:500;}
+.ai-bubble-ai{background:var(--card);border:1px solid var(--b1);color:var(--txt);border-radius:4px 16px 16px 16px;}
+.ai-bubble-user{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:16px 4px 16px 16px;}
+.ai-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.ai-avatar-ai{background:linear-gradient(135deg,#6366f1,#8b5cf6);}
+.ai-avatar-user{background:var(--b2);}
+.ai-typing{display:flex;gap:5px;align-items:center;padding:10px 13px;background:var(--card);border:1px solid var(--b1);border-radius:4px 16px 16px 16px;width:fit-content;}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:var(--sft);animation:aiTyping 1.2s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:.2s;}
+.ai-dot:nth-child(3){animation-delay:.4s;}
+@keyframes aiTyping{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.ai-input-bar{display:flex;gap:8px;padding:10px 14px calc(10px + var(--sb));background:var(--bg);border-top:1px solid var(--b1);flex-shrink:0;}
+.ai-inp{flex:1;background:var(--card);border:1.5px solid var(--b2);border-radius:22px;padding:10px 16px;font-size:14px;color:var(--txt);font-family:var(--fnt);outline:none;transition:.2s;}
+.ai-inp:focus{border-color:var(--ind);}
+.ai-send{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
+.ai-send:active{transform:scale(.88);}
+.ai-suggestions{display:flex;gap:6px;padding:0 14px 8px;overflow-x:auto;flex-shrink:0;}
+.ai-sug{background:var(--s2);border:1px solid var(--b2);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;transition:.15s;flex-shrink:0;}
+.ai-sug:active{background:var(--b2);}
+.prio-card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);padding:13px 14px;margin-bottom:12px;}
+.prio-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.prio-title{font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;flex:1;}
+.prio-badge{font-size:10px;font-weight:800;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border-radius:8px;padding:2px 9px;}
+.prio-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--b1);cursor:pointer;transition:.15s;}
+.prio-item:last-child{border-bottom:none;}
+.prio-item:active{opacity:.7;}
+.prio-rank{width:22px;height:22px;border-radius:7px;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.prio-rank.hot{background:rgba(239,68,68,.2);color:#ef4444;}
+.prio-rank.warm{background:rgba(245,158,11,.2);color:#f59e0b;}
+.prio-rank.cool{background:rgba(59,130,246,.2);color:#60a5fa;}
+.prio-name{flex:1;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prio-info{font-size:9px;color:var(--mut);margin-top:1px;font-family:'Fira Code',monospace;}
+.prio-score{font-size:11px;font-weight:800;color:var(--red);font-family:'Fira Code',monospace;}
+.ach-bar{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;}
+.ach-bar::-webkit-scrollbar{display:none;}
+.ach-pill{display:flex;align-items:center;gap:5px;background:var(--card);border:1.5px solid var(--b1);border-radius:24px;padding:6px 12px;white-space:nowrap;flex-shrink:0;transition:.2s;cursor:pointer;}
+.ach-pill.earned{border-color:var(--amb);background:rgba(245,158,11,.08);}
+.ach-ico{font-size:16px;filter:grayscale(1) opacity(.35);}
+.ach-pill.earned .ach-ico{filter:none;}
+.ach-name{font-size:10px;font-weight:800;color:var(--mut);}
+.ach-pill.earned .ach-name{color:var(--amb);}
+@keyframes achUnlock{0%{transform:scale(1);}30%{transform:scale(1.28);}60%{transform:scale(.95);}100%{transform:scale(1);}}
+.ach-unlock{animation:achUnlock .5s cubic-bezier(.34,1.56,.64,1);}
+.confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+.heatmap-card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);padding:13px 14px;margin-bottom:12px;}
+.heatmap-title{font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:5px;}
+.hm-cell{border-radius:8px;padding:5px 2px;text-align:center;cursor:pointer;transition:.15s;border:1.5px solid transparent;}
+.hm-cell:active{transform:scale(.9);}
+.hm-sec{font-size:9px;font-weight:800;display:block;}
+.hm-pct{font-size:10px;font-weight:800;font-family:'Fira Code',monospace;}
+.hm-0{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);}
+.hm-low{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);}
+.hm-mid{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);}
+.hm-high{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);}
+.hm-full{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);}
+.insight-strip{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:var(--r2);padding:10px 13px;margin-bottom:12px;display:flex;align-items:flex-start;gap:9px;cursor:pointer;}
+.insight-strip:active{opacity:.85;}
+.insight-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.insight-txt{flex:1;font-size:12px;color:var(--t2);line-height:1.5;font-weight:500;}
+.insight-lbl{font-size:9px;font-weight:800;color:var(--ind);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.insight-refresh{font-size:14px;color:var(--mut);flex-shrink:0;align-self:center;}
+@keyframes bdRing{0%,100%{transform:rotate(0);}15%{transform:rotate(15deg);}30%{transform:rotate(-12deg);}45%{transform:rotate(8deg);}60%{transform:rotate(-5deg);}75%{transform:rotate(3deg);}}
+.bd-ring-anim{display:inline-block;animation:bdRing 1.5s ease infinite;}
+
+/* ── ID SCANNER v32 ── */
+.scan-overlay{position:fixed;inset:0;z-index:500;background:#000;display:none;flex-direction:column;}
+.scan-overlay.on{display:flex;}
+.scan-hdr{padding:calc(var(--st)+10px) 16px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);}
+.scan-hdr-title{flex:1;font-size:15px;font-weight:800;color:#fff;}
+.scan-hdr-close{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;}
+.scan-video-wrap{flex:1;position:relative;overflow:hidden;background:#000;}
+.scan-video{width:100%;height:100%;object-fit:cover;display:block;}
+.scan-ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
+.scan-dark-top,.scan-dark-bottom{width:100%;flex:1;background:rgba(0,0,0,.55);}
+.scan-dark-top{max-height:30%;}
+.scan-dark-bottom{max-height:30%;}
+.scan-row{display:flex;width:100%;align-items:stretch;}
+.scan-dark-side{width:24px;background:rgba(0,0,0,.55);}
+.scan-frame-outer{flex:1;aspect-ratio:1.6;position:relative;max-width:320px;}
+.scan-frame{position:absolute;inset:0;border-radius:12px;}
+.scan-corner{position:absolute;width:24px;height:24px;border-color:#fff;border-style:solid;border-width:0;}
+.scan-corner.tl{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:8px 0 0 0;}
+.scan-corner.tr{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 8px 0 0;}
+.scan-corner.bl{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 8px;}
+.scan-corner.br{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 8px 0;}
+@keyframes scanLine{0%{top:4px;opacity:1;}45%{opacity:1;}50%{top:calc(100% - 4px);opacity:0;}51%{top:4px;opacity:0;}55%{opacity:1;}100%{top:4px;opacity:1;}}
+.scan-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(90deg,transparent,#6366f1,#a78bfa,#6366f1,transparent);border-radius:2px;animation:scanLine 2.5s ease-in-out infinite;box-shadow:0 0 8px rgba(99,102,241,.8);}
+.scan-status{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);padding:14px 16px calc(14px + var(--sb));flex-shrink:0;}
+.scan-status-txt{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);text-align:center;margin-bottom:8px;}
+.scan-status-txt.found{color:#4ade80;}
+.scan-status-txt.error{color:#f87171;}
+.scan-formats{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;}
+.scan-fmt-pill{font-size:10px;font-weight:700;background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);border-radius:12px;padding:3px 10px;}
+.scan-manual-btn{display:block;width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fnt);text-align:center;margin-top:6px;pointer-events:all;}
+.scan-manual-btn:active{background:rgba(255,255,255,.2);}
+
+/* Result preview card */
+.scan-result-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);display:none;align-items:flex-end;}
+.scan-result-overlay.on{display:flex;}
+.scan-result-sheet{background:var(--bg);border-radius:24px 24px 0 0;padding:20px 16px calc(20px + var(--sb));width:100%;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.scan-result-title{font-size:16px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.scan-result-sub{font-size:12px;color:var(--sft);margin-bottom:14px;}
+.scan-field-row{display:flex;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid var(--b1);}
+.scan-field-row:last-of-type{border-bottom:none;}
+.scan-field-lbl{font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;min-width:80px;}
+.scan-field-val{font-size:13px;font-weight:700;color:var(--txt);flex:1;}
+.scan-field-val.mono{font-family:'Fira Code',monospace;font-size:12px;}
+.scan-result-raw{background:var(--s2);border-radius:8px;padding:8px 10px;font-size:10px;font-family:'Fira Code',monospace;color:var(--sft);margin-top:8px;word-break:break-all;max-height:60px;overflow:hidden;}
+.scan-use-btn{width:100%;padding:13px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--fnt);margin-top:12px;transition:.15s;}
+.scan-use-btn:active{transform:scale(.97);}
+.scan-retry-btn{width:100%;padding:10px;border-radius:14px;background:var(--s2);border:1px solid var(--b2);color:var(--sft);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt);margin-top:8px;}
+
+/* Scan button in form */
+.scan-form-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.1));border:1.5px dashed rgba(99,102,241,.4);border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:800;color:var(--a2);margin-bottom:14px;transition:.15s;font-family:var(--fnt);}
+.scan-form-btn:active{background:rgba(99,102,241,.2);transform:scale(.98);}
+.scan-form-btn-ico{font-size:22px;}
+
+/* ════════════════════════════════════════════════════
+   v32 MEJORAS ADICIONALES CSS
+   ════════════════════════════════════════════════════ */
+
+/* ── QR Share ── */
+.qr-overlay{
+  position:fixed;inset:0;z-index:900;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  animation:fu .2s ease;
+}
+.qr-card{
+  background:var(--card);border-radius:24px;padding:28px 24px;
+  text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.6);
+  max-width:300px;width:90%;
+}
+.qr-title{font-size:16px;font-weight:900;margin-bottom:4px;}
+.qr-sub{font-size:12px;color:var(--sft);margin-bottom:18px;}
+#qr-canvas{border-radius:12px;display:block;margin:0 auto 16px;}
+.qr-close{background:var(--s2);border:1px solid var(--b2);color:var(--sft);border-radius:14px;padding:10px 24px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--fnt);}
+
+/* ── Voice Search Active ── */
+.srch-mic.recording{
+  color:var(--red)!important;
+  animation:micPulse 1s ease-in-out infinite;
+}
+@keyframes micPulse{
+  0%,100%{transform:scale(1);opacity:1;}
+  50%{transform:scale(1.2);opacity:.7;}
+}
+
+/* ── Offline action queue badge ── */
+.offline-queue-badge{
+  position:fixed;bottom:calc(var(--nh)+var(--sb)+70px);
+  left:50%;transform:translateX(-50%);
+  background:var(--amb);color:#000;
+  border-radius:20px;padding:8px 16px;
+  font-size:12px;font-weight:800;
+  display:none;align-items:center;gap:8px;
+  box-shadow:0 4px 16px rgba(245,158,11,.4);
+  z-index:600;animation:snackIn .3s ease;
+}
+.offline-queue-badge.show{display:flex;}
+
+/* ── WhatsApp bulk message ── */
+.wa-bulk-btn{
+  background:rgba(37,211,102,.1);border:1.5px solid rgba(37,211,102,.3);
+  color:#25d366;border-radius:12px;
+  padding:8px 14px;font-size:12px;font-weight:800;
+  cursor:pointer;font-family:var(--fnt);transition:.15s;
+  display:flex;align-items:center;gap:6px;
+}
+.wa-bulk-btn:active{transform:scale(.93);}
+
+/* ── Loading overlay ── */
+.page-loading{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:60px 20px;gap:14px;
+}
+.page-loading-ring{
+  width:40px;height:40px;border-radius:50%;
+  border:3px solid var(--b2);
+  border-top-color:var(--a);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.page-loading-txt{font-size:13px;color:var(--sft);font-weight:700;}
+
+/* ── Error state ── */
+.page-error{
+  display:flex;flex-direction:column;align-items:center;
+  padding:48px 20px;text-align:center;gap:10px;
+}
+.page-error-ico{font-size:40px;}
+.page-error-title{font-size:16px;font-weight:800;color:var(--red);}
+.page-error-sub{font-size:12px;color:var(--sft);}
+
+/* ── Bulk actions floating bar ── */
+.bulk-float-bar{
+  position:fixed;
+  bottom:calc(var(--nh)+var(--sb)+10px);
+  left:12px;right:12px;z-index:400;
+  background:var(--card);border:1px solid var(--b2);
+  border-radius:20px;padding:10px 14px;
+  display:none;flex-wrap:wrap;gap:8px;align-items:center;
+  box-shadow:0 8px 28px rgba(0,0,0,.4);
+  animation:floatNavIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.bulk-float-bar.show{display:flex;}
+.bfb-count{font-size:13px;font-weight:800;color:var(--a2);margin-right:auto;}
+.bfb-btn{
+  padding:7px 12px;border-radius:12px;border:1.5px solid var(--b2);
+  background:var(--s2);font-size:11px;font-weight:800;
+  cursor:pointer;font-family:var(--fnt);color:var(--sft);transition:.15s;
+}
+.bfb-btn:active{transform:scale(.93);}
+.bfb-btn.green{color:var(--grn);border-color:rgba(34,197,94,.3);}
+.bfb-btn.blue{color:var(--a2);border-color:rgba(59,130,246,.3);}
+.bfb-btn.wa{color:#25d366;border-color:rgba(37,211,102,.3);}
+.bfb-btn.red{color:var(--red);border-color:rgba(239,68,68,.3);}
+
+/* ── GPS Location button ── */
+.gps-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(34,197,94,.1);border:1.5px solid rgba(34,197,94,.25);
+  color:var(--grn);border-radius:12px;padding:7px 12px;
+  font-size:12px;font-weight:800;cursor:pointer;
+  font-family:var(--fnt);transition:.15s;
+}
+.gps-btn:active{transform:scale(.93);}
+.gps-btn.loading{color:var(--sft);border-color:var(--b2);}
+
+/* ── Tab indicator dots (current position) ── */
+.tab-pos-indicator{
+  position:fixed;bottom:calc(var(--nh)+var(--sb)+6px);
+  left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;z-index:50;pointer-events:none;
+  opacity:.5;transition:opacity .3s;
+}
+.tab-pos-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--mut);transition:.3s;
+}
+.tab-pos-dot.active{background:var(--a);transform:scale(1.4);}
+
+/* ── Success animation for field save ── */
+.inline-saved{
+  position:relative;
+}
+.inline-saved::after{
+  content:'✓';position:absolute;right:8px;top:50%;
+  transform:translateY(-50%);color:var(--grn);
+  font-size:14px;font-weight:900;
+  animation:checkIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes checkIn{from{opacity:0;transform:translateY(-50%) scale(.5);}to{opacity:1;transform:translateY(-50%) scale(1);}}
+
+/* ── Bulk section assign ── */
+.section-assign-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;max-height:200px;overflow-y:auto;padding:4px;
+}
+.sec-assign-btn{
+  padding:10px 6px;border-radius:12px;text-align:center;
+  border:1.5px solid var(--b2);background:var(--s2);
+  font-size:12px;font-weight:800;cursor:pointer;transition:.15s;
+  font-family:var(--fnt);
+}
+.sec-assign-btn:active{background:var(--a);color:#fff;border-color:var(--a);}
+
+/* ── Changelog card ── */
+.changelog-card{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:var(--r);padding:14px;margin-bottom:8px;
+}
+.cl-version{font-size:11px;font-weight:900;color:var(--a2);margin-bottom:6px;
+  font-family:'Fira Code',monospace;letter-spacing:.5px;}
+.cl-item{font-size:12px;color:var(--t2);padding:3px 0;
+  display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+.cl-item::before{content:'→';color:var(--sft);flex-shrink:0;}
 </style>
 <script>
 if('serviceWorker' in navigator){
@@ -2827,11 +3723,12 @@ if('serviceWorker' in navigator){
       </div>
       <div class="aw-title">Pensionados MX</div>
       <div class="aw-sub">Sistema de gestión de beneficiarios de programas sociales</div>
-      <div class="aw-version">⚡ v31 · PWA Offline</div>
+      <div class="aw-version">⚡ v32 · PWA Offline · IA</div>
       <div class="aw-pills">
         <div class="aw-pill">🔒 SHA-256</div>
         <div class="aw-pill">📡 Sin internet</div>
         <div class="aw-pill">🇲🇽 México</div>
+        <div class="aw-pill">🤖 IA integrada</div>
       </div>
     </div>
     <div class="aw-btns">
@@ -3147,7 +4044,7 @@ if('serviceWorker' in navigator){
     <div class="home-srch-drop">
       <div class="home-srch">
         <span class="home-srch-ico">⌕</span>
-        <input id="hsq" type="search" autocomplete="off" placeholder="Buscar beneficiario…" oninput="onHSQ()" autocorrect="off" autocapitalize="off"/>
+        <input id="hsq" type="search" autocomplete="off" placeholder="Nombre, folio, colonia, sección, teléfono…" oninput="onHSQ()" autocorrect="off" autocapitalize="off"/>
         <button class="home-srch-clr" id="hsq-clr" style="display:none" onclick="clrHSQ()">✕</button>
       </div>
       <div class="home-srch-res" id="hsq-res" style="display:none"></div>
@@ -3174,6 +4071,15 @@ if('serviceWorker' in navigator){
     <div id="pend-wrap"></div>
     <!-- v23: Meta+Racha+Nota -->
     <div id="meta-wrap"></div>
+
+    <!-- v32: IA Insight chip -->
+    <div id="insight-wrap"></div>
+
+    <!-- v32: Logros / Achievements -->
+    <div id="ach-wrap"></div>
+
+    <!-- v32: Prioridad inteligente de visitas -->
+    <div id="prio-wrap-home"></div>
 
     <div class="sh2">Recientes <span class="sh2-n" id="rc-n">0</span></div>
     <div class="recs" id="rec-recent"></div>
@@ -3202,7 +4108,7 @@ if('serviceWorker' in navigator){
   <div class="pg" id="p-buscar">
     <div class="srch-bar">
       <span class="srch-ico">⌕</span>
-      <input id="sq" type="search" autocomplete="off" placeholder="Buscar beneficiario…" oninput="onSI()" onfocus="onSF()" onblur="onSB()"/>
+      <input id="sq" type="search" autocomplete="off" placeholder="Nombre, folio, colonia, sección, teléfono…" oninput="onSI()" onfocus="onSF()" onblur="onSB()"/>
       <button class="srch-clr" id="sq-clr" style="display:none" onclick="clrSrch()">✕</button>
       <button class="srch-mic" id="srch-adv-btn" onclick="toggleSrchAdv()" title="Filtros avanzados" style="font-size:14px">⚙️</button>
     </div>
@@ -3302,36 +4208,166 @@ if('serviceWorker' in navigator){
   <!-- ESTADÍSTICAS -->
   <div class="pg" id="p-estadisticas"><div id="stats-content"></div></div>
   <!-- DESCARGAR -->
-  <div class="pg" id="p-descargar">
-    <div class="dl-card">
-      <span class="dl-card-ico">📊</span>
-      <h3>Descargar base de datos</h3>
-      <p>Exporta todos los registros. Compatible con Excel, Numbers y Google Sheets.</p>
-      <div class="dl-opts">
-        <div class="dl-opt xl" onclick="dlXLSX()"><span class="dl-opt-ico">📗</span><div class="dl-opt-lbl">Excel</div><div class="dl-opt-sub">.xlsx</div></div>
-        <div class="dl-opt csv" onclick="dlCSV()"><span class="dl-opt-ico">📄</span><div class="dl-opt-lbl">CSV</div><div class="dl-opt-sub">Universal</div></div>
+  <div class="pg" id="p-descargar" style="padding-bottom:calc(var(--nh)+var(--sb)+24px)">
+
+    <!-- ── SECCIÓN A: Exportar registros por fecha ── -->
+    <div class="exp-section-lbl">📋 Exportar registros de la app</div>
+
+    <!-- Filtro por fecha -->
+    <div class="exp-filter-card">
+      <div class="exp-filter-row">
+        <div class="exp-filter-field">
+          <label class="exp-filter-lbl">Desde</label>
+          <input class="exp-date-in" type="date" id="exp-date-from"
+            onchange="renderExportPreview()"/>
+        </div>
+        <div class="exp-filter-field">
+          <label class="exp-filter-lbl">Hasta</label>
+          <input class="exp-date-in" type="date" id="exp-date-to"
+            onchange="renderExportPreview()"/>
+        </div>
       </div>
-      <div class="dl-preview" id="dl-prev">—</div>
+      <!-- Quick date presets -->
+      <div class="exp-presets">
+        <button class="exp-preset on" id="ep-all"   onclick="expPreset('all')">Todos</button>
+        <button class="exp-preset"    id="ep-today" onclick="expPreset('today')">Hoy</button>
+        <button class="exp-preset"    id="ep-week"  onclick="expPreset('week')">Esta semana</button>
+        <button class="exp-preset"    id="ep-month" onclick="expPreset('month')">Este mes</button>
+        <button class="exp-preset"    id="ep-3m"    onclick="expPreset('3m')">3 meses</button>
+      </div>
+      <!-- Extra filters -->
+      <div class="exp-filter-row" style="margin-top:10px;gap:8px">
+        <select class="exp-sel" id="exp-fil-tipo" onchange="renderExportPreview()">
+          <option value="">Todos los programas</option>
+          <option value="PAM">PAM</option>
+          <option value="PCD">PCD</option>
+          <option value="JCF">JCF</option>
+          <option value="MT">MT</option>
+          <option value="BBJ">BBJ</option>
+        </select>
+        <select class="exp-sel" id="exp-fil-vis" onchange="renderExportPreview()">
+          <option value="">Todas las visitas</option>
+          <option value="Si">✅ Visitado</option>
+          <option value="Pendiente">⏳ Pendiente</option>
+          <option value="No">❌ Sin visita</option>
+        </select>
+      </div>
     </div>
-    <div class="dl-card">
-      <span class="dl-card-ico">📝</span><h3>Historial de cambios</h3>
-      <p>Exporta todos los registros de ediciones.</p>
-      <button class="btn btn-xl" onclick="dlHistCSV()">⬇️ Descargar historial CSV</button>
+
+    <!-- Preview count -->
+    <div class="exp-preview-bar" id="exp-preview-bar">
+      <span id="exp-count-lbl">— registros</span>
+      <span class="exp-date-range" id="exp-range-lbl"></span>
     </div>
-    <div class="dl-card">
-      <span class="dl-card-ico">🗓️</span><h3>Visitas programadas</h3>
-      <p>Exporta visitas con beneficiarios asignados.</p>
-      <button class="btn btn-xl" onclick="dlVisCSV()">⬇️ Descargar visitas CSV</button>
+
+    <!-- Export buttons -->
+    <div class="exp-btns-grid">
+      <button class="exp-btn exp-btn-xl" onclick="dlFilteredDateCSV()">
+        <span class="exp-btn-ico">📗</span>
+        <span class="exp-btn-lbl">Excel</span>
+        <span class="exp-btn-sub">.xlsx</span>
+      </button>
+      <button class="exp-btn exp-btn-csv" onclick="dlFilteredDateCSV('csv')">
+        <span class="exp-btn-ico">📄</span>
+        <span class="exp-btn-lbl">CSV</span>
+        <span class="exp-btn-sub">Universal</span>
+      </button>
+      <button class="exp-btn" onclick="dlFilteredDateCSV('json')">
+        <span class="exp-btn-ico">🔒</span>
+        <span class="exp-btn-lbl">JSON</span>
+        <span class="exp-btn-sub">Respaldo</span>
+      </button>
+      <button class="exp-btn" onclick="dlHistCSV()">
+        <span class="exp-btn-ico">📝</span>
+        <span class="exp-btn-lbl">Historial</span>
+        <span class="exp-btn-sub">CSV</span>
+      </button>
     </div>
-    <div class="backup-card">
-      <span class="dl-card-ico">🔒</span>
-      <h3>Respaldo completo JSON</h3>
-      <p>Descarga todos los datos (registros, historial, visitas, eventos) en formato JSON. Para restaurar o migrar a otro dispositivo.</p>
+
+    <!-- ── SECCIÓN B: Escanear archivos del dispositivo ── -->
+    <div class="exp-section-lbl" style="margin-top:20px">📁 Archivos de tu dispositivo</div>
+    <div class="exp-file-zone" id="exp-file-zone">
+      <div class="exp-file-zone-inner">
+        <div class="exp-file-ico">📂</div>
+        <div class="exp-file-title">Selecciona archivos</div>
+        <div class="exp-file-sub">Puedes elegir múltiples archivos a la vez</div>
+        <input type="file" id="exp-file-in" multiple accept="*/*"
+          style="display:none" onchange="handleFileScanner(event)"/>
+        <button class="exp-file-btn" onclick="document.getElementById('exp-file-in').click()">
+          Elegir archivos del dispositivo
+        </button>
+        <div class="exp-file-types">
+          <span>CSV</span><span>Excel</span><span>PDF</span>
+          <span>Imágenes</span><span>JSON</span><span>Texto</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- File filter bar (shown after files selected) -->
+    <div id="exp-file-filter-wrap" style="display:none">
+      <div class="exp-filter-card" style="margin-top:10px">
+        <div class="exp-filter-row">
+          <div class="exp-filter-field">
+            <label class="exp-filter-lbl">Desde</label>
+            <input class="exp-date-in" type="date" id="file-date-from" onchange="filterScannedFiles()"/>
+          </div>
+          <div class="exp-filter-field">
+            <label class="exp-filter-lbl">Hasta</label>
+            <input class="exp-date-in" type="date" id="file-date-to" onchange="filterScannedFiles()"/>
+          </div>
+        </div>
+        <div class="exp-presets" style="margin-top:8px">
+          <button class="exp-preset on" id="fp-all"   onclick="filePreset('all')">Todos</button>
+          <button class="exp-preset"    id="fp-today" onclick="filePreset('today')">Hoy</button>
+          <button class="exp-preset"    id="fp-week"  onclick="filePreset('week')">Esta semana</button>
+          <button class="exp-preset"    id="fp-month" onclick="filePreset('month')">Este mes</button>
+        </div>
+        <div class="exp-filter-row" style="margin-top:10px">
+          <select class="exp-sel" id="file-type-filter" onchange="filterScannedFiles()">
+            <option value="">Todos los tipos</option>
+            <option value="image">🖼 Imágenes</option>
+            <option value="text">📄 Texto / CSV</option>
+            <option value="application/pdf">📕 PDF</option>
+            <option value="spreadsheet">📊 Excel</option>
+            <option value="json">🔒 JSON</option>
+          </select>
+          <select class="exp-sel" id="file-sort" onchange="filterScannedFiles()">
+            <option value="date-desc">Más reciente primero</option>
+            <option value="date-asc">Más antiguo primero</option>
+            <option value="name-asc">Nombre A→Z</option>
+            <option value="size-desc">Más grande primero</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- File list stats -->
+      <div class="exp-preview-bar" id="file-stats-bar">
+        <span id="file-count-lbl">0 archivos</span>
+        <span id="file-size-lbl" style="color:var(--sft)">0 KB total</span>
+      </div>
+
+      <!-- Scanned file list -->
+      <div id="exp-file-list"></div>
+
+      <!-- Action bar -->
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-p" style="flex:1" onclick="downloadSelectedFiles()">
+          ⬇️ Descargar seleccionados
+        </button>
+        <button class="btn btn-s" style="flex:none" onclick="clearFileScanner()">
+          🗑️
+        </button>
+      </div>
+    </div>
+
+    <!-- Legacy sections -->
+    <div class="exp-section-lbl" style="margin-top:20px">🔒 Respaldo y restauración</div>
+    <div class="dl-card" style="margin-bottom:10px">
+      <p style="font-size:12px;color:var(--sft);margin-bottom:10px">Respaldo completo de todos los datos de la app en formato JSON.</p>
       <button class="btn btn-p" onclick="dlBackupJSON()">⬇️ Descargar respaldo .json</button>
       <div style="margin-top:10px">
-        <label style="font-size:11px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Restaurar desde respaldo</label>
         <input type="file" id="restore-in" accept=".json" style="display:none" onchange="handleRestore(event)"/>
-        <button class="btn btn-s" style="font-size:11px;padding:9px" onclick="document.getElementById('restore-in').click()">📂 Cargar respaldo .json</button>
+        <button class="btn btn-s" style="font-size:11px;padding:9px" onclick="document.getElementById('restore-in').click()">📂 Restaurar desde respaldo .json</button>
       </div>
     </div>
   </div>
@@ -3388,7 +4424,7 @@ if('serviceWorker' in navigator){
       <div class="gen-avatar" id="gen-avatar">A</div>
       <div class="gen-profile-info">
         <div class="gen-profile-name" id="gen-profile-name">Usuario</div>
-        <div class="gen-profile-role" id="gen-profile-role">Administrador · PensionadosMX v30</div>
+        <div class="gen-profile-role" id="gen-profile-role">Administrador · PensionadosMX v32</div>
       </div>
       <div class="gen-profile-rings">
         <svg class="gen-ring-svg" viewBox="0 0 44 44">
@@ -3427,6 +4463,33 @@ if('serviceWorker' in navigator){
     <!-- ── GRUPO 1: Apariencia ── -->
     <div class="gen-group-label">🎨 Apariencia</div>
     <div class="gen-group">
+      <div class="gen-row" onclick="showQRShare()">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#374151,#1f2937)">📲</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Compartir app (QR)</div>
+          <div class="gen-row-sub">Genera un QR para que otros accedan</div>
+        </div>
+        <div class="gen-row-chev">›</div>
+      </div>
+      <div class="gen-row-div"></div>
+      <div class="gen-row" onclick="showChangelog()">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#065f46,#10b981)">📋</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Novedades</div>
+          <div class="gen-row-sub">Qué hay de nuevo en esta versión</div>
+        </div>
+        <div class="gen-row-chev">›</div>
+      </div>
+      <div class="gen-row-div"></div>
+      <div class="gen-row" onclick="showAppInfo()">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">ℹ️</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Sobre la app</div>
+          <div class="gen-row-sub">Versión, estadísticas, créditos</div>
+        </div>
+        <div class="gen-row-chev">›</div>
+      </div>
+      <div class="gen-row-div"></div>
       <div class="gen-row" onclick="renderThemeG();openSheet('sh-theme')">
         <div class="gen-row-ico" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">🎨</div>
         <div class="gen-row-body">
@@ -3811,6 +4874,7 @@ if('serviceWorker' in navigator){
   </button>
   <button class="nb" id="nb-registros" onclick="go('registros')">
     <div class="nb-ico-wrap">
+      <div class="nb-count" id="nb-count-registros"></div>
       <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/>
       </svg>
@@ -3820,6 +4884,7 @@ if('serviceWorker' in navigator){
   </button>
   <button class="nb" id="nb-visitas" onclick="go('visitas')">
     <div class="nb-ico-wrap">
+      <div class="nb-count" id="nb-count-visitas" style="background:var(--amb)"></div>
       <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
       </svg>
@@ -3952,6 +5017,13 @@ if('serviceWorker' in navigator){
     <div id="eip-hist-wrap"></div>
   </div>
   <div class="fg" style="margin-top:14px"><label class="fl">Folio</label><input class="fi" id="e-folio" placeholder="F-0001"/></div>
+  <div class="fg">
+    <button type="button" class="scan-form-btn" id="scan-form-btn" onclick="openIDScanner()">
+      <span class="scan-form-btn-ico">📷</span>
+      <span>Escanear INE / CURP / QR</span>
+      <span style="font-size:10px;font-weight:700;background:rgba(99,102,241,.3);color:var(--a3);border-radius:8px;padding:2px 8px;">NUEVO</span>
+    </button>
+  </div>
   <div class="fg">
     <label class="fl">Foto (opcional)</label>
     <div class="photo-btn" id="photo-btn" onclick="document.getElementById('e-photo-in').click()">
@@ -4551,6 +5623,8 @@ function go(tab){
   curTab=tab;
   // Update presence with current tab
   if(typeof presenceUpdateTab==='function') presenceUpdateTab(tab);
+  // Update tab position dots
+  if(typeof updateTabDots==='function') updateTabDots();
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.getAttribute('onclick')==="go('"+tab+"')"));
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.getElementById('p-'+tab).classList.add('on');
@@ -5074,6 +6148,13 @@ function openShAdd(){
   sb.className='save-bar';
   document.getElementById('save-txt').textContent='Los cambios se guardan al presionar Guardar';
   openSheet('sh-add');
+  setTimeout(()=>{
+    addFieldHints();
+    attachAutocomplete('e-col',_coloniasCache);
+    attachAutocomplete('e-seccion',_seccionesCache);
+    attachAutocomplete('e-ruta',_rutasCache);
+    initSheetPullClose('sh-add');
+  },100);
 }
 function openEditSh(id){
   const r=R.find(x=>x.id===id);if(!r)return;
@@ -5388,6 +6469,10 @@ function openDet(id){
   setTimeout(()=>{
     const sheet=document.getElementById('sh-det');
     if(sheet) sheet.scrollTop=0;
+    // Init photo zoom on any photos
+    document.querySelectorAll('.det-av-photo,#sh-det img').forEach(initPhotoZoom);
+    // Init pull-close on detail sheet
+    initSheetPullClose('sh-det');
   }, 50);
 }
 function togDA(w){document.getElementById('dm-'+w).classList.toggle('on');}
@@ -5418,6 +6503,47 @@ function conf2(t,m,fn,btnTxt='Eliminar'){
 }
 function closeConf(){document.getElementById('conf').classList.remove('on');pendAct=null;}
 document.getElementById('conf-ok').addEventListener('click',function(){if(pendAct){pendAct();closeConf();}});
+/* ── Undo delete ── */
+let _undoStack = [];
+let _undoTimer = null;
+
+function _showUndoToast(record){
+  // Clear any pending undo
+  if(_undoTimer) clearTimeout(_undoTimer);
+  // Show undo toast
+  let toast = document.getElementById('undo-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'undo-toast';
+    toast.style.cssText = 'position:fixed;bottom:calc(var(--nh,64px) + var(--sb,20px) + 14px);left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--b2);border-radius:20px;padding:11px 8px 11px 16px;display:flex;align-items:center;gap:10px;z-index:900;box-shadow:0 8px 28px rgba(0,0,0,.4);white-space:nowrap;animation:snackIn .25s ease;font-size:13px;font-weight:700;';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `🗑️ <span style="color:var(--txt)">${record.nombre.split(' ')[0]} eliminado</span> <button onclick="undoDelete()" style="background:var(--a);color:#fff;border:none;border-radius:12px;padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:var(--fnt);margin-left:4px">↩ Deshacer</button> <button onclick="closeUndoToast()" style="background:none;border:none;color:var(--sft);font-size:16px;cursor:pointer;padding:0 4px;line-height:1">×</button>`;
+  toast.style.display = 'flex';
+  _undoTimer = setTimeout(closeUndoToast, 6000);
+}
+
+function closeUndoToast(){
+  const t = document.getElementById('undo-toast');
+  if(t){ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>{ if(t)t.style.display='none'; t.style.opacity=''; t.style.transition=''; }, 300); }
+  if(_undoTimer){ clearTimeout(_undoTimer); _undoTimer = null; }
+  _undoStack = [];
+}
+
+function undoDelete(){
+  if(!_undoStack.length) return;
+  const {record, histEntry} = _undoStack.pop();
+  // Restore record
+  R.push(record);
+  // Remove the history entry for this deletion
+  H = H.filter(h => h !== histEntry);
+  detectDups(); svR(); svH(); upHdr(); renderInicio();
+  if(curTab==='registros') renderList();
+  closeUndoToast();
+  snack('↩ ' + record.nombre.split(' ')[0] + ' restaurado', '↩');
+  if(navigator.vibrate) navigator.vibrate([20,10,20]);
+}
+
 function confDel(id){
   if(typeof requirePerm==='function'&&!requirePerm('deleteRecord','Eliminar registros requiere una cuenta')) return;
   const r=R.find(x=>x.id===id);
@@ -5522,6 +6648,8 @@ function onSF(){}
 function onSB(){}
 function clrSrch(){document.getElementById('sq').value='';document.getElementById('sq-clr').style.display='none';showSrchIdle();}
 function showSrchIdle(){
+  renderSrchHistory();
+  renderSrchHistory();
   srchSel=new Set();srchCurrentItems=[];
   document.getElementById('srch-idle-wrap').style.display='block';
   document.getElementById('srch-active-wrap').style.display='none';
@@ -5793,7 +6921,7 @@ function delEv(id){E=E.filter(e=>e.id!==id);svE();renderCal();snack('Evento elim
 function renderStats(){
   detectDups();
   const total=R.length;
-  if(!total){document.getElementById('stats-content').innerHTML='<div class="empty"><div class="empty-ico">📊</div><h3>Sin datos</h3><p>Agrega registros para ver estadísticas</p></div>';return;}
+  if(!total){document.getElementById('stats-content').innerHTML=emptyState('📊','Sin datos aún','Agrega beneficiarios para ver estadísticas, gráficas y análisis de cobertura','➕ Agregar primero',"openShAdd()");return;}
   const act=R.filter(r=>r.estatus==='Activo').length,inact=R.filter(r=>r.estatus==='Inactivo').length;
   const pend=R.filter(r=>r.estatus==='Pendiente').length,baja=R.filter(r=>r.estatus==='Baja').length;
   const dups=R.filter(r=>r.dup).length,mx=R.filter(r=>r.uso==='Mexico').length;
@@ -5879,6 +7007,7 @@ function renderStats(){
     ${(()=>{const rD=[...new Set(R.map(r=>r.ruta).filter(Boolean))].sort().map(rt=>{const n=R.filter(r=>r.ruta===rt).length,v=R.filter(r=>r.ruta===rt&&r.visita==='Si').length;return{rt,n,v};});return rD.length?`<div class="ch-card"><div class="ch-title">🗺️ Avance por Ruta</div>${rD.map(({rt,n,v})=>`<div class="bar-row"><div class="bar-lbl" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px">${rt}</div><div class="bar-wrap"><div class="bar-fill" style="width:${n?Math.round(v/n*100):0}%;background:var(--a)"></div></div><div class="bar-n" style="color:var(--a2)">${v}/${n}</div></div>`).join('')}</div>`:'';})()}
     `;
 }
+  setTimeout(_enhanceStats,200);
 function buildDonut(segs){
   const tot=segs.reduce((s,x)=>s+x.n,0);if(!tot)return'';
   const R2=46,cx=56,cy=56,circ=2*Math.PI*R2;let off=0,paths='';
@@ -5887,11 +7016,7 @@ function buildDonut(segs){
 }
 
 /* ===== DOWNLOAD ===== */
-function renderDL(){
-  detectDups();
-  const prev=R.slice(0,3).map(r=>`${r.folio},${r.nombre},${r.tipo},${r.uso}`).join('\n');
-  document.getElementById('dl-prev').textContent=`FOLIO,NOMBRE,TIPO,USO,...\n${prev}\n...${R.length} registros`;
-}
+/* renderDL → moved to export module */
 const COLS=['ID','Folio','Nombre','Programa','Teléfono','Domicilio','Número','Colonia','Sección','Área','Ruta','CURP','F.Nac','Visita','Uso','Estatus','Fecha','Ult.Edición','Obs.','Duplicado'];
 const rowData=r=>[r.id,r.folio,r.nombre,r.tipo,r.tel||'',r.dom||'',r.num||'',r.col||'',r.seccion||'',r.area||'',r.ruta||'',r.curp||'',r.fnac||'',r.visita,r.uso,r.estatus,r.fecha||'',r.ult||'',r.obs||'',r.dup?'SI':'NO'];
 function dlFile(name,url,isBlob=false){const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);if(isBlob)URL.revokeObjectURL(url);},300);}
@@ -6076,6 +7201,7 @@ function enterBatch(){
   batchMode=true;batchSel.clear();
   document.getElementById('batch-bar').classList.add('on');
   renderList();
+  renderBulkBar();
 }
 function exitBatch(){
   batchMode=false;batchSel.clear();
@@ -6088,6 +7214,7 @@ function toggleBatchRec(id){
   if(el)el.classList.toggle('batch-sel',batchSel.has(id));
   const n=batchSel.size;
   document.getElementById('batch-txt').textContent=n+' seleccionado'+(n!==1?'s':'');
+  renderBulkBar();
 }
 function batchMarkVisited(){
   if(!batchSel.size){snack('⚠️ Selecciona al menos uno','⚠️');return;}
@@ -7279,6 +8406,12 @@ function _applySession(){
   setTimeout(fbAutoInit, 800);
   // Check daily notifications (after 2s delay)
   setTimeout(checkDailyNotifications, 2000);
+  // Backup reminder
+  setTimeout(checkBackupReminder, 5000);
+  // Session timeout
+  resetSessionTimer();
+  // Tab swipe init
+  setTimeout(initTabSwipe, 500);
 }
 
 /* ════════════════════════════════════════════════
@@ -8649,6 +9782,2222 @@ function presenceUpdateTab(tab){
   _myPresenceRef.update({tab, lastSeen:Date.now()}).catch(()=>{});
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   EXPORT & FILE SCANNER JS v31
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Date utility ── */
+function _dateOnly(d){ return d?new Date(d+'T00:00:00'):null; }
+
+/* ── Set default dates on page load ── */
+function renderDL(){
+  detectDups();
+  // Set default dates: start of current month → today
+  const now=new Date();
+  const firstDay=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);
+  const todayStr=today();
+  const fromEl=document.getElementById('exp-date-from');
+  const toEl=document.getElementById('exp-date-to');
+  if(fromEl&&!fromEl.value) fromEl.value=firstDay;
+  if(toEl&&!toEl.value)     toEl.value=todayStr;
+  renderExportPreview();
+}
+
+/* ── Quick date presets for export ── */
+const EXP_PRESETS=['ep-all','ep-today','ep-week','ep-month','ep-3m'];
+function expPreset(p){
+  EXP_PRESETS.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('on',id==='ep-'+p);
+  });
+  const now=new Date();
+  const from=document.getElementById('exp-date-from');
+  const to=document.getElementById('exp-date-to');
+  if(!from||!to) return;
+  to.value=today();
+  if(p==='all'){   from.value='2000-01-01';to.value='2099-12-31';}
+  if(p==='today'){ from.value=today();}
+  if(p==='week'){
+    const d=new Date(now);d.setDate(d.getDate()-6);
+    from.value=d.toISOString().slice(0,10);
+  }
+  if(p==='month'){ from.value=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);}
+  if(p==='3m'){
+    const d=new Date(now);d.setMonth(d.getMonth()-3);
+    from.value=d.toISOString().slice(0,10);
+  }
+  renderExportPreview();
+}
+
+/* ── Get filtered records by date + filters ── */
+function getFilteredRecords(){
+  const from=document.getElementById('exp-date-from')?.value||'';
+  const to=document.getElementById('exp-date-to')?.value||'';
+  const tipo=document.getElementById('exp-fil-tipo')?.value||'';
+  const vis=document.getElementById('exp-fil-vis')?.value||'';
+  return R.filter(r=>{
+    // Date filter on record creation date
+    const rDate=r.fecha||r.ult||'';
+    const rD=rDate.slice(0,10);
+    if(from&&rD&&rD<from) return false;
+    if(to&&rD&&rD>to)     return false;
+    if(tipo&&r.tipo!==tipo)    return false;
+    if(vis&&r.visita!==vis)    return false;
+    return true;
+  });
+}
+
+/* ── Preview count ── */
+function renderExportPreview(){
+  // Deactivate all presets (user typed a custom range)
+  const filtered=getFilteredRecords();
+  const countEl=document.getElementById('exp-count-lbl');
+  const rangeEl=document.getElementById('exp-range-lbl');
+  if(countEl) countEl.textContent=`${filtered.length} de ${R.length} registros`;
+  const from=document.getElementById('exp-date-from')?.value||'';
+  const to=document.getElementById('exp-date-to')?.value||'';
+  if(rangeEl){
+    if(from==='2000-01-01'&&to==='2099-12-31') rangeEl.textContent='Todos los periodos';
+    else if(from===today()&&to===today())      rangeEl.textContent='Solo hoy';
+    else rangeEl.textContent=(from?from.slice(5):'')+(from&&to?' → ':'')+(to?to.slice(5):'');
+  }
+}
+
+/* ── Download filtered by date ── */
+function dlFilteredDateCSV(format='xlsx'){
+  if(typeof requirePerm==='function'&&!requirePerm('exportData','Exportar datos requiere una cuenta')) return;
+  const filtered=getFilteredRecords();
+  if(!filtered.length){snack('⚠️ Sin registros en ese rango','⚠️');return;}
+  const from=document.getElementById('exp-date-from')?.value||'';
+  const to=document.getElementById('exp-date-to')?.value||'';
+  const suffix=(from&&to)?`_${from}_${to}`:today();
+  const fname=`Pensionados${suffix}`;
+  if(format==='csv'){
+    const rows=[COLS,...filtered.map(rowData)];
+    const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+    dlFile(fname+'.csv','data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));
+    snack(`⬇️ ${filtered.length} registros → CSV`,'⬇️');
+  } else if(format==='json'){
+    const blob=new Blob([JSON.stringify({records:filtered,exported:new Date().toISOString(),total:filtered.length},null,2)],{type:'application/json'});
+    dlFile(fname+'.json',URL.createObjectURL(blob),true);
+    snack(`⬇️ ${filtered.length} registros → JSON`,'⬇️');
+  } else {
+    // Default: XLSX via existing function with filtered data
+    if(typeof dlXLSXFiltered==='function') dlXLSXFiltered(filtered,fname);
+    else {
+      // Fallback to CSV if XLSX not available
+      const rows=[COLS,...filtered.map(rowData)];
+      const csv=rows.map(r=>r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      dlFile(fname+'.csv','data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));
+      snack(`⬇️ ${filtered.length} registros exportados`,'⬇️');
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════
+   FILE SCANNER
+   ════════════════════════════════════════════════ */
+
+let _scannedFiles=[];   // Array of {file, selected}
+let _visibleFiles=[];   // After filter
+
+const FILE_TYPE_MAP={
+  'image':    {ico:'🖼️', bg:'rgba(236,72,153,.12)', lbl:'Imagen'},
+  'video':    {ico:'🎬', bg:'rgba(139,92,246,.12)', lbl:'Video'},
+  'audio':    {ico:'🎵', bg:'rgba(59,130,246,.12)',  lbl:'Audio'},
+  'text':     {ico:'📄', bg:'rgba(34,197,94,.12)',   lbl:'Texto'},
+  'pdf':      {ico:'📕', bg:'rgba(239,68,68,.12)',   lbl:'PDF'},
+  'json':     {ico:'🔒', bg:'rgba(99,102,241,.12)',  lbl:'JSON'},
+  'zip':      {ico:'📦', bg:'rgba(245,158,11,.12)',  lbl:'ZIP'},
+  'spreadsheet':{ico:'📊',bg:'rgba(34,197,94,.12)', lbl:'Excel'},
+  'default':  {ico:'📎', bg:'rgba(100,116,139,.12)',lbl:'Archivo'},
+};
+
+function _getFileType(file){
+  const t=file.type||'';
+  const n=file.name.toLowerCase();
+  if(t.startsWith('image'))  return 'image';
+  if(t.startsWith('video'))  return 'video';
+  if(t.startsWith('audio'))  return 'audio';
+  if(t==='application/pdf'||n.endsWith('.pdf')) return 'pdf';
+  if(t.includes('json')||n.endsWith('.json'))   return 'json';
+  if(t.includes('zip')||n.endsWith('.zip'))     return 'zip';
+  if(n.endsWith('.xlsx')||n.endsWith('.xls')||t.includes('spreadsheet')) return 'spreadsheet';
+  if(t.startsWith('text')||n.endsWith('.csv')||n.endsWith('.txt'))       return 'text';
+  return 'default';
+}
+
+function _fmtSize(bytes){
+  if(bytes<1024)    return bytes+'B';
+  if(bytes<1048576) return (bytes/1024).toFixed(1)+'KB';
+  return (bytes/1048576).toFixed(2)+'MB';
+}
+
+function _fmtDate(ts){
+  if(!ts) return '—';
+  return new Date(ts).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+/* ── Handle file input ── */
+function handleFileScanner(event){
+  const files=Array.from(event.target.files||[]);
+  if(!files.length) return;
+  _scannedFiles=files.map(f=>({file:f,selected:true}));
+  // Set default date range to encompass all files
+  const dates=files.map(f=>f.lastModified).filter(Boolean).sort();
+  if(dates.length){
+    const fromEl=document.getElementById('file-date-from');
+    const toEl=document.getElementById('file-date-to');
+    if(fromEl) fromEl.value=new Date(dates[0]).toISOString().slice(0,10);
+    if(toEl)   toEl.value=new Date(dates[dates.length-1]).toISOString().slice(0,10);
+  }
+  document.getElementById('exp-file-filter-wrap').style.display='block';
+  // Reset the input so the same files can be re-selected
+  event.target.value='';
+  filterScannedFiles();
+}
+
+/* ── Filter scanned files ── */
+const FILE_PRESETS=['fp-all','fp-today','fp-week','fp-month'];
+function filePreset(p){
+  FILE_PRESETS.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',id==='fp-'+p);});
+  const now=new Date();
+  const from=document.getElementById('file-date-from');
+  const to=document.getElementById('file-date-to');
+  if(!from||!to) return;
+  to.value=today();
+  if(p==='all'){   from.value='2000-01-01';to.value='2099-12-31';}
+  if(p==='today'){ from.value=today();}
+  if(p==='week'){  const d=new Date(now);d.setDate(d.getDate()-6);from.value=d.toISOString().slice(0,10);}
+  if(p==='month'){ from.value=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);}
+  filterScannedFiles();
+}
+
+function filterScannedFiles(){
+  const from=document.getElementById('file-date-from')?.value||'';
+  const to=document.getElementById('file-date-to')?.value||'';
+  const typeFilter=document.getElementById('file-type-filter')?.value||'';
+  const sort=document.getElementById('file-sort')?.value||'date-desc';
+
+  // Apply date + type filter
+  _visibleFiles=_scannedFiles.filter(({file})=>{
+    const fDate=file.lastModified?new Date(file.lastModified).toISOString().slice(0,10):'';
+    if(from&&fDate&&fDate<from) return false;
+    if(to&&fDate&&fDate>to)     return false;
+    if(typeFilter){
+      const ft=_getFileType(file);
+      if(!ft.includes(typeFilter)&&typeFilter!==ft) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  _visibleFiles.sort((a,b)=>{
+    if(sort==='date-asc')  return (a.file.lastModified||0)-(b.file.lastModified||0);
+    if(sort==='date-desc') return (b.file.lastModified||0)-(a.file.lastModified||0);
+    if(sort==='name-asc')  return a.file.name.localeCompare(b.file.name);
+    if(sort==='size-desc') return b.file.size-a.file.size;
+    return 0;
+  });
+
+  // Stats
+  const totalSize=_visibleFiles.reduce((s,{file})=>s+file.size,0);
+  const cntEl=document.getElementById('file-count-lbl');
+  const szEl=document.getElementById('file-size-lbl');
+  if(cntEl) cntEl.textContent=`${_visibleFiles.length} de ${_scannedFiles.length} archivos`;
+  if(szEl)  szEl.textContent=_fmtSize(totalSize)+' total';
+
+  renderFileList();
+}
+
+function renderFileList(){
+  const el=document.getElementById('exp-file-list');if(!el)return;
+  if(!_visibleFiles.length){
+    el.innerHTML='<div style="padding:20px;text-align:center;font-size:13px;color:var(--sft)">Sin archivos en ese rango de fechas</div>';
+    return;
+  }
+  const selCount=_visibleFiles.filter(({selected})=>selected).length;
+  el.innerHTML=`
+    <div class="exp-sel-bar">
+      <span class="exp-sel-bar-txt">${selCount} seleccionado${selCount!==1?'s':''}</span>
+      <button class="exp-sel-all-btn" onclick="toggleSelectAll()">${selCount===_visibleFiles.length?'Deseleccionar todo':'Seleccionar todo'}</button>
+    </div>`+
+  _visibleFiles.map((item,i)=>{
+    const f=item.file;
+    const ft=_getFileType(f);
+    const meta=FILE_TYPE_MAP[ft]||FILE_TYPE_MAP.default;
+    const date=_fmtDate(f.lastModified);
+    const size=_fmtSize(f.size);
+    return `<div class="exp-file-item${item.selected?' selected':''}" onclick="toggleFileSelect(${i})">
+      <div class="exp-file-type-ico" style="background:${meta.bg}">${meta.ico}</div>
+      <div class="exp-file-body">
+        <div class="exp-file-name" title="${f.name}">${f.name}</div>
+        <div class="exp-file-meta">${date} · ${size} · ${meta.lbl}</div>
+      </div>
+      <div class="exp-file-chk">${item.selected?'✓':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleFileSelect(i){
+  if(_visibleFiles[i]) _visibleFiles[i].selected=!_visibleFiles[i].selected;
+  renderFileList();
+}
+
+function toggleSelectAll(){
+  const allSel=_visibleFiles.every(f=>f.selected);
+  _visibleFiles.forEach(f=>f.selected=!allSel);
+  renderFileList();
+}
+
+/* ── Download selected files ── */
+async function downloadSelectedFiles(){
+  const selected=_visibleFiles.filter(f=>f.selected);
+  if(!selected.length){snack('⚠️ Selecciona al menos un archivo','⚠️');return;}
+  snack(`⬇️ Descargando ${selected.length} archivo${selected.length!==1?'s':''}…`,'⬇️');
+  // Download each file with delay
+  for(const {file} of selected){
+    const url=URL.createObjectURL(file);
+    dlFile(file.name,url,true);
+    await new Promise(r=>setTimeout(r,300));
+  }
+}
+
+function clearFileScanner(){
+  _scannedFiles=[];_visibleFiles=[];
+  document.getElementById('exp-file-filter-wrap').style.display='none';
+  document.getElementById('exp-file-in').value='';
+  snack('🗑️ Archivos limpiados','🗑️');
+}
+
+/* ── Drag and drop support ── */
+(function initFileDrop(){
+  const zone=document.getElementById('exp-file-zone');
+  if(!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');},{passive:false});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('dragover');
+    const files=Array.from(e.dataTransfer.files||[]);
+    if(!files.length) return;
+    _scannedFiles=files.map(f=>({file:f,selected:true}));
+    document.getElementById('exp-file-filter-wrap').style.display='block';
+    filterScannedFiles();
+  },{passive:false});
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   800% MEJORAS JS v31
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. CONFETTI CELEBRATION ── */
+function launchConfetti(x, y, count=30){
+  const colors=['#60a5fa','#6366f1','#22c55e','#f59e0b','#ec4899','#a78bfa'];
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='confetti-particle';
+    p.style.cssText=`
+      left:${x+Math.random()*80-40}px;
+      top:${y||100}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --dur:${.8+Math.random()*1.2}s;
+      --rot:${Math.random()>0.5?'+':'-'}${360+Math.random()*360}deg;
+      transform-origin: ${Math.random()*100}% ${Math.random()*100}%;
+      width:${6+Math.random()*6}px;
+      height:${4+Math.random()*8}px;
+      opacity:${.7+Math.random()*.3};
+    `;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 2500);
+  }
+}
+
+/* ── 2. NAV COUNT BADGES ── */
+function updateNavBadges(){
+  // Registros badge — show dup count
+  const dups=R.filter(r=>r.dup).length;
+  const dupBadge=document.getElementById('nb-count-registros');
+  if(dupBadge){
+    dupBadge.textContent=dups>99?'99+':dups;
+    dupBadge.classList.toggle('show',dups>0);
+  }
+  // Visitas badge — pending visits
+  const pend=R.filter(r=>r.visita==='Pendiente').length;
+  const pendBadge=document.getElementById('nb-count-visitas');
+  if(pendBadge){
+    pendBadge.textContent=pend>99?'99+':pend;
+    pendBadge.classList.toggle('show',pend>0);
+  }
+}
+
+/* ── 3. SKELETON LOADERS ── */
+function showSkeleton(containerId, count=4){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML=Array(count).fill('<div class="skel skel-rec"></div>').join('');
+}
+
+/* ── 4. SEARCH HISTORY ── */
+const SRCH_HIST_KEY='px_srch_history';
+const MAX_SRCH_HIST=10;
+
+function getSrchHistory(){
+  return JSON.parse(localStorage.getItem(SRCH_HIST_KEY)||'[]');
+}
+function addSrchHistory(term){
+  if(!term||term.length<2) return;
+  let h=getSrchHistory().filter(x=>x!==term);
+  h.unshift(term);
+  if(h.length>MAX_SRCH_HIST) h=h.slice(0,MAX_SRCH_HIST);
+  localStorage.setItem(SRCH_HIST_KEY,JSON.stringify(h));
+}
+function delSrchHistory(term){
+  const h=getSrchHistory().filter(x=>x!==term);
+  localStorage.setItem(SRCH_HIST_KEY,JSON.stringify(h));
+  renderSrchHistory();
+}
+function renderSrchHistory(){
+  const idle=document.getElementById('srch-idle');
+  if(!idle) return;
+  const h=getSrchHistory();
+  if(!h.length){
+    idle.innerHTML='<div class="empty-state-v2"><div class="es-illo">🔍</div><div class="es-title">Busca un beneficiario</div><div class="es-sub">Por nombre, folio, colonia, sección o teléfono</div></div>';
+    return;
+  }
+  idle.innerHTML=`
+    <div class="srch-recent-lbl">🕐 Búsquedas recientes</div>
+    ${h.map(t=>`
+      <div class="srch-recent-item" onclick="applyRecentSearch('${t.replace(/'/g,"\'")}')">
+        <span class="srch-recent-ico">🕐</span>
+        <span class="srch-recent-txt">${t}</span>
+        <span class="srch-recent-del" onclick="event.stopPropagation();delSrchHistory('${t.replace(/'/g,"\'")}')">×</span>
+      </div>`).join('')}
+    <div style="padding:8px 16px">
+      <button onclick="localStorage.removeItem('${SRCH_HIST_KEY}');renderSrchHistory()" style="background:none;border:none;color:var(--sft);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fnt)">Limpiar historial</button>
+    </div>`;
+}
+function applyRecentSearch(term){
+  const sq=document.getElementById('sq');
+  if(sq){sq.value=term;sq.dispatchEvent(new Event('input'));}
+}
+
+/* ── 5. FORM VALIDATION ── */
+function validateField(inputEl, rules={}){
+  const val=inputEl.value.trim();
+  const wrap=inputEl.closest('.fi-wrap')||inputEl.parentNode;
+  let errMsg=wrap?.querySelector('.field-err-msg');
+  let err='';
+  if(rules.required&&!val) err=rules.required==='true'?'Este campo es requerido':rules.required;
+  if(val&&rules.minLen&&val.length<rules.minLen) err=`Mínimo ${rules.minLen} caracteres`;
+  if(val&&rules.pattern&&!new RegExp(rules.pattern).test(val)) err=rules.patternMsg||'Formato inválido';
+  if(val&&rules.curp&&!/^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/.test(val)) err='CURP inválida (18 caracteres)';
+  inputEl.classList.toggle('invalid', !!err);
+  inputEl.classList.toggle('valid', !err&&!!val);
+  if(errMsg){errMsg.textContent=err;errMsg.classList.toggle('show',!!err);}
+  return !err;
+}
+
+/* ── 6. BATCH VISIT MARKING ── */
+function markBatchVisit(){
+  const selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  const count=selected.size;
+  conf2(`✅ Marcar ${count} como visitados`,
+    `¿Marcar ${count} beneficiario${count!==1?'s':''} como Visitado?`,
+    ()=>{
+      let changed=0;
+      selected.forEach(id=>{
+        const r=R.find(x=>x.id===id);
+        if(r&&r.visita!=='Si'){r.visita='Si';r.ult=nowStr();changed++;}
+      });
+      svR();detectDups();upHdr();renderList();renderInicio();
+      if(batchMode){batchSel=new Set();renderBatchBar();}
+      // Confetti!
+      if(changed>0) launchConfetti(window.innerWidth/2, 200, 40);
+      snack(`✅ ${changed} marcados como visitados`,'✅');
+      if(navigator.vibrate) navigator.vibrate([30,15,30]);
+    },`Marcar ${count}`);
+}
+
+/* ── 7. HAPTIC FEEDBACK on key actions ── */
+function haptic(pattern=[15]){
+  if(navigator.vibrate) navigator.vibrate(pattern);
+}
+
+/* ── 8. VIRTUAL SCROLL for large lists ── */
+const VS_ROW_H=88; // approximate record height px
+let _vsOffset=0, _vsTotal=0, _vsRendered=[];
+
+function virtualScroll(items, renderFn, containerId, rowHeight=VS_ROW_H){
+  const container=document.getElementById(containerId);
+  if(!container||items.length<50) return false; // only for large lists
+  // Simple windowed render: show 20 items around scroll position
+  const main=document.getElementById('main');
+  const scrollTop=main?.scrollTop||0;
+  const start=Math.max(0,Math.floor(scrollTop/rowHeight)-5);
+  const end=Math.min(items.length,start+30);
+  container.style.position='relative';
+  container.style.height=(items.length*rowHeight)+'px';
+  const visible=items.slice(start,end);
+  let html2='';
+  visible.forEach((item,i)=>{
+    html2+=`<div style="position:absolute;top:${(start+i)*rowHeight}px;left:0;right:0">${renderFn(item)}</div>`;
+  });
+  container.innerHTML=html2;
+  return true;
+}
+
+/* ── 9. QUICK FILTER CHIPS from home ── */
+let _homeFilter='all';
+function setHomeFilter(f, chipEl){
+  _homeFilter=f;
+  document.querySelectorAll('.hfc').forEach(c=>c.classList.remove('act','grn','amb','red','vio'));
+  if(chipEl) chipEl.classList.add('act');
+  // Jump to list with filter applied
+  if(f!=='all'){
+    // Set filter and go to registros
+    if(f==='visitado'){fS='vis_ok';}
+    else if(f==='pendiente'){fS='vis_pe';}
+    else if(f==='sinvisita'){fS='vis_no';}
+    else if(f==='dup'){fS='dup';}
+    else{fS='';}
+    go('registros');
+  } else {
+    fS='';
+    go('registros');
+  }
+}
+
+/* ── 10. SMART EMPTY STATES ── */
+function emptyState(illo, title, sub, btnLabel, btnAction){
+  return `<div class="empty-state-v2">
+    <div class="es-illo">${illo}</div>
+    <div class="es-title">${title}</div>
+    <div class="es-sub">${sub}</div>
+    ${btnLabel?`<button class="es-btn" onclick="${btnAction}">${btnLabel}</button>`:''}
+  </div>`;
+}
+
+/* ── 11. PROGRESS BAR for exports ── */
+function exportWithProgress(items, processFn, label='Exportando'){
+  return new Promise(async(resolve)=>{
+    const total=items.length;
+    let done=0;
+    snack(`⏳ ${label}… 0/${total}`,'⏳');
+    const results=[];
+    for(const item of items){
+      results.push(await processFn(item));
+      done++;
+      if(done%10===0||done===total){
+        snack(`⏳ ${label}… ${done}/${total}`,'⏳');
+      }
+    }
+    resolve(results);
+  });
+}
+
+/* ── 12. COPY TO CLIPBOARD with feedback ── */
+function copyToClipboard(text, label=''){
+  navigator.clipboard.writeText(text).then(()=>{
+    snack('📋 '+(label||text.slice(0,20))+ ' copiado','📋');
+    haptic([10,5,10]);
+  }).catch(()=>{
+    // Fallback
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    snack('📋 Copiado','📋');
+  });
+}
+
+/* ── 13. SAVE HAPTIC + confetti on streak ── */
+function _onRecordSaved(isNew, nombre){
+  haptic(isNew?[20,10,20]:[15]);
+  // Check if milestone
+  const s=_getStreak();
+  if(isNew&&(R.length%10===0||R.length===1)){
+    setTimeout(()=>launchConfetti(window.innerWidth/2,150,isNew?50:20),100);
+    if(R.length===1) snack('🎉 ¡Primer beneficiario registrado!','🎉');
+    else snack(`🎊 ¡${R.length} beneficiarios registrados!`,'🎊');
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   30 MEJORAS JS v31
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   v32 SUPREMA — IA · Logros · Prioridad · Heatmap · Confeti
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ────────────────────────────────────────────────────
+   ANIMATED COUNTER
+   ──────────────────────────────────────────────────── */
+function animateCounter(el, target, duration=600){
+  if(!el) return;
+  const start=parseInt(el.textContent)||0;
+  const diff=target-start;
+  if(diff===0){el.textContent=target;return;}
+  const startTime=performance.now();
+  function step(now){
+    const p=Math.min(1,(now-startTime)/duration);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(start+diff*ease);
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(step);
+}
+function animateAllCounters(){
+  document.querySelectorAll('[data-cnt]').forEach(el=>{
+    const t=parseInt(el.dataset.cnt)||0;
+    animateCounter(el,t,700);
+  });
+}
+
+/* ────────────────────────────────────────────────────
+   ACHIEVEMENT SYSTEM
+   ──────────────────────────────────────────────────── */
+const ACHIEVEMENTS=[
+  {id:'first',ico:'🌱',name:'Primer registro',cond:()=>R.length>=1},
+  {id:'ten',ico:'🔥',name:'10 registros',cond:()=>R.length>=10},
+  {id:'fifty',ico:'💪',name:'50 registros',cond:()=>R.length>=50},
+  {id:'hundred',ico:'💯',name:'100 registros',cond:()=>R.length>=100},
+  {id:'vis10',ico:'🚗',name:'10 visitas',cond:()=>R.filter(r=>r.visita==='Si').length>=10},
+  {id:'vis50',ico:'🏆',name:'50 visitas',cond:()=>R.filter(r=>r.visita==='Si').length>=50},
+  {id:'streak3',ico:'⚡',name:'Racha 3 días',cond:()=>_getStreak().count>=3},
+  {id:'streak7',ico:'🔱',name:'Racha 7 días',cond:()=>_getStreak().count>=7},
+  {id:'allprog',ico:'🌈',name:'5 programas',cond:()=>Object.keys(P).every(k=>R.some(r=>r.tipo===k))},
+  {id:'cov80',ico:'🗺️',name:'80% visitados',cond:()=>R.length>0&&R.filter(r=>r.visita==='Si').length/R.length>=0.8},
+];
+const ACH_KEY='px_ach_v1';
+function getEarnedAchs(){try{return JSON.parse(localStorage.getItem(ACH_KEY)||'[]');}catch{return[];}}
+function checkAchievements(){
+  const earned=getEarnedAchs();
+  const newOnes=[];
+  ACHIEVEMENTS.forEach(a=>{
+    if(!earned.includes(a.id)&&a.cond()){
+      earned.push(a.id);
+      newOnes.push(a);
+    }
+  });
+  if(newOnes.length){
+    localStorage.setItem(ACH_KEY,JSON.stringify(earned));
+    newOnes.forEach((a,i)=>setTimeout(()=>celebrateAch(a),i*800));
+  }
+  return earned;
+}
+function celebrateAch(a){
+  snack(`🏆 ¡Logro desbloqueado! ${a.ico} ${a.name}`,'🏆');
+  launchConfetti();
+}
+function renderAchievements(){
+  const wrap=document.getElementById('ach-wrap');if(!wrap)return;
+  const earned=checkAchievements();
+  if(R.length===0){wrap.innerHTML='';return;}
+  const pills=ACHIEVEMENTS.map(a=>{
+    const ok=earned.includes(a.id);
+    return`<div class="ach-pill ${ok?'earned':''}" title="${a.name}" onclick="achInfo('${a.id}')">
+      <span class="ach-ico">${a.ico}</span>
+      <span class="ach-name">${a.name}</span>
+    </div>`;
+  }).join('');
+  wrap.innerHTML=`<div class="sh2" style="margin-bottom:7px">🏆 Logros <span class="sh2-n">${earned.length}/${ACHIEVEMENTS.length}</span></div>
+    <div class="ach-bar">${pills}</div>`;
+}
+function achInfo(id){
+  const a=ACHIEVEMENTS.find(x=>x.id===id);if(!a)return;
+  const earned=getEarnedAchs().includes(id);
+  snack(`${a.ico} ${a.name} — ${earned?'¡Desbloqueado!':'Aún no desbloqueado'}`, a.ico);
+}
+
+/* ────────────────────────────────────────────────────
+   CONFETTI
+   ──────────────────────────────────────────────────── */
+
+/* ────────────────────────────────────────────────────
+   SMART PRIORITY QUEUE
+   ──────────────────────────────────────────────────── */
+function calcPriorityScore(r){
+  let score=0;
+  if(r.estatus==='Baja')return -1;
+  // Days since last visit / registration
+  const ds=r.ult?daysSince(r.ult.slice(0,10)):r.fecha?daysSince(r.fecha):0;
+  score+=Math.min(ds*2,80);
+  // Never visited
+  if(r.visita==='No')score+=30;
+  if(r.visita==='Pendiente')score+=20;
+  // Birthday soon
+  if(r.fnac){
+    try{
+      const bd=new Date(r.fnac+'T00:00:00');
+      const now=new Date();
+      const next=new Date(now.getFullYear(),bd.getMonth(),bd.getDate());
+      if(next<now)next.setFullYear(next.getFullYear()+1);
+      const daysUntil=Math.round((next-now)/(1000*60*60*24));
+      if(daysUntil<=7)score+=25;
+      else if(daysUntil<=30)score+=10;
+    }catch{}
+  }
+  // Status active gets slight bump
+  if(r.estatus==='Activo')score+=5;
+  return Math.round(score);
+}
+function renderSmartPriority(){
+  const wrap=document.getElementById('prio-wrap-home');if(!wrap)return;
+  if(R.length<3){wrap.innerHTML='';return;}
+  const scored=R
+    .map(r=>({r,score:calcPriorityScore(r)}))
+    .filter(x=>x.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,5);
+  if(!scored.length){wrap.innerHTML='';return;}
+  const rows=scored.map((x,i)=>{
+    const cls=x.score>70?'hot':x.score>40?'warm':'cool';
+    const ds=x.r.ult?daysSince(x.r.ult.slice(0,10)):x.r.fecha?daysSince(x.r.fecha):0;
+    const p=pg(x.r.tipo);
+    return`<div class="prio-item" onclick="openDet(${x.r.id})">
+      <div class="prio-rank ${cls}">${i+1}</div>
+      <div style="flex:1;min-width:0">
+        <div class="prio-name">${x.r.nombre}</div>
+        <div class="prio-info">${p.ico} ${x.r.tipo} · ${ds}d sin actualizar</div>
+      </div>
+      <div class="prio-score">${x.score}pts</div>
+    </div>`;
+  }).join('');
+  wrap.innerHTML=`<div class="prio-card">
+    <div class="prio-hdr">
+      <span style="font-size:16px">🎯</span>
+      <span class="prio-title">Visitar hoy · Prioridad</span>
+      <span class="prio-badge">IA</span>
+    </div>
+    ${rows}
+    <button class="btn btn-s" style="margin-top:8px;font-size:11px;padding:7px;width:100%" onclick="openPriorityFull()">Ver todos los pendientes →</button>
+  </div>`;
+}
+function openPriorityFull(){
+  const scored=R
+    .map(r=>({r,score:calcPriorityScore(r)}))
+    .filter(x=>x.score>0)
+    .sort((a,b)=>b.score-a.score);
+  document.getElementById('qf-t').textContent='🎯 Prioridad de visitas';
+  document.getElementById('qf-n').textContent=scored.length+' beneficiarios';
+  document.getElementById('qf-list').innerHTML=scored.map(x=>recCard(x.r)).join('');
+  openSheet('sh-qf');
+}
+
+/* ────────────────────────────────────────────────────
+   AI INSIGHT CHIP (home)
+   ──────────────────────────────────────────────────── */
+const INSIGHTS=[
+  ()=>{const n=R.filter(r=>r.visita!=='Si'&&r.estatus!=='Baja').length;return n>0?`Tienes ${n} beneficiarios pendientes de visita. Prioriza los que llevan más días sin actualizar.`:null;},
+  ()=>{const n=R.filter(r=>r.estatus==='Pendiente').length;return n>0?`${n} registros están en estatus Pendiente. Revisa y actualiza su situación.`:null;},
+  ()=>{const pct=R.length?Math.round(R.filter(r=>r.visita==='Si').length/R.length*100):0;return pct>0?`Has completado el ${pct}% de tus visitas. ${pct>=80?'¡Excelente cobertura!':pct>=50?'Buen avance, sigue así.':'Aún hay mucho por visitar.'}`:null;},
+  ()=>{const n=R.filter(r=>!r.tel&&r.estatus==='Activo').length;return n>0?`${n} beneficiarios activos no tienen teléfono registrado. Actualiza sus datos.`:null;},
+  ()=>{const s=_getStreak();return s.count>0?`Llevas ${s.count} día${s.count>1?'s':''} de racha activa. ¡Tu mejor racha fue ${s.best} días!`:null;},
+  ()=>{const hoy=new Date(),mm=hoy.getMonth(),dd=hoy.getDate();const bd=R.filter(r=>{if(!r.fnac)return false;try{const d=new Date(r.fnac+'T00:00:00');return d.getMonth()===mm&&d.getDate()===dd;}catch{return false;}});return bd.length?`🎂 ¡Hoy es el cumpleaños de ${bd[0].nombre.split(' ')[0]}${bd.length>1?` y ${bd.length-1} más`:''}! Recuerda felicitarlos.`:null;},
+];
+let _insightIdx=0;
+function renderInsight(){
+  const wrap=document.getElementById('insight-wrap');if(!wrap||R.length===0){if(wrap)wrap.innerHTML='';return;}
+  let txt=null;
+  for(let i=0;i<INSIGHTS.length;i++){
+    const fn=INSIGHTS[(_insightIdx+i)%INSIGHTS.length];
+    txt=fn();
+    if(txt){_insightIdx=(_insightIdx+i+1)%INSIGHTS.length;break;}
+  }
+  if(!txt){wrap.innerHTML='';return;}
+  wrap.innerHTML=`<div class="insight-strip" onclick="nextInsight()">
+    <span class="insight-ico">💡</span>
+    <div class="insight-txt">
+      <div class="insight-lbl">Insight IA</div>
+      ${txt}
+    </div>
+    <span class="insight-refresh">↻</span>
+  </div>`;
+}
+function nextInsight(){
+  _insightIdx=(_insightIdx+1)%INSIGHTS.length;
+  renderInsight();
+}
+
+/* ────────────────────────────────────────────────────
+   COVERAGE HEATMAP (on estadisticas)
+   ──────────────────────────────────────────────────── */
+function renderHeatmap(){
+  const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort((a,b)=>a-b||a.localeCompare(b));
+  if(secs.length<2)return '';
+  const cells=secs.map(sec=>{
+    const total=R.filter(r=>r.seccion===sec).length;
+    const vis=R.filter(r=>r.seccion===sec&&r.visita==='Si').length;
+    const pct=total?Math.round(vis/total*100):0;
+    const cls=pct===0?'hm-0':pct<30?'hm-low':pct<60?'hm-mid':pct<100?'hm-high':'hm-full';
+    const color=pct===0?'#ef4444':pct<30?'#f59e0b':pct<60?'#60a5fa':pct<100?'#22c55e':'#4ade80';
+    return`<div class="hm-cell ${cls}" onclick="openQF('sec_${sec}','📍 Sección ${sec}')" title="Sección ${sec}: ${vis}/${total} visitados">
+      <span class="hm-sec" style="color:${color}">Sec ${sec}</span>
+      <span class="hm-pct" style="color:${color}">${pct}%</span>
+    </div>`;
+  }).join('');
+  return`<div class="heatmap-card">
+    <div class="heatmap-title">
+      <span>🗺️ Mapa de cobertura</span>
+      <span style="font-size:9px;color:var(--mut)">🔴<30% 🟡30-60% 🔵60-99% 🟢100%</span>
+    </div>
+    <div class="heatmap-grid">${cells}</div>
+  </div>`;
+}
+
+/* ────────────────────────────────────────────────────
+   AI ASSISTANT (Claude API)
+   ──────────────────────────────────────────────────── */
+const AI_SUGS_DEFAULT=[
+  '¿Quién debe visitarse hoy?',
+  '¿Cuántos activos hay?',
+  '¿Cuál sección tiene menos cobertura?',
+  '¿Quién lleva más días sin visita?',
+  'Resumen de la base de datos',
+];
+let aiMessages=[];
+function buildDataContext(){
+  const total=R.length;
+  if(total===0)return'No hay registros en la base de datos todavía.';
+  const act=R.filter(r=>r.estatus==='Activo').length;
+  const pend=R.filter(r=>r.estatus==='Pendiente').length;
+  const baja=R.filter(r=>r.estatus==='Baja').length;
+  const visOk=R.filter(r=>r.visita==='Si').length;
+  const visPe=R.filter(r=>r.visita==='Pendiente').length;
+  const visNo=R.filter(r=>r.visita==='No').length;
+  const usa=R.filter(r=>r.uso==='Estados Unidos').length;
+  const dups=R.filter(r=>r.dup).length;
+  const sinTel=R.filter(r=>!r.tel&&r.estatus==='Activo').length;
+  const sinDir=R.filter(r=>!r.dom&&r.estatus==='Activo').length;
+  const streak=_getStreak();
+  const progResumen=Object.entries(P).map(([k,p])=>`${p.ico}${k}:${R.filter(r=>r.tipo===k).length}`).join(', ');
+  const secciones=[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
+  const secResumen=secciones.slice(0,10).map(s=>{
+    const t=R.filter(r=>r.seccion===s).length;
+    const v=R.filter(r=>r.seccion===s&&r.visita==='Si').length;
+    return`Sec.${s}:${v}/${t}`;
+  }).join(', ');
+  const scored=R.map(r=>({r,s:calcPriorityScore(r)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5);
+  const topPrio=scored.map(x=>`${x.r.nombre.split(' ').slice(0,2).join(' ')}(score:${x.s})`).join(', ');
+  const hoy=new Date(),mm=hoy.getMonth(),dd=hoy.getDate();
+  const bdHoy=R.filter(r=>{if(!r.fnac)return false;try{const d=new Date(r.fnac+'T00:00:00');return d.getMonth()===mm&&d.getDate()===dd;}catch{return false;}}).map(r=>r.nombre.split(' ')[0]);
+  return`Base de datos PensionadosMX:
+- Total registros: ${total}
+- Estatus: Activo=${act}, Pendiente=${pend}, Baja=${baja}, Inactivo=${total-act-pend-baja}
+- Visitas: Visitados=${visOk} (${Math.round(visOk/total*100)}%), Pendiente=${visPe}, Sin visita=${visNo}
+- Programas: ${progResumen}
+- Migrantes USA: ${usa}
+- Duplicados: ${dups}
+- Activos sin teléfono: ${sinTel} | Sin dirección: ${sinDir}
+- Racha actual: ${streak.count} días (mejor: ${streak.best})
+- Cobertura por sección: ${secResumen||'Sin secciones'}
+- Top prioridad visita hoy: ${topPrio||'Ninguno urgente'}
+- Cumpleaños hoy: ${bdHoy.length?bdHoy.join(', '):'Ninguno'}`;
+}
+function openAI(){
+  const sheet=document.getElementById('ai-sheet');
+  if(!sheet)return;
+  sheet.classList.add('on');
+  if(aiMessages.length===0){
+    aiMessages=[{role:'assistant',content:`¡Hola! 👋 Soy tu asistente IA para **PensionadosMX**.\n\nAnalizo tu base de ${R.length} beneficiar${R.length===1?'io':'ios'} en tiempo real. ¿En qué te puedo ayudar hoy?`}];
+    renderAIMsgs();
+  }
+  renderAISugs(AI_SUGS_DEFAULT);
+  setTimeout(()=>document.getElementById('ai-inp')?.focus(),300);
+}
+function closeAI(){
+  document.getElementById('ai-sheet')?.classList.remove('on');
+}
+function renderAIMsgs(){
+  const el=document.getElementById('ai-msgs');if(!el)return;
+  el.innerHTML=aiMessages.map(m=>{
+    const isUser=m.role==='user';
+    const txt=(m.content||'').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+    return`<div class="ai-msg ${isUser?'ai-msg-user':''}">
+      <div class="ai-avatar ${isUser?'ai-avatar-user':'ai-avatar-ai'}">${isUser?'👤':'🤖'}</div>
+      <div class="ai-bubble ${isUser?'ai-bubble-user':'ai-bubble-ai'}">${txt}</div>
+    </div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function renderAISugs(sugs){
+  const el=document.getElementById('ai-sugs');if(!el)return;
+  el.innerHTML=sugs.map(s=>`<div class="ai-sug" onclick="aiSugClick('${s.replace(/'/g,"\\'")}')"> ${s}</div>`).join('');
+}
+function aiSugClick(text){
+  const inp=document.getElementById('ai-inp');
+  if(inp){inp.value=text;}
+  aiSend();
+}
+function showAITyping(){
+  const el=document.getElementById('ai-msgs');if(!el)return;
+  const div=document.createElement('div');div.className='ai-msg';div.id='ai-typing-indicator';
+  div.innerHTML=`<div class="ai-avatar ai-avatar-ai">🤖</div><div class="ai-typing"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>`;
+  el.appendChild(div);el.scrollTop=el.scrollHeight;
+}
+function removeAITyping(){
+  document.getElementById('ai-typing-indicator')?.remove();
+}
+async function aiSend(){
+  const inp=document.getElementById('ai-inp');if(!inp)return;
+  const text=(inp.value||'').trim();if(!text)return;
+  inp.value='';
+  document.getElementById('ai-sugs').innerHTML='';
+  aiMessages.push({role:'user',content:text});
+  renderAIMsgs();
+  showAITyping();
+  const dataCtx=buildDataContext();
+  const systemPrompt=`Eres un asistente experto en gestión de beneficiarios de programas sociales en México para la app PensionadosMX. Responde siempre en español, de forma concisa y útil (máx 150 palabras). Usa emojis estratégicamente. Analiza los datos y da recomendaciones accionables. No repitas los datos completos, solo da la respuesta relevante.\n\nDATOS ACTUALES:\n${dataCtx}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:systemPrompt,
+        messages:aiMessages.slice(-8).map(m=>({role:m.role,content:m.content})),
+      }),
+    });
+    const data=await res.json();
+    removeAITyping();
+    const reply=data?.content?.[0]?.text||'Lo siento, no pude procesar esa consulta.';
+    aiMessages.push({role:'assistant',content:reply});
+    renderAIMsgs();
+    renderAISugs(['¿Y los pendientes?','¿Quién visitar primero?','Dame un resumen','¿Qué hacer hoy?']);
+  }catch(err){
+    removeAITyping();
+    const errMsg='⚠️ Error de conexión. Verifica tu internet e intenta de nuevo.';
+    aiMessages.push({role:'assistant',content:errMsg});
+    renderAIMsgs();
+  }
+}
+
+/* ────────────────────────────────────────────────────
+   PATCH renderInicio to call new v32 renders
+   ──────────────────────────────────────────────────── */
+const _origRenderInicioInner=window._renderInicioInner||(()=>{});
+// Hook into renderInicio end via a patch on the animateStats call
+const _origAnimateStats=window.animateStats;
+function animateStats(){
+  if(_origAnimateStats)_origAnimateStats();
+  // v32: also animate counters with data-cnt
+  requestAnimationFrame(animateAllCounters);
+}
+// Patch _renderInicioInner by overriding it after definition
+document.addEventListener('DOMContentLoaded',()=>{},false);
+// Use a MutationObserver to auto-render v32 widgets when inicio renders
+(function patchV32(){
+  let _v32Timer=null;
+  const _origGo=window.go;
+  // Override render to add v32 widgets
+  const _origRender=window.render;
+  if(typeof _origRender==='function'){
+    window.render=function(t){
+      _origRender(t);
+      if(t==='inicio'){
+        clearTimeout(_v32Timer);
+        _v32Timer=setTimeout(renderV32Dashboard,80);
+      }
+      if(t==='estadisticas'){
+        setTimeout(()=>{
+          const sc=document.getElementById('stats-content');
+          if(sc&&!document.getElementById('v32-heatmap')){
+            const hm=renderHeatmap();
+            if(hm){
+              const div=document.createElement('div');
+              div.id='v32-heatmap';div.innerHTML=hm;
+              sc.appendChild(div);
+            }
+          }
+        },250);
+      }
+    };
+  }
+})();
+
+function renderV32Dashboard(){
+  renderAchievements();
+  renderSmartPriority();
+  renderInsight();
+}
+
+/* ────────────────────────────────────────────────────
+   ALSO HOOK into _renderInicioInner directly
+   ──────────────────────────────────────────────────── */
+(function hookInicioInner(){
+  // Wait for app to define _renderInicioInner, then wrap it
+  const _check=()=>{
+    if(typeof window._renderInicioInner==='function'&&!window._v32Patched){
+      window._v32Patched=true;
+      const orig=window._renderInicioInner;
+      window._renderInicioInner=function(){
+        orig.apply(this,arguments);
+        setTimeout(renderV32Dashboard,60);
+      };
+    }
+  };
+  setTimeout(_check,100);
+  setTimeout(_check,500);
+  setTimeout(_check,1000);
+})();
+
+/* ────────────────────────────────────────────────────
+   CHECK GOAL CELEBRATION
+   ──────────────────────────────────────────────────── */
+function checkGoalCelebration(){
+  const m=_getMeta();
+  if(m.goal&&m.done>=m.goal&&!sessionStorage.getItem('px_celebrated_'+today())){
+    sessionStorage.setItem('px_celebrated_'+today(),'1');
+    setTimeout(()=>{
+      launchConfetti();
+      snack(`🎉 ¡Meta del día completada! ${m.done}/${m.goal} visitas`,'🎉');
+    },500);
+  }
+}
+
+/* ────────────────────────────────────────────────────
+   PATCH cycleVis to trigger achievements + celebration
+   ──────────────────────────────────────────────────── */
+(function patchCycleVis(){
+  const check=()=>{
+    if(typeof window.cycleVis==='function'&&!window._v32CyclePatched){
+      window._v32CyclePatched=true;
+      const orig=window.cycleVis;
+      window.cycleVis=function(id,e){
+        orig.apply(this,arguments);
+        setTimeout(()=>{checkAchievements();checkGoalCelebration();},200);
+      };
+    }
+  };
+  setTimeout(check,200);setTimeout(check,800);
+})();
+
+/* ════════════════════════════════════════════════════════════════
+   ID SCANNER v32 — INE · CURP · QR · PDF417 · Code128 · Code39
+   ════════════════════════════════════════════════════════════════ */
+
+let _scanStream=null;
+let _scanAnimFrame=null;
+let _scanDetector=null;
+let _scanResult=null;
+let _scanCanvas=null;
+let _scanCtx=null;
+let _jsQRLoaded=false;
+let _scanActive=false;
+
+/* ── Open / Close ── */
+function openIDScanner(){
+  const overlay=document.getElementById('scan-overlay');
+  if(!overlay)return;
+  overlay.classList.add('on');
+  _scanActive=true;
+  setScanStatus('Iniciando cámara…','');
+  startScanCamera();
+}
+
+function closeIDScanner(){
+  _scanActive=false;
+  stopScanCamera();
+  document.getElementById('scan-overlay')?.classList.remove('on');
+  document.getElementById('scan-result-overlay')?.classList.remove('on');
+}
+
+function retryScan(){
+  document.getElementById('scan-result-overlay')?.classList.remove('on');
+  _scanResult=null;
+  _scanActive=true;
+  setScanStatus('Apunta la cámara al código QR o código de barras','');
+  startScanLoop();
+}
+
+/* ── Camera ── */
+async function startScanCamera(){
+  try{
+    const constraints={
+      video:{
+        facingMode:{ideal:'environment'},
+        width:{ideal:1280},height:{ideal:720},
+      }
+    };
+    _scanStream=await navigator.mediaDevices.getUserMedia(constraints);
+    const video=document.getElementById('scan-video');
+    video.srcObject=_scanStream;
+    video.onloadedmetadata=()=>{
+      video.play();
+      _scanCanvas=document.createElement('canvas');
+      _scanCtx=_scanCanvas.getContext('2d',{willReadFrequently:true});
+      setScanStatus('Apunta la cámara al código QR o código de barras','');
+      initBarcodeDetector();
+    };
+  }catch(err){
+    setScanStatus('⚠️ Sin acceso a la cámara. Usa la entrada manual.','error');
+    console.warn('Camera error:',err);
+  }
+}
+
+function stopScanCamera(){
+  if(_scanAnimFrame){cancelAnimationFrame(_scanAnimFrame);_scanAnimFrame=null;}
+  if(_scanStream){_scanStream.getTracks().forEach(t=>t.stop());_scanStream=null;}
+}
+
+/* ── BarcodeDetector + jsQR init ── */
+async function initBarcodeDetector(){
+  // Try native BarcodeDetector (Chrome 88+, Safari 17+)
+  if('BarcodeDetector' in window){
+    try{
+      const supported=await BarcodeDetector.getSupportedFormats();
+      _scanDetector=new BarcodeDetector({
+        formats: supported.filter(f=>['qr_code','pdf417','code_128','code_39','aztec','data_matrix','ean_13','ean_8'].includes(f))
+      });
+    }catch(e){_scanDetector=null;}
+  }
+  // Load jsQR as fallback (for QR on iOS/Firefox)
+  if(!_jsQRLoaded){
+    const sc=document.createElement('script');
+    sc.src='https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js';
+    sc.onload=()=>{_jsQRLoaded=true;};
+    document.head.appendChild(sc);
+  }
+  startScanLoop();
+}
+
+/* ── Scan loop ── */
+function startScanLoop(){
+  if(_scanAnimFrame){cancelAnimationFrame(_scanAnimFrame);_scanAnimFrame=null;}
+  let lastScan=0;
+  async function loop(ts){
+    if(!_scanActive)return;
+    _scanAnimFrame=requestAnimationFrame(loop);
+    // Throttle: try every 400ms
+    if(ts-lastScan<400)return;
+    lastScan=ts;
+    const video=document.getElementById('scan-video');
+    if(!video||video.readyState<2)return;
+    // Draw frame to canvas
+    _scanCanvas.width=video.videoWidth||640;
+    _scanCanvas.height=video.videoHeight||480;
+    _scanCtx.drawImage(video,0,0,_scanCanvas.width,_scanCanvas.height);
+    // Try detection
+    let rawText=null;
+    // 1. BarcodeDetector (native)
+    if(_scanDetector){
+      try{
+        const barcodes=await _scanDetector.detect(_scanCanvas);
+        if(barcodes.length>0){rawText=barcodes[0].rawValue;}
+      }catch{}
+    }
+    // 2. jsQR fallback
+    if(!rawText&&_jsQRLoaded&&typeof jsQR==='function'){
+      try{
+        const imgData=_scanCtx.getImageData(0,0,_scanCanvas.width,_scanCanvas.height);
+        const result=jsQR(imgData.data,imgData.width,imgData.height);
+        if(result){rawText=result.data;}
+      }catch{}
+    }
+    if(rawText){
+      _scanActive=false;
+      if(navigator.vibrate)navigator.vibrate([50,30,50]);
+      processScannedText(rawText);
+    }
+  }
+  _scanAnimFrame=requestAnimationFrame(loop);
+}
+
+/* ── Process & Parse ── */
+function processScannedText(raw){
+  setScanStatus('✅ ¡Código detectado!','found');
+  const data=parseMexicanID(raw);
+  _scanResult={raw,data};
+  showScanResult(data,raw);
+}
+
+function parseMexicanID(raw){
+  const data={};
+  if(!raw)return data;
+  const text=raw.trim();
+
+  // 1. Extract CURP (18-char pattern)
+  const curpRx=/[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}/g;
+  const curpMatch=text.match(curpRx);
+  if(curpMatch){
+    data.curp=curpMatch[0];
+    const pc=parseCURP(data.curp);
+    if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
+  }
+
+  // 2. Pipe-delimited INE/IFE format
+  // Possible: NOMBRE|AP1|AP2|DIA|MES|ANO|SEXO|EDO|MUN|SEC|CLAVE
+  // Or:       CLAVE|NOMBRE|AP1|AP2|ANO|MES|DIA|SEXO|EDO...
+  if(text.includes('|')){
+    const parts=text.split('|').map(s=>s.trim().replace(/['"]/g,''));
+    // Find name parts (all-letter strings > 2 chars that aren't state codes)
+    const nameCandidates=parts.filter(p=>/^[A-ZÁÉÍÓÚÑÜ ]{3,}$/.test(p)&&p.length>2&&!['HOMBRE','MUJER','MASCULINO','FEMENINO'].includes(p));
+    if(nameCandidates.length>=2&&!data.nombre){
+      // Reconstruct: typically APELLIDO1 APELLIDO2 NOMBRE
+      data.nombre=nameCandidates.slice(0,3).join(' ');
+    }else if(nameCandidates.length===1&&!data.nombre){
+      data.nombre=nameCandidates[0];
+    }
+    // Find date-like parts: 2-digit numbers (day, month, year)
+    const nums=parts.filter(p=>/^\d{1,4}$/.test(p));
+    // Look for 4-digit year
+    const yr4=parts.find(p=>/^(19|20)\d{2}$/.test(p));
+    const yr2=parts.find(p=>/^\d{2}$/.test(p)&&parseInt(p)>=0&&parseInt(p)<=99);
+    if(yr4&&!data.fnac){
+      const mo=nums.find(n=>parseInt(n)>=1&&parseInt(n)<=12&&n!==yr4.slice(2));
+      const dy=nums.find(n=>parseInt(n)>=1&&parseInt(n)<=31&&n!==mo);
+      if(mo&&dy){data.fnac=`${yr4}-${mo.padStart(2,'0')}-${dy.padStart(2,'0')}`;}
+    }
+    // Find section (seccion): typically 3-4 digit number
+    const sec=parts.find(p=>/^\d{3,4}$/.test(p));
+    if(sec)data.seccion=sec;
+    // Find electoral key (18+ alphanumeric)
+    const clave=parts.find(p=>/^[A-Z0-9]{18,20}$/.test(p)&&p!==data.curp);
+    if(clave&&!data.clave)data.clave=clave;
+    // Find address-like field (has digits + letters)
+    const addr=parts.find(p=>p.length>8&&/\d/.test(p)&&/[A-Z]/.test(p)&&!curpRx.test(p)&&p!==data.clave);
+    if(addr)data.dom=addr;
+  }
+
+  // 3. Semicolon-delimited fallback
+  if(!data.nombre&&text.includes(';')){
+    const parts=text.split(';').map(s=>s.trim());
+    const nameCandidates=parts.filter(p=>/^[A-ZÁÉÍÓÚÑÜ ]{3,}$/.test(p));
+    if(nameCandidates.length>=1)data.nombre=nameCandidates.slice(0,3).join(' ');
+  }
+
+  // 4. URL with CURP param (gob.mx, RENAPO)
+  if(!data.curp&&text.includes('curp=')){
+    const m=text.match(/curp=([A-Z0-9]{18})/i);
+    if(m){
+      data.curp=m[1].toUpperCase();
+      const pc=parseCURP(data.curp);
+      if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
+    }
+  }
+
+  // 5. Plain CURP only
+  if(!data.curp&&/^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}$/.test(text.trim())){
+    data.curp=text.trim();
+    const pc=parseCURP(data.curp);
+    if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
+  }
+
+  // 6. Try to extract name from unstructured text (APELLIDO APELLIDO NOMBRE pattern)
+  if(!data.nombre){
+    // Look for 2+ consecutive capitalized words at start
+    const nameRx=/^([A-ZÁÉÍÓÚÑÜ]{2,}\s+[A-ZÁÉÍÓÚÑÜ]{2,}(?:\s+[A-ZÁÉÍÓÚÑÜ]{2,})?)/m;
+    const nm=text.match(nameRx);
+    if(nm)data.nombre=nm[1].trim();
+  }
+
+  // 7. Extract phone number
+  if(!data.tel){
+    const telRx=/(\d{3}[-.\s]?\d{3}[-.\s]?\d{4}|\d{10})/;
+    const tm=text.match(telRx);
+    if(tm)data.tel=tm[1].replace(/[-.\s]/g,'').replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3');
+  }
+
+  // 8. Extract postal code / section from raw numbers
+  if(!data.seccion){
+    const sc=text.match(/(?:SECCION|SECC?\.?|SEC)\s*:?\s*(\d{3,4})/i);
+    if(sc)data.seccion=sc[1];
+  }
+
+  return data;
+}
+
+/* ── Show result preview ── */
+function showScanResult(data,raw){
+  stopScanCamera();
+  const fieldsEl=document.getElementById('scan-result-fields');
+  const rawEl=document.getElementById('scan-result-raw');
+  const subEl=document.getElementById('scan-result-sub');
+  if(!fieldsEl)return;
+
+  const hasData=Object.keys(data).length>0;
+  const fieldDefs=[
+    {key:'nombre',lbl:'Nombre',cls:''},
+    {key:'curp',lbl:'CURP',cls:'mono'},
+    {key:'fnac',lbl:'F. Nacimiento',cls:'mono'},
+    {key:'sexo',lbl:'Sexo',cls:''},
+    {key:'seccion',lbl:'Sección',cls:'mono'},
+    {key:'dom',lbl:'Domicilio',cls:''},
+    {key:'tel',lbl:'Teléfono',cls:'mono'},
+  ];
+
+  if(hasData){
+    const rows=fieldDefs.filter(f=>data[f.key]).map(f=>`
+      <div class="scan-field-row">
+        <span class="scan-field-lbl">${f.lbl}</span>
+        <span class="scan-field-val ${f.cls}">${data[f.key]}</span>
+      </div>`).join('');
+    fieldsEl.innerHTML=rows||'<p style="color:var(--mut);font-size:12px;text-align:center;padding:8px">No se detectaron campos conocidos en este código.</p>';
+    subEl.textContent=`${Object.keys(data).filter(k=>k!=='sexo'||true).length} campo(s) detectado(s) — revisa antes de usar`;
+  }else{
+    fieldsEl.innerHTML=`<div style="text-align:center;padding:12px">
+      <div style="font-size:28px;margin-bottom:8px">🤔</div>
+      <div style="font-size:13px;font-weight:700;color:var(--txt)">No se reconoció el formato</div>
+      <div style="font-size:12px;color:var(--sft);margin-top:4px">Puedes ver el texto raw y copiar manualmente</div>
+    </div>`;
+    subEl.textContent='Formato no reconocido — texto raw disponible';
+  }
+  rawEl.textContent=raw;
+  document.getElementById('scan-result-overlay').classList.add('on');
+}
+
+/* ── Apply result to form ── */
+function applyScanResult(){
+  if(!_scanResult)return;
+  const data=_scanResult.data;
+  const raw=_scanResult.raw;
+  // Fill form fields
+  if(data.nombre){const el=document.getElementById('e-nombre');if(el)el.value=data.nombre;}
+  if(data.curp){
+    const el=document.getElementById('e-curp');
+    if(el){el.value=data.curp;onCURPInput(data.curp);}
+  }
+  if(data.fnac){const el=document.getElementById('e-fnac');if(el){el.value=data.fnac;if(typeof updEdad==='function')updEdad();}}
+  if(data.tel){const el=document.getElementById('e-tel');if(el)el.value=data.tel;}
+  if(data.dom){const el=document.getElementById('e-dom');if(el)el.value=data.dom;}
+  if(data.seccion){const el=document.getElementById('e-seccion');if(el)el.value=data.seccion;}
+  // Close all scan UI
+  document.getElementById('scan-result-overlay')?.classList.remove('on');
+  closeIDScanner();
+  // Feedback
+  const filled=Object.keys(data).filter(k=>data[k]).length;
+  snack(`✅ ${filled} campo${filled>1?'s':''} llenado${filled>1?'s':''} desde el ID`,'✅');
+}
+
+/* ── Manual CURP input ── */
+function openManualCURP(){
+  const curp=prompt('Ingresa el CURP (18 caracteres):','');
+  if(!curp)return;
+  const clean=curp.trim().toUpperCase();
+  if(clean.length<10){snack('⚠️ CURP inválido','⚠️');return;}
+  processScannedText(clean);
+}
+
+/* ── Helpers ── */
+function setScanStatus(msg,type=''){
+  const el=document.getElementById('scan-status-txt');
+  if(!el)return;
+  el.textContent=msg;
+  el.className='scan-status-txt'+(type?' '+type:'');
+}
+
+/* Ensure scan button shows/hides when editing vs adding */
+(function patchScanBtn(){
+  const check=()=>{
+    if(typeof window.openShAdd==='function'&&!window._v32ScanPatched){
+      window._v32ScanPatched=true;
+      const origAdd=window.openShAdd;
+      const origEdit=window.openEditSh;
+      window.openShAdd=function(){
+        origAdd.apply(this,arguments);
+        const btn=document.getElementById('scan-form-btn');
+        if(btn)btn.style.display='flex';
+      };
+      if(typeof origEdit==='function'){
+        window.openEditSh=function(id){
+          origEdit.apply(this,arguments);
+          // Keep scan btn visible for editing too (to update fields)
+          const btn=document.getElementById('scan-form-btn');
+          if(btn)btn.style.display='flex';
+        };
+      }
+    }
+  };
+  setTimeout(check,300);setTimeout(check,900);
+})();
+
+
+
+/* ── 1. LONG-PRESS CONTEXT MENU ── */
+let _ctxTimer=null, _ctxActive=false;
+
+function _ctxMenuItems(recordId){
+  const r=R.find(x=>x.id===recordId);
+  if(!r) return [];
+  const items=[];
+  if(can('markVisit')) items.push({ico:'✅',lbl:'Marcar visitado',cls:'success',fn:`detSetField(${recordId},'visita','Si')`});
+  if(can('editRecord')) items.push({ico:'✏️',lbl:'Editar',cls:'info',fn:`openEditSh(${recordId})`});
+  if(can('editRecord')) items.push({ico:'📋',lbl:'Duplicar registro',cls:'info',fn:`duplicateRecord(${recordId})`});
+  items.push({ico:'📞',lbl:'Llamar',cls:'info',fn:`window.location='tel:${r.tel||""}'`});
+  items.push({ico:'📋',lbl:'Copiar nombre',cls:'info',fn:`copyToClipboard('${r.nombre.replace(/'/g,"\\'")}','Nombre')`});
+  if(can('deleteRecord')) items.push({ico:'🗑️',lbl:'Eliminar',cls:'danger',fn:`confDel(${recordId})`});
+  return items;
+}
+
+function showCtxMenu(e, recordId){
+  removeCtxMenu();
+  _ctxActive=true;
+  if(navigator.vibrate) navigator.vibrate(30);
+  const items=_ctxMenuItems(recordId);
+  const overlay=document.createElement('div');
+  overlay.className='ctx-overlay';
+  overlay.onclick=removeCtxMenu;
+  document.body.appendChild(overlay);
+  const menu=document.createElement('div');
+  menu.className='ctx-menu';
+  menu.id='ctx-menu';
+  const x=Math.min(e.clientX||e.touches?.[0]?.clientX||100, window.innerWidth-200);
+  const y=Math.min(e.clientY||e.touches?.[0]?.clientY||200, window.innerHeight-items.length*50);
+  menu.style.cssText=`left:${x}px;top:${y}px;`;
+  menu.innerHTML=items.map(it=>`<div class="ctx-item ${it.cls||''}" onclick="removeCtxMenu();${it.fn}"><span class="ctx-ico">${it.ico}</span>${it.lbl}</div>`).join('');
+  document.body.appendChild(menu);
+}
+
+function removeCtxMenu(){
+  document.getElementById('ctx-menu')?.remove();
+  document.querySelectorAll('.ctx-overlay').forEach(e=>e.remove());
+  _ctxActive=false;
+}
+
+function initLongPress(el, recordId){
+  if(el.dataset.lp) return;
+  el.dataset.lp='1';
+  let timer=null;
+  const start=e=>{
+    timer=setTimeout(()=>{showCtxMenu(e,recordId);},500);
+  };
+  const cancel=()=>{clearTimeout(timer);};
+  el.addEventListener('touchstart',start,{passive:true});
+  el.addEventListener('touchend',cancel,{passive:true});
+  el.addEventListener('touchmove',cancel,{passive:true});
+  el.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,recordId);});
+}
+
+/* ── 2. DUPLICATE RECORD ── */
+function duplicateRecord(id){
+  const r=R.find(x=>x.id===id);if(!r)return;
+  const newR={
+    ...r,
+    id:     Date.now(),
+    folio:  r.folio+'-COPIA',
+    fecha:  today(),
+    ult:    nowStr(),
+    dup:    false,
+    photo:  null,
+  };
+  R.push(newR);
+  H.push({id:Date.now()+1,folio:newR.folio,nombre:newR.nombre,cambios:'Duplicado desde '+r.folio,motivo:'Duplicar',resp:authDisplayName||authUsername,fecha:nowStr(),tipo:'new'});
+  detectDups();svR();svH();upHdr();renderList();renderInicio();
+  snack('📋 Registro duplicado: '+newR.folio,'📋');
+  haptic([15,10,15]);
+}
+
+/* ── 3. AUTOCOMPLETE for colonias/secciones ── */
+const _coloniasCache=()=>[...new Set(R.map(r=>r.col).filter(Boolean))].sort();
+const _seccionesCache=()=>[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
+const _rutasCache=()=>[...new Set(R.map(r=>r.ruta).filter(Boolean))].sort();
+
+function attachAutocomplete(inputId, listFn){
+  const input=document.getElementById(inputId);if(!input)return;
+  if(input.dataset.ac)return;input.dataset.ac='1';
+  let acDiv=null;
+  input.addEventListener('input',()=>{
+    const val=input.value.toLowerCase().trim();
+    if(acDiv){acDiv.remove();acDiv=null;}
+    if(!val||val.length<1)return;
+    const opts=listFn().filter(s=>s.toLowerCase().includes(val)).slice(0,6);
+    if(!opts.length)return;
+    acDiv=document.createElement('div');acDiv.className='autocomplete-list';
+    acDiv.innerHTML=opts.map(s=>`<div class="ac-item" onmousedown="event.preventDefault()" onclick="document.getElementById('${inputId}').value='${s.replace(/'/g,"\'")}';this.closest('.autocomplete-list')?.remove()">${s.replace(new RegExp('('+val.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<span class=\"ac-highlight\">$1</span>')}</div>`).join('');
+    input.parentNode.style.position='relative';
+    input.parentNode.appendChild(acDiv);
+  });
+  input.addEventListener('blur',()=>setTimeout(()=>{acDiv?.remove();acDiv=null;},200));
+}
+
+/* ── 4. FIELD HINTS ── */
+function addFieldHints(){
+  const hints={
+    'e-folio':  'Ej: 7913768 · 8 dígitos',
+    'e-nombre': 'Apellido Paterno Materno Nombre',
+    'e-tel':    'Con lada: 492-123-4567',
+    'e-curp':   '18 caracteres (ABCD123456HABCDE01)',
+    'e-col':    'Colonia o localidad',
+    'e-seccion':'Sección electoral (ej: 615)',
+  };
+  Object.entries(hints).forEach(([id,hint])=>{
+    const el=document.getElementById(id);
+    if(!el||el.parentNode.querySelector('.fi-hint'))return;
+    const h=document.createElement('div');h.className='fi-hint';h.textContent=hint;
+    el.parentNode.insertBefore(h,el.nextSibling);
+  });
+}
+
+/* ── 5. SESSION TIMEOUT WARNING ── */
+const SESSION_WARN_MINS=30;
+let _sessionTimer=null, _sessionWarnShown=false;
+
+function resetSessionTimer(){
+  clearTimeout(_sessionTimer);_sessionWarnShown=false;
+  const bar=document.getElementById('session-bar');
+  if(bar)bar.classList.remove('show');
+  if(isGuest()||!authUsername)return;
+  _sessionTimer=setTimeout(()=>{
+    _sessionWarnShown=true;
+    const bar=document.getElementById('session-bar');
+    if(bar){bar.classList.add('show');}
+    else{snack('⚠️ Sesión por expirar — toca para continuar','⚠️');}
+  },SESSION_WARN_MINS*60*1000);
+}
+function extendSession(){
+  resetSessionTimer();
+  snack('✅ Sesión extendida','✅');
+}
+
+/* ── 6. ANIMATED COUNTER ── */
+
+/* ── 7. BACKUP REMINDER ── */
+const BACKUP_REMIND_KEY='px_last_backup_remind';
+const BACKUP_REMIND_DAYS=7;
+
+function checkBackupReminder(){
+  const last=parseInt(localStorage.getItem(BACKUP_REMIND_KEY)||'0');
+  const daysSince=(Date.now()-last)/(1000*60*60*24);
+  if(daysSince>=BACKUP_REMIND_DAYS&&R.length>0&&isCreator()){
+    setTimeout(()=>{
+      const el=document.getElementById('backup-reminder');
+      if(el)el.classList.add('show');
+    },3000);
+  }
+}
+function dismissBackupReminder(){
+  localStorage.setItem(BACKUP_REMIND_KEY,Date.now().toString());
+  const el=document.getElementById('backup-reminder');
+  if(el)el.classList.remove('show');
+}
+function doBackupNow(){
+  dismissBackupReminder();dlBackupJSON();
+}
+
+/* ── 8. COVERAGE BY SECTION for stats ── */
+function buildCoverageBySection(){
+  const secs={};
+  R.forEach(r=>{
+    const s=r.seccion||'Sin sección';
+    if(!secs[s])secs[s]={total:0,vis:0};
+    secs[s].total++;
+    if(r.visita==='Si'||r.visita==='Sí')secs[s].vis++;
+  });
+  return Object.entries(secs)
+    .map(([s,d])=>({sec:s,...d,pct:d.total?Math.round(d.vis/d.total*100):0}))
+    .sort((a,b)=>b.pct-a.pct)
+    .slice(0,10);
+}
+
+/* ── 9. TOP COLONIAS ── */
+function buildTopColonias(n=5){
+  const map={};
+  R.forEach(r=>{const c=r.col||'Sin colonia';map[c]=(map[c]||0)+1;});
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,n);
+}
+
+/* ── 10. MONTHLY CHART ── */
+function buildMonthlyData(months=6){
+  const result=[];
+  const now=new Date();
+  for(let i=months-1;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const label=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.getMonth()];
+    const ym=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const count=R.filter(r=>(r.fecha||'').startsWith(ym)).length;
+    result.push({label,count,ym,isCurrent:i===0});
+  }
+  return result;
+}
+
+/* ── 11. AGE FILTER ── */
+function calcAge(fnac){
+  if(!fnac)return null;
+  const b=new Date(fnac+'T00:00:00'),n=new Date();
+  let a=n.getFullYear()-b.getFullYear();
+  if(n.getMonth()-b.getMonth()<0||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))a--;
+  return a;
+}
+let _ageMin=0,_ageMax=120;
+function filterByAge(records){
+  if(_ageMin===0&&_ageMax===120)return records;
+  return records.filter(r=>{
+    const a=calcAge(r.fnac);
+    if(a===null)return true;
+    return a>=_ageMin&&a<=_ageMax;
+  });
+}
+
+/* ── 12. RECORD COLOR LABELS ── */
+const REC_COLORS=['','#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+function openColorPicker(recordId){
+  const r=R.find(x=>x.id===recordId);if(!r)return;
+  const cur=r.txtColor||'';
+  const html2=`<div class="rec-color-dots">
+    ${REC_COLORS.map(c=>`<div class="rec-color-dot${c===cur?' selected':''}" style="background:${c||'var(--card)'};border:2px solid var(--b2)${c===cur?';border-color:var(--txt)':''}" onclick="setRecColor(${recordId},'${c}')"></div>`).join('')}
+  </div>`;
+  conf2('🎨 Color del nombre',html2,null,null);
+}
+function setRecColor(id,color){
+  const r=R.find(x=>x.id===id);if(!r)return;
+  r.txtColor=color;r.ult=nowStr();svR();
+  closeAllSheets();
+  setTimeout(()=>openDet(id),300);
+  snack('🎨 Color actualizado','🎨');
+}
+
+/* ── 13. INLINE EDIT FROM LIST CARD ── */
+let _qEditActive=null;
+function toggleQuickEdit(recordId){
+  const wrap=document.getElementById('qedit-'+recordId);
+  if(!wrap)return;
+  if(_qEditActive&&_qEditActive!==recordId){
+    const prev=document.getElementById('qedit-'+_qEditActive);
+    if(prev)prev.classList.remove('open');
+  }
+  const open=wrap.classList.toggle('open');
+  _qEditActive=open?recordId:null;
+  if(open){
+    const inp=wrap.querySelector('.rec-qe-input');
+    if(inp){inp.focus();inp.select();}
+  }
+}
+function saveQuickEdit(recordId){
+  const wrap=document.getElementById('qedit-'+recordId);
+  const inp=wrap?.querySelector('.rec-qe-input');
+  if(!inp||!inp.value.trim())return;
+  const r=R.find(x=>x.id===recordId);if(!r)return;
+  const oldName=r.nombre;
+  r.nombre=inp.value.trim().toUpperCase();
+  r.ult=nowStr();
+  H.push({id:Date.now(),folio:r.folio,nombre:r.nombre,cambios:`Nombre: "${oldName}" → "${r.nombre}"`,motivo:'Edición rápida',resp:authDisplayName||authUsername,fecha:nowStr(),tipo:'edit'});
+  svR();svH();detectDups();
+  wrap.classList.remove('open');_qEditActive=null;
+  renderList();snack('✏️ Nombre actualizado','✏️');haptic([15]);
+}
+
+/* ── 14. FAILED LOGIN NOTIFICATION ── */
+function notifyFailedLogin(username, attempts){
+  if(isCreator()&&Notification.permission==='granted'){
+    setTimeout(()=>{
+      try{
+        new Notification('⚠️ Intento de acceso fallido',{
+          body:`Usuario "${username}" intentó entrar (intento ${attempts})`,
+          icon:'icon-192.png',tag:'login-fail'
+        });
+      }catch(e){}
+    },500);
+  }
+}
+
+/* ── 15. USAGE ANALYTICS ── */
+function buildUsageStats(){
+  const today2=today();
+  const logins=JSON.parse(localStorage.getItem('px_access_log_v1')||'[]');
+  const todayLogins=logins.filter(l=>l.ts&&l.ts.includes(new Date().toLocaleDateString('es-MX'))).length;
+  const last7=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const ds=d.toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit'});
+    const count=logins.filter(l=>l.ts&&l.ts.includes(ds)).length;
+    last7.push({ds:['Do','Lu','Ma','Mi','Ju','Vi','Sá'][d.getDay()],count});
+  }
+  return {todayLogins,last7,totalLogins:logins.length,totalRecords:R.length};
+}
+
+/* ── 16. PHOTO PINCH-TO-ZOOM ── */
+function initPhotoZoom(imgEl){
+  if(!imgEl||imgEl.dataset.zoom)return;
+  imgEl.dataset.zoom='1';
+  let scale=1,startDist=0;
+  imgEl.addEventListener('touchstart',e=>{
+    if(e.touches.length===2){
+      startDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    }
+  },{passive:true});
+  imgEl.addEventListener('touchmove',e=>{
+    if(e.touches.length===2){
+      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      scale=Math.min(3,Math.max(1,scale*(dist/startDist)));
+      startDist=dist;
+      imgEl.style.transform=`scale(${scale})`;
+      imgEl.style.transformOrigin='center center';
+    }
+  },{passive:true});
+  imgEl.addEventListener('touchend',e=>{
+    if(e.touches.length<2&&scale>1){
+      setTimeout(()=>{imgEl.style.transform='';scale=1;},1000);
+    }
+  },{passive:true});
+}
+
+/* ── 17. DARK/LIGHT TOGGLE IN HEADER ── */
+function quickToggleTheme(){
+  const isDark=['cosmos','aurora','solar','midnight','carbon','campo'].includes(curTheme);
+  applyTheme(isDark?'arctic':'cosmos');
+  haptic([15]);
+}
+
+/* ── 18. ANIMATED STAT NUMBERS (on stats page load) ── */
+
+/* ── 19. MAP LINK from address ── */
+function openMapForRecord(id){
+  const r=R.find(x=>x.id===id);if(!r)return;
+  const addr=[r.dom,r.num?'#'+r.num:'',r.col,'Jerez Zacatecas Mexico'].filter(Boolean).join(' ');
+  const url='https://maps.google.com/?q='+encodeURIComponent(addr);
+  window.open(url,'_blank');
+}
+
+/* ── 20. SAVED FILTER PRESETS ── */
+const FILTER_PRESETS_KEY='px_filter_presets';
+function saveFilterPreset(name){
+  const presets=JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY)||'[]');
+  presets.push({name,fT,fS,fSort,savedAt:Date.now()});
+  if(presets.length>10)presets.splice(0,1);
+  localStorage.setItem(FILTER_PRESETS_KEY,JSON.stringify(presets));
+  snack('💾 Filtro guardado: '+name,'💾');
+}
+function loadFilterPreset(preset){
+  fT=preset.fT||'todos';fS=preset.fS||'todos';fSort=preset.fSort||'az';
+  renderList();snack('🔖 Filtro: '+preset.name,'🔖');
+}
+function getFilterPresets(){
+  return JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY)||'[]');
+}
+
+/* ── 21. SECTION FILTER DROPDOWN (colonias) ── */
+function getColoniasList(){
+  return [...new Set(R.map(r=>r.col).filter(Boolean))].sort();
+}
+function filterByColonia(col){
+  fS='col_'+col;fT='todos';renderList();
+  snack('📍 Colonia: '+col,'📍');
+}
+
+/* ── 22. PULL-DOWN TO CLOSE SHEET ── */
+function initSheetPullClose(sheetId){
+  const sheet=document.getElementById(sheetId);if(!sheet)return;
+  if(sheet.dataset.pullClose)return;
+  sheet.dataset.pullClose='1';
+  let startY=0,pulling=false;
+  const hdl=sheet.querySelector('.hdl');
+  if(!hdl)return;
+  hdl.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;pulling=true;},{passive:true});
+  hdl.addEventListener('touchmove',e=>{
+    if(!pulling)return;
+    const dy=e.touches[0].clientY-startY;
+    if(dy>0) sheet.style.transform=`translateY(${Math.min(dy*.4,60)}px)`;
+  },{passive:true});
+  hdl.addEventListener('touchend',e=>{
+    if(!pulling)return;pulling=false;
+    const dy=e.changedTouches[0].clientY-startY;
+    sheet.style.transform='';
+    if(dy>80){closeSheet(sheetId);haptic([20,10,20]);}
+  },{passive:true});
+}
+
+/* ── 23. DOUBLE TAP TO EDIT INLINE ── */
+function initDoubleTapEdit(el, recordId, field){
+  if(el.dataset.dblEdit)return;
+  el.dataset.dblEdit='1';
+  let lastTap=0;
+  el.addEventListener('click',e=>{
+    const now=Date.now();
+    if(now-lastTap<350){
+      e.stopPropagation();
+      inlineEdit(recordId,field,el.textContent,'text',el.textContent);
+    }
+    lastTap=now;
+  });
+}
+
+/* ── 24. FILTER BY AGE RANGE in search ── */
+function applyAgeFilter(min,max){
+  _ageMin=parseInt(min)||0;
+  _ageMax=parseInt(max)||120;
+  const lbl=document.getElementById('age-filter-display');
+  if(lbl)lbl.textContent=min+' – '+max+' años';
+  renderList();
+}
+
+/* ── 25. IMPORT PROGRESS FEEDBACK ── */
+function _showImportProgress(current, total){
+  const pct=Math.round(current/total*100);
+  snack(`📥 Importando… ${current}/${total} (${pct}%)`, '📥');
+}
+
+/* ── 26. RECORD TEMPLATES ── */
+const REC_TEMPLATES=[
+  {name:'👴 Adulto Mayor (PAM)',defaults:{tipo:'PAM',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
+  {name:'♿ Discapacidad (PCD)', defaults:{tipo:'PCD',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
+  {name:'✈️ Migrante USA',      defaults:{tipo:'PAM',visita:'Pendiente',estatus:'Activo',uso:'Estados Unidos'}},
+  {name:'🎒 Becas (JCF)',        defaults:{tipo:'JCF',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
+];
+function applyTemplate(idx){
+  const tmpl=REC_TEMPLATES[idx];if(!tmpl)return;
+  Object.entries(tmpl.defaults).forEach(([k,v])=>{
+    if(k==='tipo'){TG.tip=v;}
+    else if(k==='visita'){TG.vis=v;}
+    else if(k==='estatus'){TG.est=v;}
+    else if(k==='uso'){TG.uso=v;}
+  });
+  snack('📋 Plantilla: '+tmpl.name,'📋');
+  haptic([10]);
+}
+
+/* ── 27. STATS ENHANCEMENTS — inject after renderStats ── */
+function _enhanceStats(){
+  // Add coverage section
+  const cov=buildCoverageBySection();
+  const topCol=buildTopColonias(5);
+  const monthly=buildMonthlyData(6);
+  const maxMonth=Math.max(1,...monthly.map(m=>m.count));
+  const sc=document.getElementById('stats-content');if(!sc)return;
+
+  const covHtml=cov.length?`<div class="ch-card" style="margin-top:12px">
+    <div class="ch-title">📍 Cobertura por sección</div>
+    ${cov.map(s=>`<div class="sec-cov-row">
+      <div class="sec-cov-lbl">Sec. ${s.sec}</div>
+      <div class="sec-cov-bar-wrap"><div class="sec-cov-bar" style="width:${s.pct}%;background:${s.pct>70?'var(--grn)':s.pct>40?'var(--amb)':'var(--red)'}"></div></div>
+      <div class="sec-cov-pct" style="color:${s.pct>70?'var(--grn)':s.pct>40?'var(--amb)':'var(--red)'}">${s.pct}%</div>
+    </div>`).join('')}
+  </div>`:'';
+
+  const topColHtml=topCol.length?`<div class="ch-card" style="margin-top:12px">
+    <div class="ch-title">🏘️ Top colonias</div>
+    ${topCol.map(([col,n],i)=>`<div class="top-col-item">
+      <div class="top-col-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div>
+      <div class="top-col-name">${col}</div>
+      <div class="top-col-n">${n}</div>
+    </div>`).join('')}
+  </div>`:'';
+
+  const monthHtml=`<div class="ch-card" style="margin-top:12px">
+    <div class="ch-title">📅 Registros por mes</div>
+    <div class="month-chart">
+      ${monthly.map(m=>`<div class="mc-col">
+        <div class="mc-n">${m.count||''}</div>
+        <div class="mc-bar" style="height:${Math.round(m.count/maxMonth*72)||2}px;background:${m.isCurrent?'var(--a)':'var(--b3)'}"></div>
+        <div class="mc-lbl" style="${m.isCurrent?'color:var(--a2)':''}">${m.label}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  sc.insertAdjacentHTML('beforeend', monthHtml+covHtml+topColHtml);
+  // v32: Heatmap
+  if(!document.getElementById('v32-heatmap')){
+    const hm=renderHeatmap();
+    if(hm){const d=document.createElement('div');d.id='v32-heatmap';d.innerHTML=hm;sc.appendChild(d);}
+  }
+  animateStats();
+}
+
+/* ── 28. SWIPE BETWEEN TABS (horizontal swipe on main) ── */
+const TAB_ORDER=['inicio','registros','buscar','visitas','estadisticas','general'];
+let _swipeTabStartX=0, _swipeTabStartY=0, _swipeTabActive=false;
+
+function initTabSwipe(){
+  const main=document.getElementById('main');if(!main||main.dataset.tabSwipe)return;
+  main.dataset.tabSwipe='1';
+  main.addEventListener('touchstart',e=>{
+    _swipeTabStartX=e.touches[0].clientX;
+    _swipeTabStartY=e.touches[0].clientY;
+    _swipeTabActive=true;
+  },{passive:true});
+  main.addEventListener('touchend',e=>{
+    if(!_swipeTabActive)return;_swipeTabActive=false;
+    const dx=e.changedTouches[0].clientX-_swipeTabStartX;
+    const dy=Math.abs(e.changedTouches[0].clientY-_swipeTabStartY);
+    if(Math.abs(dx)<60||dy>40)return; // not horizontal enough
+    const ci=TAB_ORDER.indexOf(curTab);
+    if(ci<0)return;
+    const next=dx<0?TAB_ORDER[ci+1]:TAB_ORDER[ci-1];
+    if(next){go(next);haptic([8]);}
+  },{passive:true});
+}
+
+/* ── 29. SMART SEARCH SUGGESTIONS ── */
+function buildSearchSuggestions(query){
+  if(!query||query.length<1)return [];
+  const q=query.toLowerCase();
+  const colonias=[...new Set(R.map(r=>r.col).filter(Boolean))].filter(c=>c.toLowerCase().includes(q));
+  const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))].filter(s=>s.includes(q));
+  return [...colonias.slice(0,3),...secs.slice(0,3)];
+}
+
+/* ── 30. AUTO-DETECT DARK MODE CHANGE ── */
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=>{
+  if(curTheme==='auto') applyTheme('auto');
+});
+
+
+/* ════════════════════════════════════════════════════════════════
+   v32 MEJORAS ADICIONALES JS
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1. QR CODE SHARE (genera QR de la URL de la app) ── */
+async function showQRShare(){
+  // Dinamically load QR library
+  if(!window.QRCode){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+      s.onload=res;s.onerror=rej;
+      document.head.appendChild(s);
+    });
+  }
+  const url=window.location.href.split('?')[0];
+  const overlay=document.createElement('div');
+  overlay.className='qr-overlay';
+  overlay.innerHTML=`
+    <div class="qr-card">
+      <div class="qr-title">📲 Compartir app</div>
+      <div class="qr-sub">Escanea para abrir PensionadosMX</div>
+      <div id="qr-canvas-wrap" style="margin:0 auto 16px;width:180px;height:180px"></div>
+      <div style="font-size:11px;color:var(--sft);margin-bottom:14px;word-break:break-all">${url}</div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button class="qr-close" onclick="this.closest('.qr-overlay').remove()">Cerrar</button>
+        <button class="qr-close" style="background:var(--a);color:#fff;border-color:var(--a)" onclick="copyToClipboard('${url}','URL de la app')">📋 Copiar link</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  setTimeout(()=>{
+    try{
+      new QRCode(document.getElementById('qr-canvas-wrap'),{
+        text:url,width:180,height:180,
+        colorDark:'#ffffff',colorLight:'#1a1f2e',
+        correctLevel:QRCode.CorrectLevel.M
+      });
+    }catch(e){document.getElementById('qr-canvas-wrap').textContent=url;}
+  },100);
+}
+
+/* ── 2. VOICE SEARCH (real Web Speech API) ── */
+let _speechRec=null;
+function toggleVoiceSearch(){
+  const micBtn=document.getElementById('srch-mic');
+  const sq=document.getElementById('sq');
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    snack('⚠️ Voz no disponible en este navegador','⚠️');return;
+  }
+  if(_speechRec){
+    _speechRec.stop();_speechRec=null;
+    if(micBtn)micBtn.classList.remove('recording');
+    return;
+  }
+  const SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;
+  _speechRec=new SpeechRec();
+  _speechRec.lang='es-MX';
+  _speechRec.continuous=false;
+  _speechRec.interimResults=true;
+  _speechRec.onstart=()=>{
+    if(micBtn)micBtn.classList.add('recording');
+    haptic([15,10,15]);
+    snack('🎤 Escuchando…','🎤');
+  };
+  _speechRec.onresult=e=>{
+    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
+    if(sq){sq.value=transcript;sq.dispatchEvent(new Event('input'));}
+  };
+  _speechRec.onerror=()=>{
+    if(micBtn)micBtn.classList.remove('recording');
+    _speechRec=null;snack('⚠️ No se entendió. Intenta de nuevo','⚠️');
+  };
+  _speechRec.onend=()=>{
+    if(micBtn)micBtn.classList.remove('recording');
+    _speechRec=null;
+    // Execute search after voice
+    const q=sq?.value?.trim();
+    if(q&&q.length>1){addSrchHistory(q);execSrch(q);}
+  };
+  _speechRec.start();
+}
+
+/* ── 3. OFFLINE ACTION QUEUE ── */
+const OFFLINE_QUEUE_KEY='px_offline_queue';
+let _offlineQueue=JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||'[]');
+
+function queueOfflineAction(type, data){
+  _offlineQueue.push({type,data,ts:Date.now()});
+  localStorage.setItem(OFFLINE_QUEUE_KEY,JSON.stringify(_offlineQueue));
+  _updateOfflineQueueBadge();
+}
+function _updateOfflineQueueBadge(){
+  const badge=document.getElementById('offline-queue-badge');
+  if(!badge)return;
+  if(_offlineQueue.length>0&&!navigator.onLine){
+    badge.querySelector('span').textContent=`${_offlineQueue.length} cambio${_offlineQueue.length>1?'s':''} pendiente${_offlineQueue.length>1?'s':''} de sincronizar`;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+    if(_offlineQueue.length===0)badge.classList.remove('show');
+  }
+}
+async function flushOfflineQueue(){
+  if(!_offlineQueue.length||!navigator.onLine)return;
+  snack(`☁️ Sincronizando ${_offlineQueue.length} cambios…`,'☁️');
+  _offlineQueue=[];
+  localStorage.removeItem(OFFLINE_QUEUE_KEY);
+  _updateOfflineQueueBadge();
+  if(fbIsConfigured()&&isCreator())await fbSyncNow();
+}
+window.addEventListener('online',()=>{
+  document.getElementById('pwa-offline')?.classList.remove('show');
+  flushOfflineQueue();
+});
+window.addEventListener('offline',()=>{
+  document.getElementById('pwa-offline')?.classList.add('show');
+  _updateOfflineQueueBadge();
+});
+
+/* ── 4. WHATSAPP BULK MESSAGES ── */
+function sendWhatsAppBulk(){
+  const selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  const records=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
+  const withPhone=records.filter(r=>r.tel);
+  if(!withPhone.length){snack('⚠️ Los registros seleccionados no tienen teléfono','⚠️');return;}
+  conf2(
+    `💬 WhatsApp a ${withPhone.length} beneficiarios`,
+    `<div style="margin-bottom:10px;font-size:13px;color:var(--sft)">Se abrirá WhatsApp para cada uno. Escribe el mensaje:</div>
+     <textarea id="wa-bulk-msg" style="width:100%;min-height:80px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:13px;outline:none;resize:none;box-sizing:border-box" placeholder="Hola {nombre}, le contactamos del programa {programa}…">Hola {nombre}, le contactamos del programa {programa} para confirmar su información. Por favor comuníquese con nosotros. Gracias.</textarea>`,
+    ()=>{
+      const template=document.getElementById('wa-bulk-msg')?.value||'Hola {nombre}';
+      withPhone.forEach((r,i)=>{
+        setTimeout(()=>{
+          const msg=template
+            .replace('{nombre}',r.nombre.split(' ')[0])
+            .replace('{programa}',r.tipo)
+            .replace('{folio}',r.folio);
+          const tel=r.tel.replace(/[^0-9]/g,'');
+          window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+        },i*500);
+      });
+      snack(`💬 Abriendo WhatsApp para ${withPhone.length} contactos`,'💬');
+    },
+    `Enviar a ${withPhone.length}`
+  );
+}
+
+/* ── 5. BULK ASSIGN SECTION ── */
+function openBulkAssignSection(){
+  const selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
+  const customSec=`<input id="bulk-sec-custom" class="fi" style="margin-bottom:8px" placeholder="Nueva sección (ej: 615)" type="text"/>`;
+  const grid=`<div class="section-assign-grid">${secs.map(s=>`<div class="sec-assign-btn" onclick="applyBulkSection('${s}')">${s}</div>`).join('')}</div>`;
+  conf2(`📍 Asignar sección a ${selected.size} registros`,
+    customSec+grid,
+    ()=>{
+      const custom=document.getElementById('bulk-sec-custom')?.value?.trim();
+      if(custom)applyBulkSection(custom);
+    },
+    'Usar sección personalizada'
+  );
+}
+function applyBulkSection(sec){
+  const selected=batchSel||new Set();
+  let count=0;
+  selected.forEach(id=>{
+    const r=R.find(x=>x.id===id);
+    if(r){r.seccion=sec;r.ult=nowStr();count++;}
+  });
+  svR();detectDups();renderList();
+  closeAllSheets();
+  snack(`📍 ${count} registros → Sección ${sec}`,'📍');
+  haptic([20,10,20]);
+}
+
+/* ── 6. GPS LOCATION para domicilio ── */
+function getGPSLocation(callback){
+  const btn=document.getElementById('gps-field-btn');
+  if(btn)btn.classList.add('loading');
+  if(!navigator.geolocation){snack('❌ GPS no disponible','❌');return;}
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      if(btn)btn.classList.remove('loading');
+      const {latitude:lat,longitude:lon}=pos.coords;
+      const coordStr=`${lat.toFixed(5)},${lon.toFixed(5)}`;
+      if(callback)callback(lat,lon,coordStr);
+      else{
+        copyToClipboard(coordStr,'Coordenadas GPS');
+        // Open Maps with location
+        window.open(`https://maps.google.com/?q=${lat},${lon}`,'_blank');
+      }
+      haptic([15,10,15]);
+    },
+    err=>{
+      if(btn)btn.classList.remove('loading');
+      snack('⚠️ No se pudo obtener ubicación: '+err.message,'⚠️');
+    },
+    {enableHighAccuracy:true,timeout:10000}
+  );
+}
+
+/* ── 7. BULK FLOAT BAR (replaces and enhances batchBar) ── */
+function renderBulkBar(){
+  const count=(batchSel||new Set()).size;
+  let bar=document.getElementById('bulk-float-bar');
+  if(!bar){
+    bar=document.createElement('div');
+    bar.id='bulk-float-bar';bar.className='bulk-float-bar';
+    document.body.appendChild(bar);
+  }
+  if(!count||!batchMode){bar.classList.remove('show');return;}
+  bar.classList.add('show');
+  bar.innerHTML=`
+    <span class="bfb-count">✓ ${count} seleccionado${count>1?'s':''}</span>
+    <button class="bfb-btn green" onclick="markBatchVisit()">✅ Visita</button>
+    <button class="bfb-btn wa" onclick="sendWhatsAppBulk()">💬 WA</button>
+    <button class="bfb-btn blue" onclick="openBulkAssignSection()">📍 Sección</button>
+    <button class="bfb-btn blue" onclick="dlBatchCSV()">⬇️ CSV</button>
+    <button class="bfb-btn red" onclick="confBatchDel()">🗑️</button>
+    <button class="bfb-btn" onclick="batchMode=false;batchSel=new Set();renderList();renderBulkBar()" style="font-size:16px;padding:7px 10px">✕</button>`;
+}
+
+function dlBatchCSV(){
+  const selected=batchSel||new Set();
+  if(!selected.size)return;
+  const recs=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
+  const rows=[COLS,...recs.map(rowData)];
+  const csv=rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  dlFile('Seleccion_'+today()+'.csv','data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));
+  snack('\u2B07\uFE0F '+recs.length+' registros exportados','\u2B07\uFE0F');
+}
+
+/* ── 8. LOADING STATE for pages ── */
+function showPageLoading(containerId, msg='Cargando…'){
+  const el=document.getElementById(containerId);
+  if(el) el.innerHTML=`<div class="page-loading"><div class="page-loading-ring"></div><div class="page-loading-txt">${msg}</div></div>`;
+}
+
+/* ── 9. ERROR BOUNDARY wrapper ── */
+function safeRender(fn, containerId, fallbackMsg='Error al cargar'){
+  try{
+    fn();
+  }catch(e){
+    console.error('Render error:',e);
+    const el=document.getElementById(containerId);
+    if(el) el.innerHTML=`<div class="page-error"><div class="page-error-ico">⚠️</div><div class="page-error-title">Error al cargar</div><div class="page-error-sub">${fallbackMsg}<br><small style="color:var(--mut)">${e.message}</small></div><button onclick="${fn.name}&&${fn.name}()" class="btn btn-s" style="margin-top:12px">Reintentar</button></div>`;
+  }
+}
+
+/* ── 10. CHANGELOG / WHAT'S NEW ── */
+const CHANGELOG=[
+  {version:'v32 SUPREMA',items:[
+    'Presencia en tiempo real — ve quién está conectado',
+    'Escaneo de archivos del dispositivo con filtro por fecha',
+    'Sistema de 30 mejoras: confetti, undo, búsqueda por voz…',
+    'QR code para compartir la app',
+    'WhatsApp masivo a beneficiarios seleccionados',
+    'Asignar sección a múltiples registros a la vez',
+    'GPS para ubicación de domicilios',
+    'Cola offline para cambios sin internet',
+    'Menú contextual con mantener presionado',
+    'Plantillas de registro rápido',
+  ]},
+  {version:'v31',items:[
+    'Firebase sync en tiempo real',
+    'Panel de administrador exclusivo',
+    'Tema automático oscuro/claro',
+    'Notificaciones locales de cumpleaños',
+  ]},
+];
+function showChangelog(){
+  const html2=CHANGELOG.map(v=>`
+    <div class="changelog-card">
+      <div class="cl-version">${v.version}</div>
+      ${v.items.map(i=>`<div class="cl-item">${i}</div>`).join('')}
+    </div>`).join('');
+  conf2('📋 Novedades',html2,null,null);
+}
+
+/* ── 11. TAB POSITION INDICATOR DOTS ── */
+const MAIN_TABS=['inicio','registros','buscar','visitas','estadisticas','general'];
+function updateTabDots(){
+  const dots=document.querySelectorAll('.tab-pos-dot');
+  const idx=MAIN_TABS.indexOf(curTab);
+  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+/* ── 12. PRINT MULTIPLE RECORDS ── */
+function printBatch(){
+  const selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  const recs=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
+  const win=window.open('','_blank');
+  const body=recs.map(r=>`
+    <div style="border:1px solid #ccc;border-radius:8px;padding:16px;margin-bottom:16px;page-break-inside:avoid">
+      <h2 style="margin:0 0 8px;font-size:16px">${r.nombre}</h2>
+      <p style="margin:0;font-size:13px;color:#666">${r.tipo} · ${r.folio} · ID: ${r.id}</p>
+      <hr style="margin:10px 0">
+      <table style="width:100%;font-size:12px;border-collapse:collapse">
+        <tr><td><b>Teléfono:</b></td><td>${r.tel||'—'}</td><td><b>Sección:</b></td><td>${r.seccion||'—'}</td></tr>
+        <tr><td><b>Domicilio:</b></td><td colspan="3">${r.dom||''} ${r.num?'#'+r.num:''} ${r.col||''}</td></tr>
+        <tr><td><b>Estatus:</b></td><td>${r.estatus}</td><td><b>Visita:</b></td><td>${r.visita}</td></tr>
+        ${r.obs?`<tr><td><b>Obs:</b></td><td colspan="3">${r.obs}</td></tr>`:''}
+      </table>
+    </div>`).join('');
+  win.document.write(`<!DOCTYPE html><html><head><title>PensionadosMX — ${recs.length} registros</title><style>body{font-family:Arial,sans-serif;padding:20px;max-width:800px;margin:0 auto}@media print{button{display:none}}</style></head><body><h1 style="font-size:18px;margin-bottom:20px">Pensionados MX · ${recs.length} registros · ${new Date().toLocaleDateString('es-MX')}</h1>${body}<button onclick="window.print()" style="padding:10px 20px;margin-top:16px;cursor:pointer">🖨️ Imprimir</button></body></html>`);
+  win.document.close();
+}
+
+/* ── 13. SEARCH IN SECTION ── */
+function searchInSection(sec){
+  go('buscar');
+  setTimeout(()=>{
+    sfFilter='sec_'+sec;
+    const sq=document.getElementById('sq');
+    if(sq)sq.value='';
+    execSrch('',true);
+    snack('📍 Sección '+sec,'📍');
+  },100);
+}
+
+/* ── 14. APP VERSION + BUILD INFO ── */
+const APP_VERSION='v32 SUPREMA';
+const APP_BUILD=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+function showAppInfo(){
+  conf2('ℹ️ Sobre PensionadosMX',`
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:36px;margin-bottom:10px">🛡️</div>
+      <div style="font-size:18px;font-weight:900;margin-bottom:4px">PensionadosMX</div>
+      <div style="font-size:13px;color:var(--a2);font-family:'Fira Code',monospace;margin-bottom:16px">${APP_VERSION}</div>
+      <div style="font-size:11px;color:var(--sft)">Jerez, Zacatecas · Programas sociales</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0">
+      <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:20px;font-weight:900;color:var(--a2)">${R.length}</div>
+        <div style="font-size:10px;color:var(--sft);font-weight:700;text-transform:uppercase">Beneficiarios</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:20px;font-weight:900;color:var(--grn)">${R.filter(r=>r.visita==='Si').length}</div>
+        <div style="font-size:10px;color:var(--sft);font-weight:700;text-transform:uppercase">Visitados</div>
+      </div>
+    </div>
+    <button onclick="showChangelog();closeAllSheets()" class="btn btn-s" style="width:100%;margin-top:4px">📋 Ver novedades</button>
+  `,null,null);
+}
+
+/* ── 15. HOOK: Replace voice search mic button handler ── */
+(function hookVoiceMic(){
+  // Will be called after DOM loads
+  document.addEventListener('DOMContentLoaded',()=>{
+    const mic=document.getElementById('srch-mic');
+    if(mic) mic.onclick=toggleVoiceSearch;
+  });
+  // Also hook after go('buscar')
+})();
+
 /* ═══════════════════════════════════════════════════
    GENERAL SECTION v30 — Full Implementation
    ═══════════════════════════════════════════════════ */
@@ -8937,7 +12286,98 @@ function copyAppInfo(){
 
 </script>
 
+<!-- ═══ ID SCANNER v32 ═══ -->
+<div class="scan-overlay" id="scan-overlay">
+  <div class="scan-hdr">
+    <div style="font-size:22px">📷</div>
+    <div class="scan-hdr-title">Escanear ID / CURP</div>
+    <button class="scan-hdr-close" onclick="closeIDScanner()">✕</button>
+  </div>
+  <div class="scan-video-wrap" id="scan-video-wrap">
+    <video class="scan-video" id="scan-video" playsinline autoplay muted></video>
+    <div class="scan-ui">
+      <div class="scan-dark-top"></div>
+      <div class="scan-row">
+        <div class="scan-dark-side"></div>
+        <div class="scan-frame-outer">
+          <div class="scan-frame">
+            <div class="scan-corner tl"></div>
+            <div class="scan-corner tr"></div>
+            <div class="scan-corner bl"></div>
+            <div class="scan-corner br"></div>
+            <div class="scan-line" id="scan-line"></div>
+          </div>
+        </div>
+        <div class="scan-dark-side"></div>
+      </div>
+      <div class="scan-dark-bottom"></div>
+    </div>
+  </div>
+  <div class="scan-status">
+    <div class="scan-status-txt" id="scan-status-txt">Apunta la cámara al código QR o código de barras</div>
+    <div class="scan-formats">
+      <span class="scan-fmt-pill">📱 QR Code</span>
+      <span class="scan-fmt-pill">📋 PDF417</span>
+      <span class="scan-fmt-pill">🔢 Code 128</span>
+      <span class="scan-fmt-pill">🆔 INE / CURP</span>
+    </div>
+    <button class="scan-manual-btn" onclick="openManualCURP()">✍️ Ingresar CURP manualmente</button>
+  </div>
+</div>
+
+<!-- Scan result preview -->
+<div class="scan-result-overlay" id="scan-result-overlay">
+  <div class="scan-result-sheet">
+    <div class="scan-result-title">✅ <span>Datos detectados</span></div>
+    <div class="scan-result-sub" id="scan-result-sub">Revisa los datos antes de usarlos</div>
+    <div id="scan-result-fields"></div>
+    <details style="margin-top:8px">
+      <summary style="font-size:10px;color:var(--mut);cursor:pointer;font-weight:700">Ver texto raw del código</summary>
+      <div class="scan-result-raw" id="scan-result-raw"></div>
+    </details>
+    <button class="scan-use-btn" onclick="applyScanResult()">✅ Usar estos datos</button>
+    <button class="scan-retry-btn" onclick="retryScan()">🔄 Escanear de nuevo</button>
+  </div>
+</div>
+
+<!-- ═══ AI ASSISTANT v32 ═══ -->
+<div class="ai-sheet" id="ai-sheet">
+  <div class="ai-hdr">
+    <div class="ai-hdr-ico">🤖</div>
+    <div class="ai-hdr-info">
+      <div class="ai-hdr-title">Asistente IA · PensionadosMX</div>
+      <div class="ai-hdr-sub">Análisis inteligente de tus beneficiarios</div>
+    </div>
+    <button class="ai-hdr-close" onclick="closeAI()">✕</button>
+  </div>
+  <div class="ai-msgs" id="ai-msgs"></div>
+  <div class="ai-suggestions" id="ai-sugs"></div>
+  <div class="ai-input-bar">
+    <input class="ai-inp" id="ai-inp" type="text" placeholder="Pregunta sobre tus beneficiarios…" autocomplete="off" autocorrect="off" onkeydown="if(event.key==='Enter')aiSend()"/>
+    <button class="ai-send" id="ai-send-btn" onclick="aiSend()">➤</button>
+  </div>
+</div>
+<button class="ai-fab" id="ai-fab" onclick="openAI()" title="Asistente IA">
+  <span class="ai-fab-pulse"></span>
+  🤖
+</button>
+<canvas class="confetti-canvas" id="confetti-canvas" style="display:none"></canvas>
+
 <div class="sw-update-bar" id="sw-update-bar"><span>🔄 Nueva versión disponible</span><button onclick="navigator.serviceWorker.getRegistration().then(r=>{r&&r.waiting&&r.waiting.postMessage({type:'SKIP_WAITING'})});this.closest('[id=sw-update-bar]').style.display='none'" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:8px;padding:5px 13px;cursor:pointer;font-family:var(--fnt)">Actualizar</button></div>
+<!-- Offline queue badge -->
+<div class="offline-queue-badge" id="offline-queue-badge">
+  <span>0 cambios pendientes</span>
+  <button onclick="flushOfflineQueue()" style="background:rgba(0,0,0,.2);border:none;color:#000;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:var(--fnt)">Sincronizar</button>
+</div>
+<!-- Tab position indicator dots -->
+<div class="tab-pos-indicator" id="tab-dots">
+  <div class="tab-pos-dot active"></div>
+  <div class="tab-pos-dot"></div>
+  <div class="tab-pos-dot"></div>
+  <div class="tab-pos-dot"></div>
+  <div class="tab-pos-dot"></div>
+  <div class="tab-pos-dot"></div>
+</div>
 <div class="pwa-offline" id="pwa-offline">📡 Sin conexión — Todos los datos están guardados en tu dispositivo</div>
 <div class="pwa-install-bar" id="pwa-install-bar">
   <div class="pwa-install-txt">📲 Instala Pensionados MX<br><span style="opacity:.8;font-size:10px">Acceso rápido desde tu pantalla</span></div>
@@ -9006,6 +12446,10 @@ function copyAppInfo(){
 
 // Offline detection
 window.addEventListener('online',  ()=>document.getElementById('pwa-offline').classList.remove('show'));
+// Reset session timer on user interaction
+['touchstart','click','keydown'].forEach(ev=>{
+  document.addEventListener(ev, ()=>{if(authUsername)resetSessionTimer();},{passive:true,capture:true});
+});
 // ── v23: Fix teclado iOS ──
 if(window.visualViewport){
   let _vt=false;
