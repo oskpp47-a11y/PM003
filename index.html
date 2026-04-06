@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Pensionados MX"/>
 <meta name="theme-color" id="meta-tc" content="#05090f"/>
-<title>Pensionados MX v32</title>
+<title>Pensionados MX v34</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ========== THEMES ========== */
@@ -4168,6 +4168,21 @@ if('serviceWorker' in navigator){
         </select>
         <button class="btn btn-s" style="font-size:11px;padding:8px 12px;white-space:nowrap" onclick="clearSrchAdv()">✕ Limpiar</button>
       </div>
+      <div style="display:flex;gap:6px;margin-top:7px;align-items:center">
+        <label style="font-size:11px;font-weight:700;color:var(--sft);white-space:nowrap">👴 Edad:</label>
+        <select class="fs" id="srch-f-edad" onchange="execSrchAdv()" style="flex:1;font-size:12px;padding:8px 10px">
+          <option value="">Todas las edades</option>
+          <option value="lt60">Menos de 60</option>
+          <option value="60_69">60 – 69 años</option>
+          <option value="70_79">70 – 79 años</option>
+          <option value="80_89">80 – 89 años</option>
+          <option value="90p">90 años o más</option>
+        </select>
+        <select class="fs" id="srch-f-dup" onchange="execSrchAdv()" style="flex:1;font-size:12px;padding:8px 10px">
+          <option value="">Sin filtro dup.</option>
+          <option value="1">Solo duplicados</option>
+        </select>
+      </div>
     </div>
     <!-- v13: barra eliminar en búsqueda -->
     <div class="srch-del-bar" id="srch-del-bar" style="display:none">
@@ -4199,7 +4214,29 @@ if('serviceWorker' in navigator){
   </div>
   <!-- VISITAS -->
   <div class="pg" id="p-visitas">
-    <button class="btn btn-g" style="margin-bottom:10px" onclick="openShV()">🚗 Programar nueva visita</button>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button class="btn btn-g" style="flex:1" onclick="openShV()">🚗 Nueva visita</button>
+      <button class="btn btn-s" style="flex:none;padding:10px 14px" onclick="toggleCalView()" id="cal-toggle-btn" title="Ver calendario">📅</button>
+    </div>
+    <!-- Calendar view (collapsible) -->
+    <div id="cal-wrap" style="display:none;margin-bottom:12px">
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:14px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b1)">
+          <button onclick="prevMo()" style="background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:5px 10px;color:var(--txt);cursor:pointer;font-size:14px">‹</button>
+          <div id="cal-month-lbl" style="font-size:13px;font-weight:800;color:var(--txt)"></div>
+          <button onclick="nextMo()" style="background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:5px 10px;color:var(--txt);cursor:pointer;font-size:14px">›</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--b1);padding:0">
+          ${['Do','Lu','Ma','Mi','Ju','Vi','Sá'].map(d=>`<div style="background:var(--card);text-align:center;font-size:9px;font-weight:800;color:var(--mut);padding:6px 0;text-transform:uppercase">${d}</div>`).join('')}
+        </div>
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--b1)"></div>
+        <div id="cal-day-panel" style="display:none;border-top:1px solid var(--b1);padding:10px 12px">
+          <div class="sh2" id="cal-sh" style="font-size:11px;margin-bottom:6px">Eventos</div>
+          <div id="cal-evs"></div>
+          <button onclick="openShEv()" style="margin-top:8px;width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:9px;padding:8px;font-size:12px;font-weight:700;color:var(--txt);cursor:pointer">+ Agregar evento</button>
+        </div>
+      </div>
+    </div>
     <div class="vis-filter-bar" id="vis-filter-bar"></div>
     <div class="sh2" id="vis-sh">Visitas</div>
     <div id="vis-list"></div>
@@ -4379,7 +4416,7 @@ if('serviceWorker' in navigator){
       <h3>Importar Excel / CSV</h3>
       <p>Analiza el archivo, detecta duplicados y reubica la información automáticamente.</p>
       <input type="file" id="file-in" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleImp(event)"/>
-      <button class="imp-btn" onclick="document.getElementById('file-in').click()">Seleccionar archivo</button>
+      <button class="imp-btn" onclick="document.getElementById('file-in').click()">Seleccionar CSV o Excel</button>
     </div>
     <button onclick="dlCSVTemplate()" style="width:100%;padding:10px;background:var(--s2);border:1.5px dashed var(--b3);border-radius:var(--r2);color:var(--sft);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--fnt);margin-bottom:10px">📥 Descargar plantilla CSV con todos los campos</button>
     <div id="imp-out"></div>
@@ -6450,8 +6487,9 @@ function openDet(id){
     </div>
     <div class="btn2" style="margin-top:6px">
       <button type="button" class="btn btn-s" onclick="shareRecord(${r.id})"${!can('shareRecord')?' style="display:none"':''}>📤 Compartir</button>
-      ${(r.dom||r.col)?`<button type="button" class="btn btn-s" onclick="copyAddr(${r.id})">📋 Copiar dir.</button>`:''}
+      ${r.tel?`<button type="button" class="btn btn-s" style="color:#22c55e;border-color:#22c55e" onclick="sendWhatsAppReminder(${r.id})">💬 WhatsApp</button>`:(r.dom||r.col)?`<button type="button" class="btn btn-s" onclick="copyAddr(${r.id})">📋 Copiar dir.</button>`:''}
     </div>
+    ${r.tel&&(r.dom||r.col)?`<div class="btn2" style="margin-top:6px"><button type="button" class="btn btn-s" onclick="copyAddr(${r.id})">📋 Copiar dirección</button>${r.dom?`<button type="button" class="btn btn-s" onclick="openMapForRecord(${r.id})">🗺️ Ver mapa</button>`:''}</div>`:''}
     <div class="btn2" style="margin-top:6px">
       <button type="button" class="btn btn-s" style="color:var(--red);border-color:var(--red)${!can('deleteRecord')?';display:none':''}" onclick="confDel(${r.id})">🗑️ Eliminar</button>
     </div>
@@ -6896,7 +6934,50 @@ let calD=new Date(),selDay=null;
 const MOS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 function prevMo(){calD=new Date(calD.getFullYear(),calD.getMonth()-1,1);renderCal();}
 function nextMo(){calD=new Date(calD.getFullYear(),calD.getMonth()+1,1);renderCal();}
-// renderCal removida v19
+function renderCal(){
+  const grid=document.getElementById('cal-grid');
+  const lbl=document.getElementById('cal-month-lbl');
+  if(!grid)return;
+  const yr=calD.getFullYear(),mo=calD.getMonth();
+  if(lbl)lbl.textContent=MOS[mo]+' '+yr;
+  const first=new Date(yr,mo,1).getDay();
+  const last=new Date(yr,mo+1,0).getDate();
+  const todayStr=today();
+  // Build event map for this month
+  const evMap={};
+  E.filter(e=>e.date&&e.date.slice(0,7)===`${yr}-${String(mo+1).padStart(2,'0')}`).forEach(e=>{
+    const d=e.date.slice(8,10);evMap[d]=(evMap[d]||0)+1;
+  });
+  V.filter(v=>v.date&&v.date.slice(0,7)===`${yr}-${String(mo+1).padStart(2,'0')}`).forEach(v=>{
+    const d=v.date.slice(8,10);evMap[d]=(evMap[d]||0)+1;
+  });
+  let cells='';
+  for(let i=0;i<first;i++) cells+=`<div style="background:var(--card);padding:6px 2px;min-height:36px"></div>`;
+  for(let d=1;d<=last;d++){
+    const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=ds===todayStr;
+    const isSel=ds===selDay;
+    const cnt=evMap[String(d).padStart(2,'0')]||0;
+    cells+=`<div onclick="selD('${ds}')" style="background:${isSel?'var(--a)':isToday?'var(--s2)':'var(--card)'};padding:4px 2px;min-height:36px;cursor:pointer;text-align:center;position:relative;transition:.15s">
+      <div style="font-size:12px;font-weight:${isToday||isSel?'800':'600'};color:${isSel?'#fff':isToday?'var(--a2)':'var(--t2)'}">${d}</div>
+      ${cnt?`<div style="display:flex;justify-content:center;gap:2px;margin-top:2px">${Array.from({length:Math.min(cnt,3)},()=>'<div style="width:5px;height:5px;border-radius:50%;background:'+(isSel?'rgba(255,255,255,.7)':'var(--a)')+'"></div>').join('')}</div>`:''}
+    </div>`;
+  }
+  grid.innerHTML=cells;
+  // Show day panel if a day is selected
+  const panel=document.getElementById('cal-day-panel');
+  if(panel)panel.style.display=selDay?'block':'none';
+  if(selDay)showDayEvs(selDay);
+}
+function toggleCalView(){
+  const wrap=document.getElementById('cal-wrap');
+  const btn=document.getElementById('cal-toggle-btn');
+  if(!wrap)return;
+  const showing=wrap.style.display!=='none';
+  wrap.style.display=showing?'none':'block';
+  if(btn)btn.style.background=showing?'':'var(--a)',btn.style.color=showing?'':'#fff';
+  if(!showing)renderCal();
+}
 
 function selD(ds){selDay=ds;renderCal();}
 function openShEv(){document.getElementById('evt').value='';document.getElementById('evh').value='09:00';document.getElementById('evtp').selectedIndex=0;document.getElementById('evn').value='';openSheet('sh-ev');}
@@ -6998,6 +7079,44 @@ function renderStats(){
       <div class="bar-row"><div class="bar-lbl">🇲🇽 México</div><div class="bar-wrap"><div class="bar-fill" style="width:${total?Math.round(mx/total*100):0}%;background:var(--grn)"></div></div><div class="bar-n" style="color:var(--grn)">${mx}</div></div>
       <div class="bar-row"><div class="bar-lbl">✈️ USA</div><div class="bar-wrap"><div class="bar-fill" style="width:${total?Math.round(usa/total*100):0}%;background:var(--usa)"></div></div><div class="bar-n" style="color:var(--usa)">${usa}</div></div>
     </div>
+    ${(()=>{
+      const now=new Date();
+      const ages=R.filter(r=>r.fnac).map(r=>{try{return Math.floor((now-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));}catch{return null;}}).filter(a=>a&&a>0&&a<120);
+      if(ages.length<3)return'';
+      const avg=Math.round(ages.reduce((a,b)=>a+b,0)/ages.length);
+      const brackets=[['60-69',ages.filter(a=>a>=60&&a<70).length,'#60a5fa'],['70-79',ages.filter(a=>a>=70&&a<80).length,'#34d399'],['80-89',ages.filter(a=>a>=80&&a<90).length,'#f472b6'],['90+',ages.filter(a=>a>=90).length,'#fb923c'],['<60',ages.filter(a=>a<60).length,'#94a3b8']].filter(x=>x[1]>0);
+      const maxAge=Math.max(1,...brackets.map(b=>b[1]));
+      return`<div class="ch-card">
+        <div class="ch-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>👴 Distribución de edades</span>
+          <span style="font-size:10px;font-weight:700;color:var(--sft)">Prom. ${avg} años · ${ages.length} con fecha</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(${Math.min(brackets.length,5)},1fr);gap:6px;margin-top:8px">
+          ${brackets.map(([lbl,n,c])=>`<div style="text-align:center">
+            <div style="height:48px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px">
+              <div style="width:28px;background:${c};border-radius:4px 4px 0 0;height:${Math.max(6,Math.round(n/maxAge*44))}px;transition:.4s"></div>
+            </div>
+            <div style="font-size:14px;font-weight:800;font-family:var(--fnt2);color:${c}">${n}</div>
+            <div style="font-size:8px;font-weight:700;color:var(--mut);text-transform:uppercase">${lbl}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    })()}
+    ${(()=>{
+      const vencidas=R.filter(r=>r.estatus==='Activo'&&r.fecha&&daysSince(r.fecha)>30&&r.visita!=='Si');
+      if(!vencidas.length)return'';
+      return`<div class="ch-card" style="border-color:rgba(239,68,68,.2);background:rgba(239,68,68,.04)">
+        <div class="ch-title" style="color:var(--red)">⚠️ Visitas vencidas (+30 días sin actualizar)</div>
+        <div style="font-size:28px;font-weight:800;font-family:var(--fnt2);color:var(--red);margin:4px 0">${vencidas.length}</div>
+        <div style="font-size:11px;color:var(--mut);margin-bottom:8px">Beneficiarios activos sin visita en más de 30 días</div>
+        ${vencidas.slice(0,3).map(r=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--b1)">
+          <div style="width:28px;height:28px;border-radius:8px;background:rgba(239,68,68,.15);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">${daysSince(r.fecha)}d</div>
+          <div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.nombre}</div><div style="font-size:9px;color:var(--mut)">${r.folio} · Sec.${r.seccion||'?'}</div></div>
+          <button onclick="openDet(${r.id})" style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0">Ver</button>
+        </div>`).join('')}
+        ${vencidas.length>3?`<div style="font-size:10px;color:var(--mut);margin-top:6px;text-align:center">+${vencidas.length-3} más con visita vencida</div>`:''}
+      </div>`;
+    })()}
     ${secciones.length?`<div class="ch-card"><div class="ch-title">📍 Registros por Sección</div>${secciones.map(sec=>{const cnt=R.filter(r=>r.seccion===sec).length;const vis=R.filter(r=>r.seccion===sec&&(r.visita==='Si'||r.visita==='Sí')).length;return`<div class="bar-row"><div class="bar-lbl">Sec. ${sec}</div><div class="bar-wrap"><div class="bar-fill" style="width:${total?Math.round(cnt/total*100):0}%;background:var(--a)"></div></div><div class="bar-n">${cnt}</div></div>`;}).join('')}</div>`:''}
     <div class="ch-card">
       <div class="ch-title">🚗 Estado de visitas</div>
@@ -7069,9 +7188,40 @@ function handleImp(ev){
   const file=ev.target.files[0];if(!file)return;
   const out=document.getElementById('imp-out');
   out.innerHTML='<div class="imp-res"><b>⏳ Analizando…</b></div>';
-  if(file.name.split('.').pop().toLowerCase()==='csv'){const reader=new FileReader();reader.onload=e=>procCSV(e.target.result,file.name,out);reader.readAsText(file,'UTF-8');}
-  else out.innerHTML=`<div class="imp-res bad"><b>📋 ${file.name}</b><br><br>Los .xlsx necesitan convertirse a CSV primero.<br><b>iPhone:</b> Numbers → Exportar → CSV → importar aquí.</div>`;
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){
+    const reader=new FileReader();
+    reader.onload=e=>procCSV(e.target.result,file.name,out);
+    reader.readAsText(file,'UTF-8');
+  } else if(ext==='xlsx'||ext==='xls'){
+    // Load SheetJS if needed
+    if(typeof XLSX==='undefined'){
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=()=>_procXLSX(file,out);
+      s.onerror=()=>{out.innerHTML=`<div class="imp-res bad">⚠️ No se pudo cargar el lector de Excel. Verifica tu conexión o convierte a CSV primero.</div>`;};
+      document.head.appendChild(s);
+    } else {
+      _procXLSX(file,out);
+    }
+  } else {
+    out.innerHTML=`<div class="imp-res bad"><b>📋 ${file.name}</b><br><br>Formato no soportado. Usa archivos <b>.csv</b> o <b>.xlsx</b>.</div>`;
+  }
   ev.target.value='';
+}
+function _procXLSX(file,out){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const csv=XLSX.utils.sheet_to_csv(ws,{FS:',',RS:'\n'});
+      procCSV(csv,file.name,out);
+    }catch(err){
+      out.innerHTML=`<div class="imp-res bad">⚠️ Error leyendo Excel: ${err.message||'archivo corrupto'}. Intenta guardarlo como CSV.</div>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
 }
 function procCSV(text,fname,out){
   const lines=text.split(/\r?\n/).filter(l=>l.trim());
@@ -7749,7 +7899,7 @@ function toggleSrchAdv(){
 }
 
 function clearSrchAdv(){
-  ['srch-f-tipo','srch-f-est','srch-f-vis','srch-f-uso','srch-f-sec','srch-f-area','srch-f-ruta'].forEach(id=>{
+  ['srch-f-tipo','srch-f-est','srch-f-vis','srch-f-uso','srch-f-sec','srch-f-area','srch-f-ruta','srch-f-edad','srch-f-dup'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
   execSrchAdv();
@@ -7764,13 +7914,15 @@ function getAdvFilters(){
     sec:  document.getElementById('srch-f-sec')?.value||'',
     area: document.getElementById('srch-f-area')?.value||'',
     ruta: document.getElementById('srch-f-ruta')?.value||'',
+    edad: document.getElementById('srch-f-edad')?.value||'',
+    dup:  document.getElementById('srch-f-dup')?.value||'',
   };
 }
 
 function execSrchAdv(){
   const q=(document.getElementById('sq')?.value||'').trim();
   const f=getAdvFilters();
-  const hasFilter=f.tipo||f.est||f.vis||f.uso||f.sec||f.area||f.ruta||q;
+  const hasFilter=f.tipo||f.est||f.vis||f.uso||f.sec||f.area||f.ruta||f.edad||f.dup||q;
   if(!hasFilter){showSrchIdle();return;}
   let pool=R.slice();
   if(f.tipo)pool=pool.filter(r=>r.tipo===f.tipo);
@@ -7780,6 +7932,22 @@ function execSrchAdv(){
   if(f.sec)  pool=pool.filter(r=>r.seccion===f.sec);
   if(f.area) pool=pool.filter(r=>r.area===f.area);
   if(f.ruta) pool=pool.filter(r=>r.ruta===f.ruta);
+  if(f.dup==='1'){detectDups();pool=pool.filter(r=>r.dup);}
+  if(f.edad){
+    const now=new Date();
+    pool=pool.filter(r=>{
+      if(!r.fnac)return false;
+      try{
+        const age=Math.floor((now-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));
+        if(f.edad==='lt60')return age<60;
+        if(f.edad==='60_69')return age>=60&&age<70;
+        if(f.edad==='70_79')return age>=70&&age<80;
+        if(f.edad==='80_89')return age>=80&&age<90;
+        if(f.edad==='90p')return age>=90;
+      }catch{return false;}
+      return true;
+    });
+  }
   if(q){
     const ql=q.toLowerCase();
     pool=pool.filter(r=>r.nombre.toLowerCase().includes(ql)||r.folio.toLowerCase().includes(ql)||(r.tel||'').includes(ql)||(r.col||'').toLowerCase().includes(ql)||(r.dom||'').toLowerCase().includes(ql)||(r.obs||'').toLowerCase().includes(ql)||(r.seccion||'').includes(ql));
@@ -10501,6 +10669,12 @@ const INSIGHTS=[
   ()=>{const n=R.filter(r=>!r.tel&&r.estatus==='Activo').length;return n>0?`${n} beneficiarios activos no tienen teléfono registrado. Actualiza sus datos.`:null;},
   ()=>{const s=_getStreak();return s.count>0?`Llevas ${s.count} día${s.count>1?'s':''} de racha activa. ¡Tu mejor racha fue ${s.best} días!`:null;},
   ()=>{const hoy=new Date(),mm=hoy.getMonth(),dd=hoy.getDate();const bd=R.filter(r=>{if(!r.fnac)return false;try{const d=new Date(r.fnac+'T00:00:00');return d.getMonth()===mm&&d.getDate()===dd;}catch{return false;}});return bd.length?`🎂 ¡Hoy es el cumpleaños de ${bd[0].nombre.split(' ')[0]}${bd.length>1?` y ${bd.length-1} más`:''}! Recuerda felicitarlos.`:null;},
+  ()=>{const venc=R.filter(r=>r.estatus==='Activo'&&r.fecha&&daysSince(r.fecha)>30&&r.visita!=='Si').length;return venc>0?`⚠️ ${venc} beneficiarios activos llevan más de 30 días sin actualizar. Agenda visitas urgentes.`:null;},
+  ()=>{const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))];if(secs.length<2)return null;const worst=secs.map(s=>{const t=R.filter(r=>r.seccion===s).length;const v=R.filter(r=>r.seccion===s&&r.visita==='Si').length;return{s,pct:t?Math.round(v/t*100):0};}).sort((a,b)=>a.pct-b.pct)[0];return worst&&worst.pct<50?`📉 La sección ${worst.s} tiene solo el ${worst.pct}% de cobertura. ¡Necesita atención prioritaria!`:null;},
+  ()=>{const now=new Date(),mm=now.getMonth();const bdMes=R.filter(r=>{if(!r.fnac)return false;try{return new Date(r.fnac+'T00:00:00').getMonth()===mm;}catch{return false;}}).length;return bdMes>0?`🎂 ${bdMes} beneficiario${bdMes>1?'s':''}  cumplen años este mes. Revisa el listado.`:null;},
+  ()=>{const n=R.filter(r=>r.dup).length;return n>0?`🔁 Hay ${n} registros duplicados en la base. Revisa y unifica para mantener datos limpios.`:null;},
+  ()=>{const usa=R.filter(r=>r.uso==='Estados Unidos').length;return usa>0?`✈️ ${usa} beneficiario${usa>1?'s':''} están registrado${usa>1?'s':''} como migrantes en USA. Considera canales especiales de contacto.`:null;},
+  ()=>{const act=R.filter(r=>r.estatus==='Activo').length;const total=R.length;return total>0?`📊 El ${Math.round(act/total*100)}% de tu base (${act} personas) están activas. ${act/total>.8?'¡Excelente tasa!':act/total>.5?'Buena base activa.':'Muchos registros inactivos — revisa estatus.'}`:null;},
 ];
 let _insightIdx=0;
 function renderInsight(){
@@ -10582,31 +10756,56 @@ function buildDataContext(){
   const secResumen=secciones.slice(0,10).map(s=>{
     const t=R.filter(r=>r.seccion===s).length;
     const v=R.filter(r=>r.seccion===s&&r.visita==='Si').length;
-    return`Sec.${s}:${v}/${t}`;
+    return`Sec.${s}:${v}/${t}(${Math.round(v/t*100)}%)`;
   }).join(', ');
+  // Sección con menor cobertura
+  const secCov=secciones.map(s=>{const t=R.filter(r=>r.seccion===s).length;const v=R.filter(r=>r.seccion===s&&r.visita==='Si').length;return{s,pct:t?Math.round(v/t*100):0,t};}).filter(x=>x.t>0);
+  const worstSec=secCov.length?[...secCov].sort((a,b)=>a.pct-b.pct)[0]:null;
+  const bestSec=secCov.length?[...secCov].sort((a,b)=>b.pct-a.pct)[0]:null;
   const scored=R.map(r=>({r,s:calcPriorityScore(r)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,5);
   const topPrio=scored.map(x=>`${x.r.nombre.split(' ').slice(0,2).join(' ')}(score:${x.s})`).join(', ');
+  // Cumpleaños
   const hoy=new Date(),mm=hoy.getMonth(),dd=hoy.getDate();
   const bdHoy=R.filter(r=>{if(!r.fnac)return false;try{const d=new Date(r.fnac+'T00:00:00');return d.getMonth()===mm&&d.getDate()===dd;}catch{return false;}}).map(r=>r.nombre.split(' ')[0]);
-  return`Base de datos PensionadosMX:
-- Total registros: ${total}
-- Estatus: Activo=${act}, Pendiente=${pend}, Baja=${baja}, Inactivo=${total-act-pend-baja}
-- Visitas: Visitados=${visOk} (${Math.round(visOk/total*100)}%), Pendiente=${visPe}, Sin visita=${visNo}
-- Programas: ${progResumen}
-- Migrantes USA: ${usa}
-- Duplicados: ${dups}
-- Activos sin teléfono: ${sinTel} | Sin dirección: ${sinDir}
-- Racha actual: ${streak.count} días (mejor: ${streak.best})
-- Cobertura por sección: ${secResumen||'Sin secciones'}
-- Top prioridad visita hoy: ${topPrio||'Ninguno urgente'}
-- Cumpleaños hoy: ${bdHoy.length?bdHoy.join(', '):'Ninguno'}`;
+  const bdMes=R.filter(r=>{if(!r.fnac)return false;try{const d=new Date(r.fnac+'T00:00:00');return d.getMonth()===mm;}catch{return false;}}).length;
+  // Distribución de edades
+  const now=new Date();
+  const ages=R.filter(r=>r.fnac).map(r=>{try{return Math.floor((now-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));}catch{return null;}}).filter(Boolean);
+  const age60_70=ages.filter(a=>a>=60&&a<70).length;
+  const age70_80=ages.filter(a=>a>=70&&a<80).length;
+  const age80p=ages.filter(a=>a>=80).length;
+  const ageAvg=ages.length?Math.round(ages.reduce((a,b)=>a+b,0)/ages.length):0;
+  // Visitas vencidas (>30 días)
+  const vencidas=R.filter(r=>r.estatus==='Activo'&&r.fecha&&daysSince(r.fecha)>30&&r.visita!=='Si').length;
+  // Top colonias
+  const colCnt={};R.forEach(r=>{if(r.col)(colCnt[r.col]=(colCnt[r.col]||0)+1);});
+  const topCols=Object.entries(colCnt).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([c,n])=>`${c}(${n})`).join(', ');
+  // Actividad última semana
+  const hace7=new Date();hace7.setDate(hace7.getDate()-7);
+  const recsEsta=R.filter(r=>r.fecha&&new Date(r.fecha+'T00:00:00')>=hace7).length;
+  return`=== PensionadosMX — Datos en tiempo real ===
+📊 TOTALES: ${total} registros | Activo=${act} | Pendiente=${pend} | Baja=${baja} | Inactivo=${total-act-pend-baja}
+✅ VISITAS: Visitados=${visOk}(${Math.round(visOk/total*100)}%) | Pendiente=${visPe} | Sin visita=${visNo} | Vencidas+30días=${vencidas}
+🏥 PROGRAMAS: ${progResumen}
+🗺️ COBERTURA POR SECCIÓN: ${secResumen||'Sin secciones'}
+📉 Peor sección: ${worstSec?`Sec.${worstSec.s} (${worstSec.pct}% cubierta)`:'N/A'} | Mejor: ${bestSec?`Sec.${bestSec.s} (${bestSec.pct}%)`:'N/A'}
+🎯 TOP PRIORIDAD HOY: ${topPrio||'Ninguno urgente'}
+👴 EDADES: 60-69años=${age60_70} | 70-79años=${age70_80} | 80+años=${age80p} | Promedio=${ageAvg}años
+🎂 Cumpleaños hoy: ${bdHoy.length?bdHoy.join(', '):'Ninguno'} | Este mes: ${bdMes}
+✈️ Migrantes USA: ${usa} | Duplicados: ${dups} | Sin tel: ${sinTel} | Sin dir: ${sinDir}
+🏘️ Top colonias: ${topCols||'N/A'}
+📅 Registros última semana: ${recsEsta}
+🔥 Racha actual: ${streak.count} días (mejor: ${streak.best} días)`;
 }
 function openAI(){
   const sheet=document.getElementById('ai-sheet');
   if(!sheet)return;
   sheet.classList.add('on');
+  updateAIKeyIndicator();
   if(aiMessages.length===0){
-    aiMessages=[{role:'assistant',content:`¡Hola! 👋 Soy tu asistente IA para **PensionadosMX**.\n\nAnalizo tu base de ${R.length} beneficiar${R.length===1?'io':'ios'} en tiempo real. ¿En qué te puedo ayudar hoy?`}];
+    const hasKey=!!getAIKey();
+    const noKeyNote=hasKey?'':`\n\n⚠️ **Sin API Key configurada.** Toca el botón 🔑 arriba para configurar tu clave de Anthropic y activar el chat.`;
+    aiMessages=[{role:'assistant',content:`¡Hola! 👋 Soy tu asistente IA para **PensionadosMX**.\n\nAnalizo tu base de **${R.length}** beneficiar${R.length===1?'io':'ios'} en tiempo real. ¿En qué te puedo ayudar hoy?${noKeyNote}`}];
     renderAIMsgs();
   }
   renderAISugs(AI_SUGS_DEFAULT);
@@ -10645,9 +10844,50 @@ function showAITyping(){
 function removeAITyping(){
   document.getElementById('ai-typing-indicator')?.remove();
 }
+/* ── AI API Key management (v34) ── */
+const AI_KEY_STORE='px_ai_key_v1';
+function getAIKey(){return localStorage.getItem(AI_KEY_STORE)||'';}
+function saveAIKey(){
+  const v=(document.getElementById('ai-key-inp')?.value||'').trim();
+  if(!v){snack('⚠️ Escribe tu API Key primero','⚠️');return;}
+  if(!v.startsWith('sk-ant-')){snack('⚠️ Clave inválida — debe iniciar con sk-ant-','⚠️');return;}
+  localStorage.setItem(AI_KEY_STORE,v);
+  document.getElementById('ai-key-panel').style.display='none';
+  updateAIKeyIndicator();
+  snack('✅ API Key guardada correctamente','🔑');
+}
+function clearAIKey(){
+  localStorage.removeItem(AI_KEY_STORE);
+  const inp=document.getElementById('ai-key-inp');if(inp)inp.value='';
+  updateAIKeyIndicator();
+  snack('🗑 API Key eliminada','🔑');
+}
+function openAIKeySheet(){
+  const panel=document.getElementById('ai-key-panel');if(!panel)return;
+  const showing=panel.style.display!=='none';
+  panel.style.display=showing?'none':'block';
+  if(!showing){const inp=document.getElementById('ai-key-inp');if(inp){inp.value=getAIKey();inp.focus();}}
+}
+function updateAIKeyIndicator(){
+  const btn=document.getElementById('ai-key-btn');
+  const sub=document.getElementById('ai-hdr-sub');
+  if(!btn)return;
+  const hasKey=!!getAIKey();
+  btn.style.color=hasKey?'var(--grn)':'var(--amb)';
+  btn.style.borderColor=hasKey?'rgba(34,197,94,.3)':'rgba(245,158,11,.3)';
+  btn.title=hasKey?'API Key configurada ✅':'Configurar API Key';
+  if(sub)sub.textContent=hasKey?'Conectado · Análisis en tiempo real':'Sin API Key — toca 🔑 para configurar';
+}
+
 async function aiSend(){
   const inp=document.getElementById('ai-inp');if(!inp)return;
   const text=(inp.value||'').trim();if(!text)return;
+  const apiKey=getAIKey();
+  if(!apiKey){
+    openAIKeySheet();
+    snack('🔑 Configura tu API Key primero','🔑');
+    return;
+  }
   inp.value='';
   document.getElementById('ai-sugs').innerHTML='';
   aiMessages.push({role:'user',content:text});
@@ -10658,7 +10898,7 @@ async function aiSend(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
@@ -10668,14 +10908,20 @@ async function aiSend(){
     });
     const data=await res.json();
     removeAITyping();
-    const reply=data?.content?.[0]?.text||'Lo siento, no pude procesar esa consulta.';
-    aiMessages.push({role:'assistant',content:reply});
+    if(data.error){
+      const errMsg=data.error.type==='authentication_error'
+        ?'🔑 API Key inválida. Toca 🔑 arriba para corregirla.'
+        :`⚠️ Error API: ${data.error.message||'Inténtalo de nuevo.'}`;
+      aiMessages.push({role:'assistant',content:errMsg});
+    }else{
+      const reply=data?.content?.[0]?.text||'Lo siento, no pude procesar esa consulta.';
+      aiMessages.push({role:'assistant',content:reply});
+    }
     renderAIMsgs();
-    renderAISugs(['¿Y los pendientes?','¿Quién visitar primero?','Dame un resumen','¿Qué hacer hoy?']);
+    renderAISugs(['¿Quién visitar mañana?','¿Cuántos cumplen años este mes?','¿Qué sección tiene menos cobertura?','Dame un reporte ejecutivo','¿Cuáles necesitan actualización urgente?']);
   }catch(err){
     removeAITyping();
-    const errMsg='⚠️ Error de conexión. Verifica tu internet e intenta de nuevo.';
-    aiMessages.push({role:'assistant',content:errMsg});
+    aiMessages.push({role:'assistant',content:'⚠️ Error de conexión. Verifica tu internet e intenta de nuevo.'});
     renderAIMsgs();
   }
 }
@@ -11272,6 +11518,22 @@ function checkBackupReminder(){
       if(el)el.classList.add('show');
     },3000);
   }
+  // Auto-compress history if storage > 75%
+  _checkStorageQuota();
+}
+function _checkStorageQuota(){
+  try{
+    const kb=parseFloat(calcStorageKB());
+    const pct=kb/5120*100;
+    if(pct>90){
+      // Critical: trim history to last 50 entries and show alert
+      if(H.length>50){H=H.slice(-50);svH();}
+      snack('⚠️ Almacenamiento al '+pct.toFixed(0)+'% — historial comprimido','⚠️');
+    } else if(pct>75){
+      // Warning: trim history to last 100 entries silently
+      if(H.length>100){H=H.slice(-100);svH();}
+    }
+  }catch{}
 }
 function dismissBackupReminder(){
   localStorage.setItem(BACKUP_REMIND_KEY,Date.now().toString());
@@ -11788,6 +12050,50 @@ function sendWhatsAppBulk(){
   );
 }
 
+/* ── WhatsApp recordatorio individual ── */
+function sendWhatsAppReminder(id){
+  const r=R.find(x=>x.id===id);if(!r||!r.tel)return;
+  const tel=r.tel.replace(/[^0-9]/g,'');
+  const nombre=r.nombre.split(' ')[0];
+  const msg=`Hola ${nombre}, le contactamos del programa ${r.tipo}${r.folio?' (Folio: '+r.folio+')':''} para saludarle y confirmar que se encuentra bien. Cualquier duda estamos a sus órdenes. ¡Que tenga un excelente día!`;
+  conf2(
+    `💬 WhatsApp a ${nombre}`,
+    `<div style="font-size:13px;color:var(--sft);margin-bottom:10px">Mensaje a enviar:</div>
+     <textarea id="wa-ind-msg" style="width:100%;min-height:70px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:12px;outline:none;resize:none;box-sizing:border-box">${msg}</textarea>`,
+    ()=>{
+      const finalMsg=document.getElementById('wa-ind-msg')?.value||msg;
+      window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(finalMsg)}`,'_blank');
+    },
+    'Abrir WhatsApp'
+  );
+}
+  const selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  const records=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
+  const withPhone=records.filter(r=>r.tel);
+  if(!withPhone.length){snack('⚠️ Los registros seleccionados no tienen teléfono','⚠️');return;}
+  conf2(
+    `💬 WhatsApp a ${withPhone.length} beneficiarios`,
+    `<div style="margin-bottom:10px;font-size:13px;color:var(--sft)">Se abrirá WhatsApp para cada uno. Escribe el mensaje:</div>
+     <textarea id="wa-bulk-msg" style="width:100%;min-height:80px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:13px;outline:none;resize:none;box-sizing:border-box" placeholder="Hola {nombre}, le contactamos del programa {programa}…">Hola {nombre}, le contactamos del programa {programa} para confirmar su información. Por favor comuníquese con nosotros. Gracias.</textarea>`,
+    ()=>{
+      const template=document.getElementById('wa-bulk-msg')?.value||'Hola {nombre}';
+      withPhone.forEach((r,i)=>{
+        setTimeout(()=>{
+          const msg=template
+            .replace('{nombre}',r.nombre.split(' ')[0])
+            .replace('{programa}',r.tipo)
+            .replace('{folio}',r.folio);
+          const tel=r.tel.replace(/[^0-9]/g,'');
+          window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+        },i*500);
+      });
+      snack(`💬 Abriendo WhatsApp para ${withPhone.length} contactos`,'💬');
+    },
+    `Enviar a ${withPhone.length}`
+  );
+}
+
 /* ── 5. BULK ASSIGN SECTION ── */
 function openBulkAssignSection(){
   const selected=batchSel||new Set();
@@ -11893,23 +12199,29 @@ function safeRender(fn, containerId, fallbackMsg='Error al cargar'){
 
 /* ── 10. CHANGELOG / WHAT'S NEW ── */
 const CHANGELOG=[
-  {version:'v32 SUPREMA',items:[
-    'Presencia en tiempo real — ve quién está conectado',
-    'Escaneo de archivos del dispositivo con filtro por fecha',
-    'Sistema de 30 mejoras: confetti, undo, búsqueda por voz…',
-    'QR code para compartir la app',
-    'WhatsApp masivo a beneficiarios seleccionados',
-    'Asignar sección a múltiples registros a la vez',
-    'GPS para ubicación de domicilios',
-    'Cola offline para cambios sin internet',
-    'Menú contextual con mantener presionado',
-    'Plantillas de registro rápido',
+  {version:'v34 — Edición Suprema+',items:[
+    '🔑 Gestión de API Key — configura tu clave Anthropic directamente en el chat IA',
+    '📅 Calendario visual en pestaña Visitas con eventos y visitas programadas',
+    '📊 Importación nativa de Excel (.xlsx) sin necesidad de convertir a CSV',
+    '💬 WhatsApp individual — envía mensaje personalizado desde el detalle del registro',
+    '🔎 Filtros edad y duplicados ahora funcionan en la búsqueda avanzada',
+    '🔧 Compresión automática del historial cuando el almacenamiento supera el 75%',
+    '🐛 Corrección de ternario roto en exportación PDF',
+    '⚡ Service Worker v34 — excluye llamadas API Anthropic del caché offline',
+    '📱 Manifest con shortcuts: "Nuevo registro" y "Buscar" desde el ícono de la app',
+    '🏷️ Versión consistente v34 en toda la interfaz',
   ]},
-  {version:'v31',items:[
-    'Firebase sync en tiempo real',
-    'Panel de administrador exclusivo',
-    'Tema automático oscuro/claro',
-    'Notificaciones locales de cumpleaños',
+  {version:'v32-v33 SUPREMA',items:[
+    'Presencia en tiempo real — ve quién está conectado',
+    'Asistente IA con Claude — análisis en lenguaje natural',
+    'Sistema de logros (10 badges desbloqueables)',
+    'Cola de prioridad inteligente con scoring automático',
+    'Mapa de calor de cobertura por sección',
+    'Escáner de INE/credencial con cámara',
+    'WhatsApp masivo a seleccionados',
+    'Exportar PDF imprimible con resumen',
+    'Widget de cumpleaños del mes en inicio',
+    'Atajos de teclado: / buscar · N nuevo · A IA · Esc cerrar',
   ]},
 ];
 function showChangelog(){
@@ -12034,7 +12346,7 @@ function renderGeneral(){
   const name=authUsername||'Usuario';
   const av=document.getElementById('gen-avatar');       if(av) av.textContent=name[0]?.toUpperCase()||'?';
   const pn=document.getElementById('gen-profile-name'); if(pn) pn.textContent=isGuest()?'Invitado':name;
-  const pr=document.getElementById('gen-profile-role'); if(pr) pr.textContent=isGuest()?'Modo solo lectura':'Administrador · PensionadosMX v30';
+  const pr=document.getElementById('gen-profile-role'); if(pr) pr.textContent=isGuest()?'Modo solo lectura':'Administrador · PensionadosMX v34';
 
   // Stats strip
   const vis=R.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
@@ -12267,7 +12579,7 @@ function copyAppInfo(){
   const streak=_getStreak();
   const vis=R.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
   const txt=[
-    '📱 Pensionados MX v30',
+    '📱 Pensionados MX v34',
     '━━━━━━━━━━━━━━━━━━',
     `👥 Registros: ${R.length}`,
     `✅ Visitados: ${vis} (${R.length?Math.round(vis/R.length*100):0}%)`,
@@ -12276,7 +12588,7 @@ function copyAppInfo(){
     `📅 Fecha: ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}`,
   ].join('\n');
   if(navigator.share){
-    navigator.share({title:'Pensionados MX v30',text:txt}).catch(()=>{});
+    navigator.share({title:'Pensionados MX v34',text:txt}).catch(()=>{});
   } else if(navigator.clipboard){
     navigator.clipboard.writeText(txt).then(()=>snack('📋 Copiado al portapapeles','📋'));
   } else {
@@ -12340,15 +12652,27 @@ function copyAppInfo(){
   </div>
 </div>
 
-<!-- ═══ AI ASSISTANT v32 ═══ -->
+<!-- ═══ AI ASSISTANT v34 ═══ -->
 <div class="ai-sheet" id="ai-sheet">
   <div class="ai-hdr">
     <div class="ai-hdr-ico">🤖</div>
     <div class="ai-hdr-info">
       <div class="ai-hdr-title">Asistente IA · PensionadosMX</div>
-      <div class="ai-hdr-sub">Análisis inteligente de tus beneficiarios</div>
+      <div class="ai-hdr-sub" id="ai-hdr-sub">Análisis inteligente de tus beneficiarios</div>
     </div>
+    <button class="ai-hdr-btn" onclick="openAIKeySheet()" title="Configurar API Key" style="background:none;border:1px solid var(--b2);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--sft);cursor:pointer;margin-right:6px" id="ai-key-btn">🔑</button>
     <button class="ai-hdr-close" onclick="closeAI()">✕</button>
+  </div>
+  <!-- API Key setup panel (inline) -->
+  <div id="ai-key-panel" style="display:none;padding:16px;background:var(--s1);border-bottom:1px solid var(--b1)">
+    <div style="font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🔑 API Key de Anthropic</div>
+    <input id="ai-key-inp" type="password" placeholder="sk-ant-api03-..." autocomplete="off"
+      style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;margin-bottom:8px"/>
+    <div style="display:flex;gap:7px">
+      <button onclick="saveAIKey()" style="flex:1;background:var(--a);color:#fff;border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt)">💾 Guardar</button>
+      <button onclick="clearAIKey()" style="flex:1;background:var(--s2);color:var(--sft);border:1px solid var(--b2);border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt)">🗑 Borrar</button>
+    </div>
+    <div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">Tu clave se guarda solo en este dispositivo (localStorage). Obtenla en <b style="color:var(--sft)">console.anthropic.com</b></div>
   </div>
   <div class="ai-msgs" id="ai-msgs"></div>
   <div class="ai-suggestions" id="ai-sugs"></div>
@@ -12484,10 +12808,169 @@ document.getElementById('pwa-install-btn').addEventListener('click',async()=>{
   hidePWABar();
 });
 window.addEventListener('appinstalled',()=>{hidePWABar();snack('✅ App instalada','✅');});
-function hidePWABar(){
-  document.getElementById('pwa-install-bar').classList.remove('show');
-  localStorage.setItem('pwa_install_dismissed','1');
+/* ═══════════════════════════════════════════════════
+   v34 — ATAJOS DE TECLADO
+   ═══════════════════════════════════════════════════ */
+document.addEventListener('keydown',function(e){
+  // Ignore when typing in inputs
+  const tag=(document.activeElement||{}).tagName||'';
+  if(['INPUT','TEXTAREA','SELECT'].includes(tag))return;
+  // '/' → focus search
+  if(e.key==='/'&&!e.ctrlKey&&!e.metaKey){
+    e.preventDefault();
+    go('buscar');
+    setTimeout(()=>{const s=document.getElementById('sq')||document.getElementById('srch-inp');if(s){s.focus();s.select();}},150);
+    return;
+  }
+  // 'n' / 'N' → new record
+  if((e.key==='n'||e.key==='N')&&!e.ctrlKey&&!e.metaKey){
+    e.preventDefault();
+    if(typeof openShAdd==='function')openShAdd();
+    return;
+  }
+  // 'h' → inicio
+  if(e.key==='h'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();go('inicio');return;}
+  // 's' → estadisticas
+  if(e.key==='s'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();go('estadisticas');return;}
+  // Escape → close all sheets
+  if(e.key==='Escape'){e.preventDefault();closeAllSheets();closeAI();return;}
+  // 'a' → open AI
+  if(e.key==='a'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();openAI();return;}
+});
+
+/* ═══════════════════════════════════════════════════
+   v34 — CUMPLEAÑOS DE ESTE MES (widget en inicio)
+   ═══════════════════════════════════════════════════ */
+function renderBdMesWidget(){
+  const wrap=document.getElementById('bd-mes-wrap');if(!wrap)return;
+  const hoy=new Date(),mm=hoy.getMonth(),dd=hoy.getDate();
+  const proximos=R.filter(r=>{
+    if(!r.fnac)return false;
+    try{
+      const d=new Date(r.fnac+'T00:00:00');
+      if(d.getMonth()!==mm)return false;
+      return d.getDate()>=dd; // este mes, desde hoy en adelante
+    }catch{return false;}
+  }).sort((a,b)=>{
+    const da=new Date(a.fnac+'T00:00:00').getDate();
+    const db=new Date(b.fnac+'T00:00:00').getDate();
+    return da-db;
+  });
+  if(!proximos.length){wrap.innerHTML='';return;}
+  const hoyBd=proximos.filter(r=>new Date(r.fnac+'T00:00:00').getDate()===dd);
+  wrap.innerHTML=`<div style="background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(139,92,246,.12));border:1px solid rgba(236,72,153,.2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;cursor:pointer" onclick="go('buscar')">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:26px">🎂</div>
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:800;color:rgba(236,72,153,.9);text-transform:uppercase;letter-spacing:.5px">Cumpleaños este mes</div>
+        ${hoyBd.length?`<div style="font-size:13px;font-weight:700;color:var(--txt);margin-top:2px">🎉 ¡Hoy: ${hoyBd.map(r=>r.nombre.split(' ')[0]).join(', ')}!</div>`:''}
+        <div style="font-size:11px;color:var(--sft);margin-top:1px">${proximos.length} cumpleaño${proximos.length>1?'s':''} restante${proximos.length>1?'s':''} en ${new Date(hoy.getFullYear(),mm,1).toLocaleString('es-MX',{month:'long'})}</div>
+      </div>
+      <div style="font-size:18px;font-weight:800;font-family:var(--fnt2);color:rgba(236,72,153,.9)">${proximos.length}</div>
+    </div>
+  </div>`;
 }
-</script>
+
+/* ═══════════════════════════════════════════════════
+   v34 — EXPORTAR PDF IMPRIMIBLE
+   ═══════════════════════════════════════════════════ */
+function exportPDFReport(){
+  if(typeof requirePerm==='function'&&!requirePerm('exportData','Exportar requiere una cuenta')) return;
+  const total=R.length;
+  if(!total){snack('No hay datos para exportar','📄');return;}
+  const act=R.filter(r=>r.estatus==='Activo').length;
+  const visOk=R.filter(r=>r.visita==='Si').length;
+  const pct=Math.round(visOk/total*100);
+  const fecha=new Date().toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const progData=Object.entries(P).map(([k,p])=>({k,p,cnt:R.filter(r=>r.tipo===k).length})).filter(x=>x.cnt>0);
+  const secciones=[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
+  const secRows=secciones.map(s=>{
+    const t=R.filter(r=>r.seccion===s).length;
+    const v=R.filter(r=>r.seccion===s&&r.visita==='Si').length;
+    const pc=Math.round(v/t*100);
+    return`<tr><td>Sección ${s}</td><td style="text-align:center">${t}</td><td style="text-align:center">${v}</td><td style="text-align:center;color:${pc>70?'green':pc>40?'#b45309':'#dc2626'}">${pc}%</td></tr>`;
+  }).join('');
+  const win=window.open('','_blank','width=800,height=900');
+  if(!win)return;
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Reporte PensionadosMX</title>
+  <style>body{font-family:Arial,sans-serif;color:#111;margin:0;padding:24px;font-size:13px;}
+  h1{font-size:22px;margin:0 0 4px;}h2{font-size:15px;color:#444;margin:18px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;}
+  .meta{color:#666;font-size:11px;margin-bottom:20px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+  .kpi{border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;}
+  .kpi-n{font-size:28px;font-weight:700;line-height:1;}
+  .kpi-l{font-size:10px;color:#666;text-transform:uppercase;margin-top:3px;}
+  table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+  th{background:#f5f5f5;padding:7px 10px;text-align:left;font-size:11px;border:1px solid #ddd;}
+  td{padding:6px 10px;border:1px solid #eee;font-size:12px;}
+  tr:nth-child(even){background:#fafafa;}
+  .bar-cell{background:#eee;border-radius:3px;height:8px;margin:2px 0;}
+  .bar-fill{height:8px;border-radius:3px;background:#1d4ed8;}
+  @media print{body{margin:0;}button{display:none;}}</style></head><body>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div><h1>📋 Reporte PensionadosMX v34</h1><div class="meta">${fecha}</div></div>
+    <button onclick="window.print()" style="background:#1d4ed8;color:#fff;border:none;border-radius:7px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer">🖨️ Imprimir</button>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-n">${total}</div><div class="kpi-l">Total</div></div>
+    <div class="kpi"><div class="kpi-n" style="color:green">${act}</div><div class="kpi-l">Activos</div></div>
+    <div class="kpi"><div class="kpi-n" style="color:#1d4ed8">${visOk}</div><div class="kpi-l">Visitados</div></div>
+    <div class="kpi"><div class="kpi-n" style="color:${pct>70?'green':pct>40?'#b45309':'#dc2626'}">${pct}%</div><div class="kpi-l">Cobertura</div></div>
+  </div>
+  <h2>Distribución por programa</h2>
+  <table><tr><th>Programa</th><th>Registros</th><th>% del total</th><th>Cobertura visitas</th></tr>
+  ${progData.map(({k,p,cnt})=>{const v=R.filter(r=>r.tipo===k&&r.visita==='Si').length;const pp=Math.round(cnt/total*100);const vp=Math.round(v/cnt*100);return`<tr><td>${p.ico} ${k}</td><td>${cnt}</td><td>${pp}%</td><td>${vp}%</td></tr>`;}).join('')}
+  </table>
+  ${secRows?`<h2>Cobertura por sección</h2><table><tr><th>Sección</th><th>Total</th><th>Visitados</th><th>Cobertura</th></tr>${secRows}</table>`:''}
+  <h2>Listado completo (${R.filter(r=>r.estatus==='Activo').length} activos)</h2>
+  <table><tr><th>Folio</th><th>Nombre</th><th>Programa</th><th>Sección</th><th>Visita</th><th>Estatus</th></tr>
+  ${R.filter(r=>r.estatus==='Activo').slice(0,200).map(r=>`<tr><td style="font-family:monospace">${r.folio}</td><td>${r.nombre}</td><td>${r.tipo}</td><td>${r.seccion||'—'}</td><td>${r.visita==='Si'?'✅':r.visita==='Pendiente'?'⏳':'❌'}</td><td>${r.estatus}</td></tr>`).join('')}
+  ${R.filter(r=>r.estatus==='Activo').length>200?`<tr><td colspan="6" style="text-align:center;color:#666;font-style:italic">... y ${R.filter(r=>r.estatus==='Activo').length-200} más (muestra limitada a 200 en PDF)</td></tr>`:''}
+  </table>
+  <div style="margin-top:20px;color:#999;font-size:10px;text-align:center">Generado por PensionadosMX v34 · ${fecha}</div>
+  </body></html>`);
+  win.document.close();
+}
+
+/* ═══════════════════════════════════════════════════
+   v34 — HOOK: inyectar bd-mes-wrap y botón PDF en inicio
+   ═══════════════════════════════════════════════════ */
+(function v34Hooks(){
+  // Patch _renderInicioInner to add birthday month widget
+  const _origII=window._renderInicioInner;
+  if(typeof _origII==='function'&&!window._v34BdPatched){
+    window._v34BdPatched=true;
+    const _origRenderInicio=window.renderInicio;
+    window.renderInicio=function(){
+      if(_origRenderInicio)_origRenderInicio();
+      // Inject bd-mes-wrap if not exists
+      setTimeout(()=>{
+        if(!document.getElementById('bd-mes-wrap')){
+          const ini=document.getElementById('p-inicio');
+          if(ini){
+            const div=document.createElement('div');
+            div.id='bd-mes-wrap';
+            ini.querySelector('.main-inner,#inicio-inner,.pg.on')?.prepend(div)||ini.prepend(div);
+          }
+        }
+        renderBdMesWidget();
+      },100);
+    };
+  }
+  // Add PDF export button to download tab
+  setTimeout(()=>{
+    const dl=document.getElementById('p-descargar');
+    if(dl&&!document.getElementById('v34-pdf-btn')){
+      const btn=document.createElement('button');
+      btn.id='v34-pdf-btn';
+      btn.className='btn btn-s';
+      btn.style.cssText='width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px';
+      btn.innerHTML='📄 Exportar Reporte PDF imprimible';
+      btn.onclick=exportPDFReport;
+      dl.appendChild(btn);
+    }
+  },500);
+})();
+
 </body>
 </html>

@@ -1,7 +1,7 @@
-// Pensionados MX — Service Worker v33
+// Pensionados MX — Service Worker v34
 // Estrategia: Cache First para assets, Network First para datos
-const CACHE_NAME   = 'pensionados-v33';
-const CACHE_STATIC = 'pensionados-static-v32';
+const CACHE_NAME   = 'pensionados-v34';
+const CACHE_STATIC = 'pensionados-static-v34';
 
 // Assets que siempre se cachean
 const STATIC_ASSETS = [
@@ -19,7 +19,6 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_STATIC)
       .then(c => c.addAll(STATIC_ASSETS).catch(err => {
-        // Si falla una fuente externa, continuar igual
         console.warn('SW install partial:', err);
       }))
       .then(() => self.skipWaiting())
@@ -46,7 +45,17 @@ self.addEventListener('fetch', e => {
   let url;
   try { url = new URL(e.request.url); } catch { return; }
 
-  // Navegación principal → siempre devuelve index.html (SPA offline)
+  // Llamadas API Anthropic → NO cachear nunca
+  if(url.hostname.includes('anthropic.com') || url.hostname.includes('api.anthropic.com')){
+    return; // deja pasar sin interceptar
+  }
+
+  // Firebase → NO cachear (datos en tiempo real)
+  if(url.hostname.includes('firebaseio.com') || url.hostname.includes('firestore.googleapis.com')){
+    return;
+  }
+
+  // Navegación principal → Network First con fallback offline
   if(e.request.mode === 'navigate'){
     e.respondWith(
       fetch(e.request)
@@ -81,26 +90,24 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Assets locales → Cache First con actualización en background
+  // Assets locales → Cache First con actualización en background (Stale-While-Revalidate)
   if(url.origin === self.location.origin){
     e.respondWith(
-      caches.match(e.request)
-        .then(cached => {
-          const fetchAndUpdate = fetch(e.request).then(r => {
-            if(r && r.status === 200){
-              const clone = r.clone();
-              caches.open(CACHE_STATIC).then(c => c.put(e.request, clone));
-            }
+      caches.open(CACHE_STATIC).then(cache =>
+        cache.match(e.request).then(cached => {
+          const networkFetch = fetch(e.request).then(r => {
+            if(r && r.status === 200) cache.put(e.request, r.clone());
             return r;
           }).catch(() => null);
-          return cached || fetchAndUpdate;
+          return cached || networkFetch;
         })
+      )
     );
     return;
   }
 });
 
-// Mensaje para forzar actualización
+// Mensajes desde la app
 self.addEventListener('message', e => {
   if(e.data?.type === 'SKIP_WAITING') self.skipWaiting();
   if(e.data?.type === 'GET_VERSION'){

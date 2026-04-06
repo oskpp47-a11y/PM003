@@ -1,4 +1,4 @@
-# 🛡️ Pensionados MX v32
+# 🛡️ Pensionados MX v34 — Edición Suprema+
 
 App web progresiva (PWA) para gestión de beneficiarios de programas sociales.  
 Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
@@ -10,8 +10,8 @@ Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
 | Archivo | Descripción |
 |---|---|
 | `index.html` | App completa (toda la lógica en un solo archivo) |
-| `sw.js` | Service Worker — permite uso offline |
-| `manifest.json` | Configuración PWA |
+| `sw.js` | Service Worker v34 — permite uso offline, excluye API de caché |
+| `manifest.json` | Configuración PWA con shortcuts de pantalla de inicio |
 | `icon-192.png` | Ícono app (192×192) |
 | `icon-512.png` | Ícono app (512×512) |
 | `README.md` | Este archivo |
@@ -47,15 +47,44 @@ Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
 
 ---
 
-## ✨ Novedades v32 — Edición Suprema
+## 🤖 Configurar el Asistente IA
 
-- **🤖 Asistente IA integrado** — Chat con Claude que analiza tu base de datos en tiempo real. Pregunta en lenguaje natural: ¿Quién visitar hoy? ¿Cuántos activos hay? ¿Cuál sección tiene menos cobertura?
-- **🏆 Sistema de logros** — 10 badges desbloqueables por hitos (10 registros, 50 visitas, racha de 7 días, 80% cobertura, etc.)
-- **🎯 Cola de prioridad inteligente** — Algoritmo que rankea automáticamente a quién visitar hoy según días sin actualizar, estatus y cumpleaños
-- **🗺️ Mapa de calor de cobertura** — Grid visual por sección con colores según % visitado (🔴<30% 🟡30-60% 🔵60-99% 🟢100%)
-- **💡 Insights IA en dashboard** — Chip rotativo con análisis automático de tu base de datos
-- **🎉 Confeti al cumplir meta** — Celebración animada cuando alcanzas tu meta de visitas diaria
-- **🔢 Contadores animados** — Todos los números hacen animación suave al actualizarse
+1. En cualquier pantalla, toca el botón 🤖 (esquina inferior derecha)
+2. En el chat, toca el botón **🔑** (esquina superior derecha)
+3. Pega tu API Key de Anthropic (empieza con `sk-ant-`)
+4. Toca **💾 Guardar**
+5. El botón se vuelve verde ✅ cuando está activa
+
+> 🔒 La API Key se guarda **solo en tu dispositivo** (localStorage). Obtenla en [console.anthropic.com](https://console.anthropic.com)
+
+---
+
+## ✨ Novedades v34 — Edición Suprema+
+
+| Feature | Descripción |
+|---|---|
+| 🔑 **API Key gestionable** | Configura tu clave Anthropic directo en el chat IA |
+| 📅 **Calendario en Visitas** | Vista mensual con eventos y visitas programadas |
+| 📊 **Importar Excel nativo** | Sube `.xlsx` directamente — ya no necesitas convertir a CSV |
+| 💬 **WhatsApp individual** | Mensaje personalizado desde el detalle de cada beneficiario |
+| 🔎 **Filtros de edad y dups** | Ahora funcionan en la búsqueda avanzada |
+| 🗜️ **Compresión automática** | Historial se comprime si el almacenamiento supera el 75% |
+| 🐛 **PDF corregido** | Íconos de visita aparecen correctamente en el PDF imprimible |
+| ⚡ **SW mejorado** | Las llamadas al API de Anthropic ya no se cachean offline |
+| 📱 **Shortcuts PWA** | "Nuevo registro" y "Buscar" disponibles desde el ícono de la app |
+
+---
+
+## ⌨️ Atajos de teclado (escritorio)
+
+| Tecla | Acción |
+|---|---|
+| `/` | Ir a Búsqueda y enfocar el campo |
+| `N` | Abrir formulario de nuevo registro |
+| `A` | Abrir Asistente IA |
+| `H` | Ir a Inicio |
+| `S` | Ir a Estadísticas |
+| `Esc` | Cerrar panel o modal activo |
 
 ---
 
@@ -64,4 +93,13 @@ Funciona **100% sin internet** — todos los datos se guardan en tu dispositivo.
 - iPhone: iOS 14+ / Safari
 - Android: Chrome 90+
 - Sin conexión a internet requerida después de la primera carga
-- **Asistente IA**: Requiere conexión a internet solo cuando uses el chat
+- **Asistente IA**: Requiere conexión a internet + API Key de Anthropic
+- **Importar Excel**: Requiere conexión (carga SheetJS la primera vez)
+
+---
+
+## 💾 Respaldo y migración
+
+- Ve a **General → Almacenamiento → Respaldar JSON** para exportar todos tus datos
+- Usa **Importar → CSV/Excel** para restaurar o migrar desde otra app
+- Se recomienda hacer respaldo semanal si tienes más de 500 registros
