@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Pensionados MX"/>
 <meta name="theme-color" id="meta-tc" content="#05090f"/>
-<title>Pensionados MX v34</title>
+<title>Pensionados MX v36</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ========== THEMES ========== */
@@ -90,15 +90,15 @@ html,body{height:100%;min-height:-webkit-fill-available;overflow:hidden;backgrou
 *::-webkit-scrollbar{display:none;}*{scrollbar-width:none;}
 input,select,textarea,button{font-family:var(--fnt);-webkit-appearance:none;appearance:none;}
 body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;min-height:-webkit-fill-available;}
-.hdr{padding:calc(var(--st) + 6px) 16px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--b1);position:relative;z-index:10;}
-.hdr-logo{width:36px;height:36px;border-radius:10px;background:var(--lg);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.hdr-text{flex:1;}
-.hdr-title{font-size:16px;font-weight:800;letter-spacing:-.4px;}
-.hdr-sub{font-size:11px;color:var(--sft);margin-top:1px;font-weight:500;}
-.hdr-right{display:flex;align-items:center;gap:8px;}
-.hdr-badge{background:var(--a);color:#fff;font-size:11px;font-weight:700;border-radius:12px;padding:3px 10px;font-family:'Fira Code',monospace;}
-.hdr-btn{width:32px;height:32px;border-radius:8px;background:var(--s2);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:.15s;}
-.hdr-btn:active{background:var(--b1);}
+/* .hdr defined below in v36 redesign block */
+/* .hdr-logo defined below */
+/* .hdr-text below */
+/* .hdr-title below */
+/* .hdr-sub below */
+/* .hdr-right below */
+/* .hdr-badge below */
+/* .hdr-btn below */
+/* .hdr-btn:active below */
 .tabs{display:flex;overflow-x:auto;flex-shrink:0;border-bottom:1px solid var(--b1);background:var(--bg);}
 .tab{flex:none;padding:9px 14px;font-size:12px;font-weight:700;color:var(--mut);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;letter-spacing:-.1px;}
 .tab.on{color:var(--a2);border-bottom-color:var(--a);}
@@ -134,7 +134,185 @@ body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;mi
 .qb-lbl{font-size:8px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;line-height:1.2;}
 .qb-n{font-size:13px;font-weight:800;font-family:'Fira Code',monospace;line-height:1;}
 /* ── HERO TOTAL CARD ── */
-.hero-card{background:var(--lg);border-radius:var(--r);padding:16px 16px 14px;margin-bottom:12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;}
+/* ══════════════════════════════════════════════
+   v36 — REDISEÑO COMPLETO: NAV · HEADER · HOME
+   ══════════════════════════════════════════════ */
+
+/* ── HEADER mejorado ── */
+.hdr{padding:calc(var(--st) + 4px) 14px 8px;display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:50;}
+.hdr-logo{width:38px;height:38px;border-radius:11px;background:var(--lg);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,.35);}
+.hdr-text{flex:1;min-width:0;}
+.hdr-title{font-size:15px;font-weight:900;letter-spacing:-.4px;color:var(--txt);}
+.hdr-sub{font-size:10px;color:var(--sft);font-weight:600;margin-top:1px;}
+.hdr-clock{display:none;} /* reloj oculto — espacio para título */
+.hdr-right{display:flex;align-items:center;gap:6px;}
+.hdr-badge{background:var(--a);color:#fff;font-size:10px;font-weight:800;border-radius:10px;padding:3px 9px;font-family:'Fira Code',monospace;min-width:32px;text-align:center;}
+.hdr-btn{width:36px;height:36px;border-radius:10px;background:var(--s2);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;}
+.hdr-btn:active{background:var(--b2);transform:scale(.93);}
+/* offline banner más visible */
+.pwa-offline{display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#dc2626,#ef4444);color:#fff;text-align:center;font-size:12px;font-weight:800;padding:8px;letter-spacing:.3px;}
+.pwa-offline.show{display:block;}
+
+/* ── BOTTOM NAV — rediseño total ── */
+.bnav{
+  display:flex;background:var(--s1);
+  border-top:1px solid var(--b1);
+  padding:6px 4px calc(var(--sb) + 6px);
+  flex-shrink:0;position:fixed;
+  bottom:0;left:0;right:0;z-index:60;
+  box-shadow:0 -4px 24px rgba(0,0,0,.35);
+}
+/* cada botón de nav */
+.nb{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;gap:3px;
+  background:none;border:none;cursor:pointer;
+  color:var(--sft);font-size:9px;font-weight:800;
+  padding:4px 2px 2px;transition:.18s;
+  text-transform:uppercase;letter-spacing:.35px;
+  font-family:var(--fnt);-webkit-tap-highlight-color:transparent;
+  min-width:0;
+}
+.nb-ico-wrap{
+  position:relative;width:44px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;margin-bottom:1px;
+  transition:.2s;
+}
+.nb-svg{width:22px;height:22px;stroke:currentColor;transition:.2s;stroke-width:1.8;}
+/* estado activo — pill azul bajo el icono */
+.nb.on{color:var(--a2);}
+.nb.on .nb-ico-wrap{background:rgba(59,130,246,.15);}
+.nb.on .nb-svg{stroke:var(--a2);stroke-width:2.2;filter:drop-shadow(0 0 5px rgba(96,165,250,.5));}
+/* dot badge */
+.nb-dot{position:absolute;top:2px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--s1);display:none;}
+.nb-dot.on{display:block;}
+.nb-count{position:absolute;top:-2px;right:-2px;min-width:16px;height:16px;border-radius:8px;background:var(--red);color:#fff;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--s1);display:none;pointer-events:none;}
+.nb-count.on{display:flex;}
+/* botón admin especial */
+.nb-admin .nb-svg{stroke:var(--vio)!important;}
+.nb-admin.on .nb-ico-wrap{background:rgba(139,92,246,.18)!important;}
+.nb-admin.on .nb-svg{stroke:var(--vio)!important;filter:drop-shadow(0 0 6px var(--vio))!important;}
+.nb-admin.on{color:var(--vio)!important;}
+/* pulse dot */
+.nb-dot-pulse{display:block!important;animation:pls 1.4s infinite;}
+@keyframes pls{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.5;}}
+
+/* ── FAB — ahora más grande y accesible ── */
+.fab{
+  position:fixed;right:14px;
+  bottom:calc(var(--nh) + var(--sb) + 14px);
+  height:50px;border-radius:25px;
+  background:var(--lg);color:#fff;
+  font-size:14px;font-weight:800;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  gap:7px;padding:0 20px;
+  box-shadow:0 6px 24px rgba(99,102,241,.5);
+  z-index:70;transition:.2s;letter-spacing:-.2px;
+  font-family:var(--fnt);
+}
+.fab:active{transform:scale(.95);box-shadow:0 3px 12px rgba(99,102,241,.4);}
+
+/* ── TABS SCROLLABLE — más compactos ── */
+.tabs{display:flex;overflow-x:auto;flex-shrink:0;border-bottom:1px solid var(--b1);background:var(--bg);scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:none;padding:8px 13px;font-size:11px;font-weight:700;color:var(--mut);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;font-family:var(--fnt);}
+.tab.on{color:var(--a2);border-bottom-color:var(--a2);}
+
+/* ── MAIN CONTENT — padding correcto ── */
+.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px calc(var(--nh) + var(--sb) + 20px);}
+
+/* ══ HOME SCREEN — cómoda y clara ══ */
+
+/* búsqueda */
+.home-srch{display:flex;align-items:center;gap:0;background:var(--card);border:1.5px solid var(--b2);border-radius:16px;padding:2px 14px;margin-bottom:14px;transition:.2s;}
+.home-srch:focus-within{border-color:var(--a);box-shadow:0 0 0 3px rgba(59,130,246,.12);}
+.home-srch-ico{font-size:16px;color:var(--sft);margin-right:10px;}
+#hsq{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:14px;font-family:var(--fnt);padding:13px 0;}
+#hsq::placeholder{color:var(--sft);}
+
+/* hero card */
+.hero-card{background:var(--lg);border-radius:var(--r);padding:20px 18px 18px;margin-bottom:14px;cursor:pointer;transition:.15s;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;}
+.hero-card::after{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06);}
+.hero-card:active{transform:scale(.98);opacity:.9;}
+.hero-n{font-size:58px;font-weight:800;font-family:'Fira Code',monospace;color:#fff;line-height:1;}
+.hero-lbl{font-size:11px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.6);}
+.hero-arr{font-size:28px;color:rgba(255,255,255,.55);margin-right:2px;}
+
+/* stat cards 2×2 más grandes */
+.stat-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.scard{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:18px 10px 14px;cursor:pointer;transition:.15s;text-align:center;}
+.scard:active{transform:scale(.94);opacity:.85;}
+.scard-n{font-size:32px;font-weight:800;font-family:'Fira Code',monospace;line-height:1;margin-bottom:6px;}
+.scard-l{font-size:10px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.4px;line-height:1.3;}
+
+/* progreso de visitas */
+.vis-prog-wrap{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);padding:16px 16px 14px;margin-bottom:14px;}
+.vis-prog-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.vis-prog-title{font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;}
+.vis-prog-pct{font-size:16px;font-weight:800;font-family:'Fira Code',monospace;color:var(--a2);}
+.vis-prog-bar{height:9px;background:var(--s2);border-radius:99px;overflow:hidden;margin-bottom:11px;}
+.vis-prog-fill{height:100%;background:var(--lg);border-radius:99px;transition:width .5s ease;}
+.vis-prog-detail{display:flex;gap:8px;}
+.vpd{flex:1;background:var(--s2);border-radius:var(--r3);padding:9px 6px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;}
+.vpd:active{opacity:.8;transform:scale(.97);}
+
+/* botón QR prominente */
+.home-qr-btn{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(59,130,246,.08));
+  border:1.5px solid rgba(99,102,241,.3);
+  border-radius:var(--r);padding:16px 18px;
+  margin-bottom:14px;cursor:pointer;transition:.15s;width:100%;
+}
+.home-qr-btn:active{transform:scale(.98);background:rgba(99,102,241,.18);}
+.home-qr-ico{font-size:28px;flex-shrink:0;}
+.home-qr-txt{flex:1;text-align:left;}
+.home-qr-title{font-size:14px;font-weight:800;color:var(--txt);margin-bottom:3px;}
+.home-qr-sub{font-size:11px;color:var(--sft);}
+.home-qr-arr{font-size:20px;color:var(--a2);}
+
+/* programas en grid 4 col */
+.prog-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.pp{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:12px 4px 10px;text-align:center;cursor:pointer;transition:.15s;border-bottom:3px solid transparent;}
+.pp:active{transform:scale(.92);}
+.pp-ico{font-size:20px;margin-bottom:4px;display:block;}
+.pp-code{font-size:9px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.4px;}
+.pp-n{font-size:17px;font-weight:800;font-family:'Fira Code',monospace;margin-top:3px;}
+
+/* sh2 encabezados de sección */
+.sh2{font-size:10px;font-weight:900;color:var(--sft);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;margin-top:6px;display:flex;align-items:center;justify-content:space-between;}
+.sh2-n{font-family:'Fira Code',monospace;font-size:10px;color:var(--a2);background:rgba(59,130,246,.12);padding:2px 9px;border-radius:99px;}
+
+/* insight chip */
+.insight-strip{background:linear-gradient(135deg,rgba(99,102,241,.13),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.28);border-radius:var(--r2);padding:13px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:.15s;}
+.insight-strip:active{opacity:.85;}
+.insight-ico{font-size:20px;flex-shrink:0;margin-top:1px;}
+.insight-lbl{font-size:9px;font-weight:900;color:var(--ind);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.insight-txt{font-size:12px;color:var(--t2);line-height:1.55;}
+.insight-refresh{font-size:16px;color:var(--sft);flex-shrink:0;margin-top:2px;}
+
+/* alerta sin visitar */
+.alert-no-visit{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);border-left:3px solid var(--red);border-radius:var(--r2);padding:14px 14px;margin-bottom:14px;cursor:pointer;transition:.15s;}
+.alert-no-visit:active{opacity:.85;}
+.alert-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.alert-ico{font-size:22px;}
+.alert-title{font-size:13px;font-weight:800;color:var(--txt);}
+.alert-sub{font-size:11px;color:var(--sft);margin-top:2px;}
+.alert-count{font-size:24px;font-weight:800;font-family:'Fira Code',monospace;color:var(--red);}
+.alert-names{display:flex;flex-wrap:wrap;gap:6px;}
+.alert-names span{background:rgba(239,68,68,.12);color:var(--red);font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+
+/* pendientes */
+.pend-item{display:flex;align-items:center;gap:12px;padding:14px 14px;background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--amb);border-radius:var(--r2);margin-bottom:8px;cursor:pointer;transition:.15s;}
+.pend-item:active{transform:scale(.98);}
+.pend-av{width:42px;height:42px;border-radius:50%;background:var(--lg);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+.pend-name{font-size:13px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pend-sec{font-size:11px;color:var(--sft);margin-top:2px;}
+.pend-badge{font-size:10px;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(245,158,11,.15);color:var(--amb);flex-shrink:0;}
+
 .hero-card:active{transform:scale(.98);opacity:.9;}
 .hero-card::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08);}
 .hero-card::before{content:'';position:absolute;right:40px;bottom:-30px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.05);}
@@ -3740,7 +3918,73 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .cl-item{font-size:12px;color:var(--t2);padding:3px 0;
   display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
 .cl-item::before{content:'→';color:var(--sft);flex-shrink:0;}
+
+/* ═══ v37 NUEVAS FEATURES ═══ */
+
+/* ── MAPA DE SECCIONES ── */
+.sec-view-toggle{display:flex;gap:6px;margin-bottom:12px;}
+.sec-vt-btn{flex:1;padding:8px;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;color:var(--sft);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--fnt);transition:.15s;}
+.sec-vt-btn.on{background:var(--a);border-color:var(--a);color:#fff;}
+.sec-heatmap{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px;}
+.sec-tile{border-radius:12px;padding:10px 6px 8px;text-align:center;cursor:pointer;transition:.18s;border:1.5px solid transparent;position:relative;}
+.sec-tile:active{transform:scale(.92);}
+.sec-tile-num{font-size:16px;font-weight:900;font-family:'Fira Code',monospace;line-height:1;margin-bottom:2px;}
+.sec-tile-pct{font-size:9px;font-weight:800;opacity:.85;letter-spacing:.3px;}
+.sec-tile-cnt{font-size:8px;opacity:.6;margin-top:1px;}
+.sec-tile.t-verde{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.4);color:#22c55e;}
+.sec-tile.t-amarillo{background:rgba(251,191,36,.2);border-color:rgba(251,191,36,.4);color:#fbbf24;}
+.sec-tile.t-naranja{background:rgba(249,115,22,.2);border-color:rgba(249,115,22,.4);color:#f97316;}
+.sec-tile.t-rojo{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.4);color:#ef4444;}
+.sec-heatmap-legend{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.shl-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:var(--sft);}
+.shl-dot{width:8px;height:8px;border-radius:50%;}
+.sec-heatmap-summary{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.shms-ring{position:relative;width:54px;height:54px;flex-shrink:0;}
+.shms-ring svg{transform:rotate(-90deg);}
+
+/* ── NOTIFICACIONES ── */
+.notif-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--b1);}
+.notif-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);border-radius:7px;padding:2px 8px;font-size:9px;font-weight:800;margin-left:6px;}
+
+/* ── QR SHEET ── */
+.qr-sheet-wrap{padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.qr-box{background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:center;}
+.qr-info{text-align:center;}
+.qr-info-name{font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px;}
+.qr-info-sub{font-size:11px;color:var(--sft);}
+.qr-actions{display:flex;gap:8px;width:100%;}
+
+/* ── SYNC INDICATOR ── */
+.sync-pending-badge{display:none;position:absolute;top:-3px;right:-3px;background:var(--amb);color:#000;font-size:8px;font-weight:900;border-radius:6px;padding:1px 5px;font-family:'Fira Code',monospace;}
+.sync-pending-badge.show{display:block;}
+.sync-status-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:10px 14px;margin-bottom:10px;}
+.sync-status-dot{width:8px;height:8px;border-radius:50%;background:var(--mut);}
+.sync-status-dot.online{background:var(--grn);}
+.sync-status-dot.pending{background:var(--amb);animation:pls 1.2s infinite;}
+
+/* ── EDAD EN TARJETA ── */
+.edad-chip{display:inline-flex;align-items:center;background:rgba(99,102,241,.15);color:var(--ind);border:1px solid rgba(99,102,241,.3);border-radius:6px;font-size:9px;font-weight:800;padding:1px 6px;margin-left:4px;font-family:'Fira Code',monospace;}
+
+/* ── PLANTILLAS WHATSAPP ── */
+.wa-template-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.wa-tpl{background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px;cursor:pointer;transition:.15s;}
+.wa-tpl:active{border-color:var(--a);background:var(--card);}
+.wa-tpl-ico{font-size:18px;margin-bottom:4px;}
+.wa-tpl-name{font-size:11px;font-weight:800;color:var(--txt);}
+.wa-tpl-preview{font-size:9px;color:var(--sft);margin-top:2px;line-height:1.4;}
+.wa-tpl.selected{border-color:var(--grn);background:rgba(34,197,94,.08);}
+
+/* ── RUTA DE VISITA ── */
+.ruta-card{background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:14px;margin-bottom:12px;}
+.ruta-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1);}
+.ruta-item:last-child{border-bottom:none;}
+.ruta-num{width:22px;height:22px;border-radius:50%;background:var(--a);color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ruta-name{flex:1;font-size:12px;font-weight:700;color:var(--txt);}
+.ruta-col{font-size:10px;color:var(--sft);}
 </style>
+<!-- FIX v35: jsQR precargado en head → SW lo cachea en install → funciona offline -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
@@ -3781,7 +4025,7 @@ if('serviceWorker' in navigator){
       </div>
       <div class="aw-title">Pensionados MX</div>
       <div class="aw-sub">Sistema de gestión de beneficiarios de programas sociales</div>
-      <div class="aw-version">⚡ v32 · PWA Offline · IA</div>
+      <div class="aw-version">⚡ v36 · PWA Offline · IA</div>
       <div class="aw-pills">
         <div class="aw-pill">🔒 SHA-256</div>
         <div class="aw-pill">📡 Sin internet</div>
@@ -4047,24 +4291,25 @@ if('serviceWorker' in navigator){
 <div id="guest-banner"><span>👻 MODO INVITADO — Solo lectura</span> <span class="gb-upgrade" onclick="doLogout();setTimeout(()=>showSlide('as-register'),100)">Crear cuenta ↗</span></div>
 <div id="user-banner"><span>👤 <span id="user-banner-name">Usuario</span> · Acceso registrado</span> <span style="font-size:10px;opacity:.7">Solo lectura en datos protegidos</span></div>
 <div class="hdr">
-  <div class="hdr-logo" style="overflow:hidden;padding:0" onclick="go('inicio')">
-    <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <div class="hdr-logo" onclick="go('inicio')" style="overflow:hidden;padding:0">
+    <svg width="38" height="38" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
       <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a50d4"/><stop offset="100%" stop-color="#6b77ff"/></linearGradient></defs>
       <rect width="36" height="36" rx="10" fill="url(#sg)"/>
-      <path d="M18 5 L30 10 L30 20 C30 26 24 31 18 33 C12 31 6 26 6 20 L6 10 Z" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+      <path d="M18 5 L30 10 L30 20 C30 26 24 31 18 33 C12 31 6 26 6 20 L6 10 Z" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
       <text x="18" y="22" text-anchor="middle" font-family="'Inter',sans-serif" font-size="11" font-weight="800" fill="white" letter-spacing="-0.5">PM</text>
     </svg>
   </div>
-  <!-- Clock widget -->
-  <div class="hdr-clock" onclick="toggleClockMode()">
-    <div class="hdr-clock-time" id="hdr-clock-time">00:00</div>
-    <div class="hdr-clock-date" id="hdr-clock-date"></div>
+  <!-- Título app -->
+  <div class="hdr-text">
+    <div class="hdr-title">Pensionados MX</div>
+    <div class="hdr-sub" id="hdr-sub-txt">Cargando…</div>
   </div>
   <div class="hdr-right">
     <!-- Firebase sync indicator -->
     <div class="fb-sync-dot" id="fb-sync-dot" title="Sincronización" onclick="openFbStatus()" style="display:none">
       <div class="fb-sync-ring"></div>
     </div>
+    <span id="sync-pending-badge" style="display:none;background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid #f59e0b60;font-size:9px;font-weight:800;border-radius:8px;padding:3px 7px;font-family:'Fira Code',monospace;cursor:pointer" onclick="openFbStatus()">0 sin sync</span>
     <div class="hdr-badge" id="hdr-n">0</div>
     <div class="hdr-btn" id="appear-btn" title="Apariencia">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -4078,16 +4323,16 @@ if('serviceWorker' in navigator){
   </div>
 </div>
 <div class="tabs" id="tabs">
-  <button class="tab on" onclick="go('inicio')">Inicio</button>
-  <button class="tab" onclick="go('registros')">Registros</button>
-  <button class="tab" onclick="go('buscar')">Búsqueda</button>
-  <button class="tab" onclick="go('visitas')">Visitas</button>
-  <button class="tab" onclick="go('estadisticas')">Stats</button>
-  <button class="tab" onclick="go('descargar')">Exportar</button>
-  <button class="tab" onclick="go('importar')">Importar</button>
-  <button class="tab" onclick="go('secciones')">Secciones</button>
-  <button class="tab" onclick="go('historial')">Historial</button>
-  <button class="tab" onclick="go('accesos')">🔐 Accesos</button>
+  <button class="tab on" onclick="go('inicio')">🏠 Inicio</button>
+  <button class="tab" onclick="go('registros')">📋 Registros</button>
+  <button class="tab" onclick="go('buscar')">🔍 Búsqueda</button>
+  <button class="tab" onclick="go('visitas')">📍 Visitas</button>
+  <button class="tab" onclick="go('estadisticas')">📊 Stats</button>
+  <button class="tab" onclick="go('descargar')">⬇️ Exportar</button>
+  <button class="tab" onclick="go('importar')">⬆️ Importar</button>
+  <button class="tab" onclick="go('secciones')">🗺️ Secciones</button>
+  <button class="tab" style="display:none" onclick="go('historial')">📜 Historial</button>
+  <button class="tab" style="display:none" onclick="go('accesos')">🔐 Accesos</button>
   <button class="tab" onclick="go('general')">⚙️ General</button>
   <button class="tab tab-admin" id="tab-admin" onclick="go('admin')" style="display:none">👑 Admin</button>
 </div>
@@ -4098,7 +4343,8 @@ if('serviceWorker' in navigator){
     <div id="bd-alert-wrap"></div>
     <!-- v17: Alerta sin visitar -->
     <div id="alert-no-visit-wrap"></div>
-    <!-- Búsqueda rápida -->
+
+    <!-- v35: Búsqueda rápida mejorada -->
     <div class="home-srch-drop">
       <div class="home-srch">
         <span class="home-srch-ico">⌕</span>
@@ -4107,6 +4353,17 @@ if('serviceWorker' in navigator){
       </div>
       <div class="home-srch-res" id="hsq-res" style="display:none"></div>
     </div>
+
+    <!-- v35: Botón escanear QR/INE integrado en pantalla principal -->
+    <button class="home-qr-btn" onclick="openIDScanner()">
+      <span class="home-qr-ico">📷</span>
+      <div class="home-qr-txt">
+        <div class="home-qr-title">Escanear INE / QR / CURP</div>
+        <div class="home-qr-sub">Funciona sin internet · Llena el formulario automático</div>
+      </div>
+      <span class="home-qr-arr">›</span>
+    </button>
+
     <!-- Hero total card -->
     <div class="hero-card" id="hero-total" onclick="openQF('todos','📋 Todos los beneficiarios')">
       <div>
@@ -4117,21 +4374,24 @@ if('serviceWorker' in navigator){
       <div style="flex:1"></div>
       <span class="hero-arr">📋</span>
     </div>
+
     <!-- Barra de progreso de visitas -->
     <div class="vis-prog-wrap" id="vis-prog-wrap"></div>
-    <!-- 3 stat cards: Duplicados, USA, Pendientes -->
-    <div class="stat-row3" id="stats-row3"></div>
 
+    <!-- 3 stat cards -->
+    <div class="stat-row3" id="stats-row3"></div>
 
     <!-- Programas -->
     <div class="sh2">Programas</div>
     <div class="prog-row" id="prog-row"></div>
+
+    <!-- v32: IA Insight chip — arriba para ser visible -->
+    <div id="insight-wrap"></div>
+
     <div id="pend-wrap"></div>
+
     <!-- v23: Meta+Racha+Nota -->
     <div id="meta-wrap"></div>
-
-    <!-- v32: IA Insight chip -->
-    <div id="insight-wrap"></div>
 
     <!-- v32: Logros / Achievements -->
     <div id="ach-wrap"></div>
@@ -4148,7 +4408,8 @@ if('serviceWorker' in navigator){
     <div class="sort-bar" id="sort-bar"></div>
     <div class="batch-bar" id="batch-bar">
       <span class="batch-bar-txt" id="batch-txt">0 seleccionados</span>
-      <button class="batch-btn" onclick="batchMarkVisited()">✅ Visitados</button>
+      <button class="batch-btn" onclick="batchMarkVisited()">✅ Visit.</button>
+      <button class="batch-btn" style="color:#25d366" onclick="sendWhatsAppBulk()">💬 WA</button>
       <button class="batch-btn" onclick="batchExport()">⬇️ CSV</button>
       <button class="batch-btn" onclick="batchDelete()" style="background:rgba(239,68,68,.25)">🗑️</button>
       <button class="batch-btn" onclick="exitBatch()">✕</button>
@@ -4484,6 +4745,7 @@ if('serviceWorker' in navigator){
   </div>
   <!-- SECCIONES -->
   <div class="pg" id="p-secciones">
+    <div id="sec-pg-heatmap"></div>
     <div class="sec-pg-header">
       <div class="sec-pg-search">
         <span style="font-size:15px;color:var(--mut)">⌕</span>
@@ -4712,6 +4974,28 @@ if('serviceWorker' in navigator){
           <div class="gen-row-sub" id="gen-storage-sub">Calculando…</div>
         </div>
         <div class="gen-row-chev">›</div>
+      </div>
+    </div>
+
+    <!-- ── ACCESOS RÁPIDOS: Historial y Accesos ── -->
+    <div class="gen-group-label">📋 Registros del sistema</div>
+    <div class="gen-group">
+      <div class="gen-row" onclick="go('historial')">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">🕐</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Historial de cambios</div>
+          <div class="gen-row-sub">Ver todos los cambios realizados a registros</div>
+        </div>
+        <div style="color:var(--sft);font-size:14px">›</div>
+      </div>
+      <div class="gen-row-div"></div>
+      <div class="gen-row" onclick="go('accesos')">
+        <div class="gen-row-ico" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">🔐</div>
+        <div class="gen-row-body">
+          <div class="gen-row-title">Bitácora de accesos</div>
+          <div class="gen-row-sub">Registro de inicios de sesión y actividad</div>
+        </div>
+        <div style="color:var(--sft);font-size:14px">›</div>
       </div>
     </div>
 
@@ -4960,7 +5244,7 @@ if('serviceWorker' in navigator){
 <div class="bnav">
   <button class="nb on" id="nb-inicio" onclick="go('inicio')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/>
       </svg>
       <div class="nb-dot" id="nb-dot-inicio"></div>
@@ -4970,18 +5254,18 @@ if('serviceWorker' in navigator){
   <button class="nb" id="nb-registros" onclick="go('registros')">
     <div class="nb-ico-wrap">
       <div class="nb-count" id="nb-count-registros"></div>
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/>
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h1M9 13h6M9 17h6"/>
       </svg>
       <div class="nb-dot" id="nb-dot-registros"></div>
     </div>
-    <span>Lista</span>
+    <span>Registros</span>
   </button>
   <button class="nb" id="nb-visitas" onclick="go('visitas')">
     <div class="nb-ico-wrap">
       <div class="nb-count" id="nb-count-visitas" style="background:var(--amb)"></div>
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s-8-5.6-8-11a8 8 0 0116 0c0 5.4-8 11-8 11z"/><circle cx="12" cy="11" r="3"/>
       </svg>
       <div class="nb-dot" id="nb-dot-visitas"></div>
     </div>
@@ -4989,7 +5273,7 @@ if('serviceWorker' in navigator){
   </button>
   <button class="nb" id="nb-buscar" onclick="go('buscar')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
       </svg>
       <div class="nb-dot" id="nb-dot-buscar"></div>
@@ -4998,8 +5282,8 @@ if('serviceWorker' in navigator){
   </button>
   <button class="nb" id="nb-estadisticas" onclick="go('estadisticas')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/>
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="7" rx="1"/><rect x="12" y="9" width="3" height="11" rx="1"/><rect x="17" y="5" width="3" height="15" rx="1"/>
       </svg>
       <div class="nb-dot" id="nb-dot-estadisticas"></div>
     </div>
@@ -5007,19 +5291,19 @@ if('serviceWorker' in navigator){
   </button>
   <button class="nb" id="nb-general" onclick="go('general')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
-        <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>
       </svg>
       <div class="nb-dot" id="nb-dot-general"></div>
     </div>
-    <span>General</span>
+    <span>Config</span>
   </button>
   <!-- ADMIN NAV — hidden until creator login -->
   <button class="nb nb-admin" id="nb-admin" onclick="go('admin')" style="display:none">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2L3 7l9 5 9-5-9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/>
+      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
       </svg>
       <div class="nb-dot nb-dot-pulse" id="nb-dot-admin"></div>
     </div>
@@ -5111,7 +5395,7 @@ if('serviceWorker' in navigator){
     <div class="eip-grid" id="eip-grid"></div>
     <div id="eip-hist-wrap"></div>
   </div>
-  <div class="fg" style="margin-top:14px"><label class="fl">Folio</label><input class="fi" id="e-folio" placeholder="F-0001"/></div>
+  <div class="fg" style="margin-top:14px"><label class="fl">Folio</label><input class="fi" id="e-folio" oninput="this.value=this.value.toUpperCase()" placeholder="F-0001"/></div>
   <div class="fg">
     <div class="scan-btns-row" id="scan-btns-row">
       <button type="button" class="scan-form-btn-half" id="scan-form-btn" onclick="openIDScanner()">
@@ -5145,9 +5429,9 @@ if('serviceWorker' in navigator){
       <option value="BBJ">📚 BBJ – Becas Benito Juárez</option>
     </select>
   </div>
-  <div class="fg"><label class="fl">Nombre Completo</label><input class="fi" id="e-nombre" placeholder="Apellido Apellido Nombre"/></div>
+  <div class="fg"><label class="fl">Nombre Completo</label><input class="fi" id="e-nombre" oninput="this.value=this.value.toUpperCase()" placeholder="Apellido Apellido Nombre"/></div>
   <div class="fr2">
-    <div class="fg"><label class="fl">CURP</label><input class="fi" id="e-curp" placeholder="XXXX000000XXXXXX00" maxlength="18" oninput="onCURPInput(this.value)" style="font-family:'Fira Code',monospace;letter-spacing:.5px"/></div>
+    <div class="fg"><label class="fl">CURP</label><input class="fi" id="e-curp" oninput="this.value=this.value.toUpperCase()" maxlength="18" placeholder="XXXX000000XXXXXX00" maxlength="18" oninput="onCURPInput(this.value)" style="font-family:'Fira Code',monospace;letter-spacing:.5px"/></div>
     <div class="fg"><label class="fl">Fecha de Nacimiento</label><input class="fi" id="e-fnac" type="date" oninput="updEdad()"/></div>
   </div>
   <div id="edad-display" style="display:none;margin:-8px 0 12px;padding:8px 12px;background:var(--s2);border-radius:var(--r3);font-size:12px;font-weight:700;color:var(--a2)"></div>
@@ -5453,6 +5737,36 @@ function shareRecord(id){
 }
 
 /* ── Plantilla CSV ── */
+/* ══ v37: QR del beneficiario ══ */
+function showBenefQR(id){
+  const r=R.find(x=>x.id===id);if(!r)return;
+  const data=`PENSIONADOS MX
+Nombre: ${r.nombre}
+Folio: ${r.folio}
+Programa: ${r.tipo}
+Sección: ${r.seccion||'—'}
+Estatus: ${r.estatus}`;
+  conf2(
+    `📱 QR de ${r.nombre.split(' ')[0]}`,
+    `<div style="text-align:center;padding:8px 0">
+      <div id="benef-qr-box" style="display:inline-block;background:#fff;padding:12px;border-radius:12px;margin-bottom:12px"></div>
+      <div style="font-size:11px;color:var(--sft);font-weight:700">Escanea para ver datos del beneficiario</div>
+      <div style="font-size:10px;color:var(--mut);margin-top:4px">${r.folio} · ${r.tipo} · Sec.${r.seccion||'—'}</div>
+    </div>`,
+    null,null
+  );
+  setTimeout(()=>{
+    const box=document.getElementById('benef-qr-box');
+    if(!box)return;
+    box.innerHTML='';
+    if(typeof QRCode!=='undefined'){
+      new QRCode(box,{text:data,width:180,height:180,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
+    }else{
+      box.innerHTML='<div style="color:#666;font-size:12px;padding:20px">QR no disponible<br>sin internet</div>';
+    }
+  },200);
+}
+
 function dlCSVTemplate(){
   const hdr='Folio,Nombre,Programa,Telefono,Domicilio,Numero,Colonia,Seccion,Area,Ruta,CURP,FechaNacimiento,Estatus,Observaciones';
   const ex='F-0001,GARCIA LOPEZ JUAN,PAM,492-000-0000,Calle Juarez,123,Centro,617,Norte,Ruta 1,GALJ800101HZSMRN05,1980-01-01,Activo,Ejemplo';
@@ -5723,6 +6037,10 @@ function go(tab){
     }
   }
   curTab=tab;
+  // v36: actualizar subtítulo del header según tab
+  const _tabNames={inicio:'Panel principal',registros:'Lista de beneficiarios',buscar:'Búsqueda avanzada',visitas:'Control de visitas',estadisticas:'Estadísticas',descargar:'Exportar datos',importar:'Importar datos',secciones:'Secciones electorales',historial:'Historial de cambios',accesos:'Bitácora de accesos',general:'Configuración general',admin:'Panel de administrador'};
+  const _hdrSub=document.getElementById('hdr-sub-txt');
+  if(_hdrSub)_hdrSub.textContent=_tabNames[tab]||tab;
   // Update presence with current tab
   if(typeof presenceUpdateTab==='function') presenceUpdateTab(tab);
   // Update tab position dots
@@ -5785,7 +6103,7 @@ function recCard(r){
         ${avatarHtml}
         <div class="rec-meta">
           <div class="rec-name" style="${r.txtColor?'color:'+r.txtColor:''}">${r.nombre}</div>
-          <div class="rec-folio">${r.folio} · ID ${r.id} · ${p.ico} ${r.tipo}${r.seccion?' · Sec.'+r.seccion:''}</div>
+          <div class="rec-folio">${r.folio} · ID ${r.id} · ${p.ico} ${r.tipo}${r.seccion?' · Sec.'+r.seccion:''}${(()=>{if(!r.fnac)return'';try{const a=Math.floor((new Date()-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));return a>0&&a<120?' · <span style="color:var(--a2);font-weight:700">'+a+'a</span>'  :''}catch{return''}})()}</div>
         </div>
         ${r.dup?'<span class="dup-tag">⚠️ DUP</span>':daysBadge}
       </div>
@@ -5895,6 +6213,9 @@ function renderInicio(){requestAnimationFrame(()=>_renderInicioInner());}
 function _renderInicioInner(){
   detectDups();
   const total=R.length,act=R.filter(r=>r.estatus==='Activo').length;
+  // v36: actualizar subtítulo header con resumen
+  const _sub=document.getElementById('hdr-sub-txt');
+  if(_sub)_sub.textContent=total?`${total} beneficiarios · ${act} activos`:'Panel principal';
   const dups=R.filter(r=>r.dup).length,pend=R.filter(r=>r.estatus==='Pendiente').length;
   const usa=R.filter(r=>r.uso==='Estados Unidos').length;
   const visOk=R.filter(r=>r.visita==='Si').length;
@@ -6318,12 +6639,18 @@ function doSaveRec(){
   if(!folio){snack('⚠️ El folio es requerido','⚠️');return;}
   if(!tipo){snack('⚠️ Selecciona un programa','⚠️');return;}
   if(!nombre){snack('⚠️ El nombre es requerido','⚠️');return;}
+  // v36: Validación CURP
+  const _curpRaw=(document.getElementById('e-curp')?.value||'').trim().toUpperCase();
+  if(_curpRaw && !/^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}$/.test(_curpRaw)){
+    snack('⚠️ CURP inválido — 18 caracteres (ej: GAEJ800101HZSMRN05)','⚠️');
+    document.getElementById('e-curp')?.focus();return;
+  }
   const sb=document.getElementById('save-bar');
   sb.className='save-bar saving';
   document.getElementById('save-txt').textContent='Guardando…';
   const nd={
     folio,tipo,nombre,
-    tel:    document.getElementById('e-tel').value.trim(),
+    tel:    (()=>{const t=document.getElementById('e-tel').value.trim();return t?t.replace(/[^0-9\-\+\(\)\s]/g,''):'';})(),
     dom:    document.getElementById('e-dom').value.trim(),
     num:    document.getElementById('e-num').value.trim(),
     col:    document.getElementById('e-col').value.trim(),
@@ -6553,6 +6880,10 @@ function openDet(id){
     <div class="btn2" style="margin-top:6px">
       <button type="button" class="btn btn-s" onclick="shareRecord(${r.id})"${!can('shareRecord')?' style="display:none"':''}>📤 Compartir</button>
       ${r.tel?`<button type="button" class="btn btn-s" style="color:#22c55e;border-color:#22c55e" onclick="sendWhatsAppReminder(${r.id})">💬 WhatsApp</button>`:(r.dom||r.col)?`<button type="button" class="btn btn-s" onclick="copyAddr(${r.id})">📋 Copiar dir.</button>`:''}
+    </div>
+    <div class="btn2" style="margin-top:6px">
+      <button type="button" class="btn btn-s" style="color:var(--ind);border-color:var(--ind)" onclick="showBenefQR(${r.id})">📱 QR Beneficiario</button>
+      ${r.dom?`<button type="button" class="btn btn-s" style="color:var(--grn);border-color:var(--grn)" onclick="openMapForRecord(${r.id})">🗺️ Ver en mapa</button>`:''}
     </div>
     ${r.tel&&(r.dom||r.col)?`<div class="btn2" style="margin-top:6px"><button type="button" class="btn btn-s" onclick="copyAddr(${r.id})">📋 Copiar dirección</button>${r.dom?`<button type="button" class="btn btn-s" onclick="openMapForRecord(${r.id})">🗺️ Ver mapa</button>`:''}</div>`:''}
     <div class="btn2" style="margin-top:6px">
@@ -7871,6 +8202,41 @@ function renderSecPg(){
     return;
   }
 
+  // v37: HEAT MAP de cobertura
+  const allVisData=allSecs.map(s=>{
+    const regs=R.filter(r=>r.seccion===s);
+    const cnt=regs.length;
+    const vis=regs.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
+    return{s,cnt,pct:cnt?Math.round(vis/cnt*100):0};
+  });
+  const heatEl=document.getElementById('sec-pg-heatmap');
+  if(heatEl&&allVisData.length){
+    const heatCells=allVisData.map(function(d){
+      var s=d.s,cnt=d.cnt,pct=d.pct;
+      var clr=pct>=80?'#22c55e':pct>=50?'#f59e0b':pct>=20?'#f97316':'#ef4444';
+      var bg=pct>=80?'rgba(34,197,94,.15)':pct>=50?'rgba(245,158,11,.15)':pct>=20?'rgba(249,115,22,.15)':'rgba(239,68,68,.13)';
+      return '<div onclick="openQF(\'sec_'+s+'\',\'📍 Sección '+s+'\')" style="background:'+bg+';border:1.5px solid '+clr+'40;border-radius:9px;padding:6px 4px;text-align:center;cursor:pointer;transition:.15s">'
+        +'<div style="font-size:13px;font-weight:900;font-family:\'Fira Code\',monospace;color:'+clr+'">'+pct+'%</div>'
+        +'<div style="font-size:9px;font-weight:800;color:var(--sft);margin-top:1px">Sec.'+s+'</div>'
+        +'<div style="font-size:8px;color:var(--mut)">'+cnt+' reg</div>'
+        +'</div>';
+    }).join('');
+    var c80=allVisData.filter(function(x){return x.pct>=80;}).length;
+    var cMid=allVisData.filter(function(x){return x.pct>=20&&x.pct<80;}).length;
+    var cLow=allVisData.filter(function(x){return x.pct<20;}).length;
+    heatEl.innerHTML='<div style="background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:12px 14px;margin-bottom:12px">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+      +'<div style="font-size:12px;font-weight:800;color:var(--t2)">🗺️ Mapa de Cobertura</div>'
+      +'<div style="display:flex;gap:8px;font-size:9px;font-weight:700;color:var(--sft)"><span>🔴 &lt;20%</span><span>🟡 50%</span><span>🟢 ≥80%</span></div>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px">'+heatCells+'</div>'
+      +'<div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center">'
+      +'<div style="background:rgba(34,197,94,.1);border-radius:8px;padding:6px"><div style="font-size:14px;font-weight:900;color:#22c55e">'+c80+'</div><div style="font-size:8px;font-weight:800;color:var(--mut);text-transform:uppercase">Cubiertas ≥80%</div></div>'
+      +'<div style="background:rgba(245,158,11,.1);border-radius:8px;padding:6px"><div style="font-size:14px;font-weight:900;color:#f59e0b">'+cMid+'</div><div style="font-size:8px;font-weight:800;color:var(--mut);text-transform:uppercase">En progreso</div></div>'
+      +'<div style="background:rgba(239,68,68,.1);border-radius:8px;padding:6px"><div style="font-size:14px;font-weight:900;color:#ef4444">'+cLow+'</div><div style="font-size:8px;font-weight:800;color:var(--mut);text-transform:uppercase">Críticas &lt;20%</div></div>'
+      +'</div></div>';
+  }else if(heatEl){heatEl.innerHTML='';}
+
   document.getElementById('sec-pg-list').innerHTML=filtered.map(sec=>{
     const regs=R.filter(r=>r.seccion===sec);
     const cnt=regs.length;
@@ -8461,7 +8827,8 @@ async function doLogin(){
       clearFailedAttempts();
       if(btn)btn.classList.remove('loading');
       const cfg=getEmailCfg();
-      const otpRequired=cfg&&cfg.otpRequired&&creds.email;
+      // FIX v35: sin internet → omitir OTP (no se puede enviar email sin red)
+      const otpRequired=cfg&&cfg.otpRequired&&creds.email&&navigator.onLine;
       if(otpRequired){
         const sent=await initiateOTP('creator',user,user,creds.email);
         if(!sent){logAccess('login',user,'Creator directo');startSession('creator',user,user);}
@@ -11003,2262 +11370,41 @@ function animateStats(){
   requestAnimationFrame(animateAllCounters);
 }
 // Patch _renderInicioInner by overriding it after definition
-document.addEventListener('DOMContentLoaded',()=>{},false);
-// Use a MutationObserver to auto-render v32 widgets when inicio renders
-(function patchV32(){
-  let _v32Timer=null;
-  const _origGo=window.go;
-  // Override render to add v32 widgets
-  const _origRender=window.render;
-  if(typeof _origRender==='function'){
-    window.render=function(t){
-      _origRender(t);
-      if(t==='inicio'){
-        clearTimeout(_v32Timer);
-        _v32Timer=setTimeout(renderV32Dashboard,80);
-      }
-      if(t==='estadisticas'){
-        setTimeout(()=>{
-          const sc=document.getElementById('stats-content');
-          if(sc&&!document.getElementById('v32-heatmap')){
-            const hm=renderHeatmap();
-            if(hm){
-              const div=document.createElement('div');
-              div.id='v32-heatmap';div.innerHTML=hm;
-              sc.appendChild(div);
-            }
-          }
-        },250);
-      }
-    };
-  }
-})();
 
-function renderV32Dashboard(){
-  renderAchievements();
-  renderSmartPriority();
-  renderInsight();
-}
-
-/* ────────────────────────────────────────────────────
-   ALSO HOOK into _renderInicioInner directly
-   ──────────────────────────────────────────────────── */
-(function hookInicioInner(){
-  // Wait for app to define _renderInicioInner, then wrap it
-  const _check=()=>{
-    if(typeof window._renderInicioInner==='function'&&!window._v32Patched){
-      window._v32Patched=true;
-      const orig=window._renderInicioInner;
-      window._renderInicioInner=function(){
-        orig.apply(this,arguments);
-        setTimeout(renderV32Dashboard,60);
-      };
-    }
-  };
-  setTimeout(_check,100);
-  setTimeout(_check,500);
-  setTimeout(_check,1000);
-})();
-
-/* ────────────────────────────────────────────────────
-   CHECK GOAL CELEBRATION
-   ──────────────────────────────────────────────────── */
-function checkGoalCelebration(){
-  const m=_getMeta();
-  if(m.goal&&m.done>=m.goal&&!sessionStorage.getItem('px_celebrated_'+today())){
-    sessionStorage.setItem('px_celebrated_'+today(),'1');
-    setTimeout(()=>{
-      launchConfetti();
-      snack(`🎉 ¡Meta del día completada! ${m.done}/${m.goal} visitas`,'🎉');
-    },500);
-  }
-}
-
-/* ────────────────────────────────────────────────────
-   PATCH cycleVis to trigger achievements + celebration
-   ──────────────────────────────────────────────────── */
-(function patchCycleVis(){
-  const check=()=>{
-    if(typeof window.cycleVis==='function'&&!window._v32CyclePatched){
-      window._v32CyclePatched=true;
-      const orig=window.cycleVis;
-      window.cycleVis=function(id,e){
-        orig.apply(this,arguments);
-        setTimeout(()=>{checkAchievements();checkGoalCelebration();},200);
-      };
-    }
-  };
-  setTimeout(check,200);setTimeout(check,800);
-})();
-
-/* ════════════════════════════════════════════════════════════════
-   ID SCANNER v32 — INE · CURP · QR · PDF417 · Code128 · Code39
-   ════════════════════════════════════════════════════════════════ */
-
-let _scanStream=null;
-let _scanAnimFrame=null;
-let _scanDetector=null;
-let _scanResult=null;
-let _scanCanvas=null;
-let _scanCtx=null;
-let _jsQRLoaded=false;
-let _scanActive=false;
-
-/* ── Open / Close ── */
-function openIDScanner(){
-  const overlay=document.getElementById('scan-overlay');
-  if(!overlay)return;
-  overlay.classList.add('on');
-  _scanActive=true;
-  setScanStatus('Iniciando cámara…','');
-  startScanCamera();
-}
-
-function closeIDScanner(){
-  _scanActive=false;
-  stopScanCamera();
-  document.getElementById('scan-overlay')?.classList.remove('on');
-  document.getElementById('scan-result-overlay')?.classList.remove('on');
-}
-
-function retryScan(){
-  document.getElementById('scan-result-overlay')?.classList.remove('on');
-  _scanResult=null;
-  _scanActive=true;
-  setScanStatus('Apunta la cámara al código QR o código de barras','');
-  startScanLoop();
-}
-
-/* ── Camera ── */
-async function startScanCamera(){
-  try{
-    const constraints={
-      video:{
-        facingMode:{ideal:'environment'},
-        width:{ideal:1280},height:{ideal:720},
-      }
-    };
-    _scanStream=await navigator.mediaDevices.getUserMedia(constraints);
-    const video=document.getElementById('scan-video');
-    video.srcObject=_scanStream;
-    video.onloadedmetadata=()=>{
-      video.play();
-      _scanCanvas=document.createElement('canvas');
-      _scanCtx=_scanCanvas.getContext('2d',{willReadFrequently:true});
-      setScanStatus('Apunta la cámara al código QR o código de barras','');
-      initBarcodeDetector();
-    };
-  }catch(err){
-    setScanStatus('⚠️ Sin acceso a la cámara. Usa la entrada manual.','error');
-    console.warn('Camera error:',err);
-  }
-}
-
-function stopScanCamera(){
-  if(_scanAnimFrame){cancelAnimationFrame(_scanAnimFrame);_scanAnimFrame=null;}
-  if(_scanStream){_scanStream.getTracks().forEach(t=>t.stop());_scanStream=null;}
-}
-
-/* ── BarcodeDetector + jsQR init ── */
-async function initBarcodeDetector(){
-  // Try native BarcodeDetector (Chrome 88+, Safari 17+)
-  if('BarcodeDetector' in window){
-    try{
-      const supported=await BarcodeDetector.getSupportedFormats();
-      _scanDetector=new BarcodeDetector({
-        formats: supported.filter(f=>['qr_code','pdf417','code_128','code_39','aztec','data_matrix','ean_13','ean_8'].includes(f))
-      });
-    }catch(e){_scanDetector=null;}
-  }
-  // Load jsQR as fallback (for QR on iOS/Firefox)
-  if(!_jsQRLoaded){
-    const sc=document.createElement('script');
-    sc.src='https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js';
-    sc.onload=()=>{_jsQRLoaded=true;};
-    document.head.appendChild(sc);
-  }
-  startScanLoop();
-}
-
-/* ── Scan loop ── */
-function startScanLoop(){
-  if(_scanAnimFrame){cancelAnimationFrame(_scanAnimFrame);_scanAnimFrame=null;}
-  let lastScan=0;
-  async function loop(ts){
-    if(!_scanActive)return;
-    _scanAnimFrame=requestAnimationFrame(loop);
-    // Throttle: try every 400ms
-    if(ts-lastScan<400)return;
-    lastScan=ts;
-    const video=document.getElementById('scan-video');
-    if(!video||video.readyState<2)return;
-    // Draw frame to canvas
-    _scanCanvas.width=video.videoWidth||640;
-    _scanCanvas.height=video.videoHeight||480;
-    _scanCtx.drawImage(video,0,0,_scanCanvas.width,_scanCanvas.height);
-    // Try detection
-    let rawText=null;
-    // 1. BarcodeDetector (native)
-    if(_scanDetector){
-      try{
-        const barcodes=await _scanDetector.detect(_scanCanvas);
-        if(barcodes.length>0){rawText=barcodes[0].rawValue;}
-      }catch{}
-    }
-    // 2. jsQR fallback
-    if(!rawText&&_jsQRLoaded&&typeof jsQR==='function'){
-      try{
-        const imgData=_scanCtx.getImageData(0,0,_scanCanvas.width,_scanCanvas.height);
-        const result=jsQR(imgData.data,imgData.width,imgData.height);
-        if(result){rawText=result.data;}
-      }catch{}
-    }
-    if(rawText){
-      _scanActive=false;
-      if(navigator.vibrate)navigator.vibrate([50,30,50]);
-      processScannedText(rawText);
-    }
-  }
-  _scanAnimFrame=requestAnimationFrame(loop);
-}
-
-/* ── Process & Parse ── */
-function processScannedText(raw){
-  setScanStatus('✅ ¡Código detectado!','found');
-  const data=parseMexicanID(raw);
-  _scanResult={raw,data};
-  showScanResult(data,raw);
-}
-
-function parseMexicanID(raw){
-  const data={};
-  if(!raw)return data;
-  const text=raw.trim();
-
-  // 1. Extract CURP (18-char pattern)
-  const curpRx=/[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}/g;
-  const curpMatch=text.match(curpRx);
-  if(curpMatch){
-    data.curp=curpMatch[0];
-    const pc=parseCURP(data.curp);
-    if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
-  }
-
-  // 2. Pipe-delimited INE/IFE format
-  // Possible: NOMBRE|AP1|AP2|DIA|MES|ANO|SEXO|EDO|MUN|SEC|CLAVE
-  // Or:       CLAVE|NOMBRE|AP1|AP2|ANO|MES|DIA|SEXO|EDO...
-  if(text.includes('|')){
-    const parts=text.split('|').map(s=>s.trim().replace(/['"]/g,''));
-    // Find name parts (all-letter strings > 2 chars that aren't state codes)
-    const nameCandidates=parts.filter(p=>/^[A-ZÁÉÍÓÚÑÜ ]{3,}$/.test(p)&&p.length>2&&!['HOMBRE','MUJER','MASCULINO','FEMENINO'].includes(p));
-    if(nameCandidates.length>=2&&!data.nombre){
-      // Reconstruct: typically APELLIDO1 APELLIDO2 NOMBRE
-      data.nombre=nameCandidates.slice(0,3).join(' ');
-    }else if(nameCandidates.length===1&&!data.nombre){
-      data.nombre=nameCandidates[0];
-    }
-    // Find date-like parts: 2-digit numbers (day, month, year)
-    const nums=parts.filter(p=>/^\d{1,4}$/.test(p));
-    // Look for 4-digit year
-    const yr4=parts.find(p=>/^(19|20)\d{2}$/.test(p));
-    const yr2=parts.find(p=>/^\d{2}$/.test(p)&&parseInt(p)>=0&&parseInt(p)<=99);
-    if(yr4&&!data.fnac){
-      const mo=nums.find(n=>parseInt(n)>=1&&parseInt(n)<=12&&n!==yr4.slice(2));
-      const dy=nums.find(n=>parseInt(n)>=1&&parseInt(n)<=31&&n!==mo);
-      if(mo&&dy){data.fnac=`${yr4}-${mo.padStart(2,'0')}-${dy.padStart(2,'0')}`;}
-    }
-    // Find section (seccion): typically 3-4 digit number
-    const sec=parts.find(p=>/^\d{3,4}$/.test(p));
-    if(sec)data.seccion=sec;
-    // Find electoral key (18+ alphanumeric)
-    const clave=parts.find(p=>/^[A-Z0-9]{18,20}$/.test(p)&&p!==data.curp);
-    if(clave&&!data.clave)data.clave=clave;
-    // Find address-like field (has digits + letters)
-    const addr=parts.find(p=>p.length>8&&/\d/.test(p)&&/[A-Z]/.test(p)&&!curpRx.test(p)&&p!==data.clave);
-    if(addr)data.dom=addr;
-  }
-
-  // 3. Semicolon-delimited fallback
-  if(!data.nombre&&text.includes(';')){
-    const parts=text.split(';').map(s=>s.trim());
-    const nameCandidates=parts.filter(p=>/^[A-ZÁÉÍÓÚÑÜ ]{3,}$/.test(p));
-    if(nameCandidates.length>=1)data.nombre=nameCandidates.slice(0,3).join(' ');
-  }
-
-  // 4. URL with CURP param (gob.mx, RENAPO)
-  if(!data.curp&&text.includes('curp=')){
-    const m=text.match(/curp=([A-Z0-9]{18})/i);
-    if(m){
-      data.curp=m[1].toUpperCase();
-      const pc=parseCURP(data.curp);
-      if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
-    }
-  }
-
-  // 5. Plain CURP only
-  if(!data.curp&&/^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{2}$/.test(text.trim())){
-    data.curp=text.trim();
-    const pc=parseCURP(data.curp);
-    if(pc){data.fnac=pc.fnac;data.sexo=pc.sexo;}
-  }
-
-  // 6. Try to extract name from unstructured text (APELLIDO APELLIDO NOMBRE pattern)
-  if(!data.nombre){
-    // Look for 2+ consecutive capitalized words at start
-    const nameRx=/^([A-ZÁÉÍÓÚÑÜ]{2,}\s+[A-ZÁÉÍÓÚÑÜ]{2,}(?:\s+[A-ZÁÉÍÓÚÑÜ]{2,})?)/m;
-    const nm=text.match(nameRx);
-    if(nm)data.nombre=nm[1].trim();
-  }
-
-  // 7. Extract phone number
-  if(!data.tel){
-    const telRx=/(\d{3}[-.\s]?\d{3}[-.\s]?\d{4}|\d{10})/;
-    const tm=text.match(telRx);
-    if(tm)data.tel=tm[1].replace(/[-.\s]/g,'').replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3');
-  }
-
-  // 8. Extract postal code / section from raw numbers
-  if(!data.seccion){
-    const sc=text.match(/(?:SECCION|SECC?\.?|SEC)\s*:?\s*(\d{3,4})/i);
-    if(sc)data.seccion=sc[1];
-  }
-
-  return data;
-}
-
-/* ── Show result preview ── */
-function showScanResult(data,raw){
-  stopScanCamera();
-  const fieldsEl=document.getElementById('scan-result-fields');
-  const rawEl=document.getElementById('scan-result-raw');
-  const subEl=document.getElementById('scan-result-sub');
-  if(!fieldsEl)return;
-
-  const hasData=Object.keys(data).length>0;
-  const fieldDefs=[
-    {key:'nombre',lbl:'Nombre',cls:''},
-    {key:'curp',lbl:'CURP',cls:'mono'},
-    {key:'fnac',lbl:'F. Nacimiento',cls:'mono'},
-    {key:'sexo',lbl:'Sexo',cls:''},
-    {key:'seccion',lbl:'Sección',cls:'mono'},
-    {key:'dom',lbl:'Domicilio',cls:''},
-    {key:'tel',lbl:'Teléfono',cls:'mono'},
-  ];
-
-  if(hasData){
-    const rows=fieldDefs.filter(f=>data[f.key]).map(f=>`
-      <div class="scan-field-row">
-        <span class="scan-field-lbl">${f.lbl}</span>
-        <span class="scan-field-val ${f.cls}">${data[f.key]}</span>
-      </div>`).join('');
-    fieldsEl.innerHTML=rows||'<p style="color:var(--mut);font-size:12px;text-align:center;padding:8px">No se detectaron campos conocidos en este código.</p>';
-    subEl.textContent=`${Object.keys(data).filter(k=>k!=='sexo'||true).length} campo(s) detectado(s) — revisa antes de usar`;
-  }else{
-    fieldsEl.innerHTML=`<div style="text-align:center;padding:12px">
-      <div style="font-size:28px;margin-bottom:8px">🤔</div>
-      <div style="font-size:13px;font-weight:700;color:var(--txt)">No se reconoció el formato</div>
-      <div style="font-size:12px;color:var(--sft);margin-top:4px">Puedes ver el texto raw y copiar manualmente</div>
-    </div>`;
-    subEl.textContent='Formato no reconocido — texto raw disponible';
-  }
-  rawEl.textContent=raw;
-  document.getElementById('scan-result-overlay').classList.add('on');
-}
-
-/* ── Apply result to form ── */
-function applyScanResult(){
-  if(!_scanResult)return;
-  const data=_scanResult.data;
-  const raw=_scanResult.raw;
-  // Fill form fields
-  if(data.nombre){const el=document.getElementById('e-nombre');if(el)el.value=data.nombre;}
-  if(data.curp){
-    const el=document.getElementById('e-curp');
-    if(el){el.value=data.curp;onCURPInput(data.curp);}
-  }
-  if(data.fnac){const el=document.getElementById('e-fnac');if(el){el.value=data.fnac;if(typeof updEdad==='function')updEdad();}}
-  if(data.tel){const el=document.getElementById('e-tel');if(el)el.value=data.tel;}
-  if(data.dom){const el=document.getElementById('e-dom');if(el)el.value=data.dom;}
-  if(data.seccion){const el=document.getElementById('e-seccion');if(el)el.value=data.seccion;}
-  // Close all scan UI
-  document.getElementById('scan-result-overlay')?.classList.remove('on');
-  closeIDScanner();
-  // Feedback
-  const filled=Object.keys(data).filter(k=>data[k]).length;
-  snack(`✅ ${filled} campo${filled>1?'s':''} llenado${filled>1?'s':''} desde el ID`,'✅');
-}
-
-/* ── Manual CURP input ── */
-function openManualCURP(){
-  const curp=prompt('Ingresa el CURP (18 caracteres):','');
-  if(!curp)return;
-  const clean=curp.trim().toUpperCase();
-  if(clean.length<10){snack('⚠️ CURP inválido','⚠️');return;}
-  processScannedText(clean);
-}
-
-/* ── Helpers ── */
-function setScanStatus(msg,type=''){
-  const el=document.getElementById('scan-status-txt');
-  if(!el)return;
-  el.textContent=msg;
-  el.className='scan-status-txt'+(type?' '+type:'');
-}
-
-/* ═══════════════════════════════════════════════════
-   PHOTO ID SCANNER v35 — Claude Vision OCR
-   Toma foto de la credencial → IA extrae datos →
-   Hoja de guardado rápido con selector de programa
-   ═══════════════════════════════════════════════════ */
-
-let _pidStream = null;
-let _pidImageB64 = null;  // base64 jpeg captured
-// pid program handled via select#pid-tipo-sel
-
-/* ── Open / Close ── */
-function openPhotoIDScanner(){
-  const ov = document.getElementById('pid-overlay');
-  if(!ov) return;
-  _pidImageB64 = null;
-  document.getElementById('pid-processing').classList.remove('on');
-  document.getElementById('pid-capture-btn').disabled = false;
-  ov.classList.add('on');
-  _startPIDCamera();
-}
-
-function closePhotoIDScanner(){
-  _stopPIDCamera();
-  document.getElementById('pid-overlay')?.classList.remove('on');
-}
-
-function closePIDResult(){
-  document.getElementById('pid-result-overlay')?.classList.remove('on');
-}
-
-function retryPIDPhoto(){
-  closePIDResult();
-  openPhotoIDScanner();
-}
-
-/* ── Camera ── */
-async function _startPIDCamera(){
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} }
-    });
-    _pidStream = stream;
-    const v = document.getElementById('pid-video');
-    v.srcObject = stream;
-    v.play();
-  }catch(err){
-    snack('⚠️ Sin acceso a la cámara — usa "Elegir de galería"','⚠️');
-    console.warn('PID camera error:', err);
-  }
-}
-
-function _stopPIDCamera(){
-  if(_pidStream){ _pidStream.getTracks().forEach(t=>t.stop()); _pidStream=null; }
-}
-
-/* ── Capture ── */
-function capturePhotoID(){
-  const video = document.getElementById('pid-video');
-  const canvas = document.getElementById('pid-canvas');
-  if(!video || video.readyState < 2){
-    snack('⚠️ Cámara no lista','⚠️');
-    return;
-  }
-  // Draw video frame to canvas
-  canvas.width = video.videoWidth || 1280;
-  canvas.height = video.videoHeight || 720;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  // Get base64 jpeg (0.88 quality — balance tamaño/calidad)
-  const dataURL = canvas.toDataURL('image/jpeg', 0.88);
-  _pidImageB64 = dataURL.split(',')[1];
-  _stopPIDCamera();
-  _processPIDImage(dataURL);
-}
-
-function handlePIDFile(event){
-  const file = event.target.files?.[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (e)=>{
-    const dataURL = e.target.result;
-    _pidImageB64 = dataURL.split(',')[1];
-    _stopPIDCamera();
-    _processPIDImage(dataURL);
-  };
-  reader.readAsDataURL(file);
-  // Reset input
-  event.target.value = '';
-}
-
-/* ── Process with Claude Vision ── */
-async function _processPIDImage(dataURL){
-  // Show processing state
-  document.getElementById('pid-processing').classList.add('on');
-  document.getElementById('pid-capture-btn').disabled = true;
-
-  const apiKey = getAIKey();
-  if(!apiKey){
-    _hidePIDProcessing();
-    // No API key: show empty editable fields so user fills manually
-    _showPIDResult({confianza:'baja',_noai:true}, dataURL);
-    return;
-  }
-
-  const prompt = `Eres un sistema OCR especializado en credenciales de identidad mexicanas (INE/IFE, CURP, pasaporte).
-
-Analiza la imagen de esta credencial y extrae TODOS los datos visibles. Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markdown, sin bloques de código.
-
-El JSON debe tener EXACTAMENTE esta estructura (usa null para campos no encontrados):
-{
-  "nombre": "APELLIDO1 APELLIDO2 NOMBRE(S) en mayúsculas",
-  "curp": "18 caracteres CURP o null",
-  "fnac": "YYYY-MM-DD o null",
-  "sexo": "Masculino o Femenino o null",
-  "dom": "calle y número o null",
-  "col": "colonia o null",
-  "municipio": "municipio o null",
-  "estado": "estado o null",
-  "seccion": "número de sección electoral o null",
-  "clave": "clave de elector 18-20 chars o null",
-  "tel": "teléfono o null",
-  "confianza": "alta | media | baja",
-  "tipo_doc": "INE | IFE | CURP | PASAPORTE | OTRO"
-}`;
-
-  try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method: 'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        messages:[{
-          role:'user',
-          content:[
-            { type:'image', source:{ type:'base64', media_type:'image/jpeg', data: _pidImageB64 } },
-            { type:'text', text: prompt }
-          ]
-        }]
-      })
-    });
-
-    const data = await res.json();
-    _hidePIDProcessing();
-
-    if(data.error){
-      const msg = data.error.type === 'authentication_error'
-        ? '🔑 API Key inválida — ve al Asistente IA y corrígela'
-        : `⚠️ Error IA: ${data.error.message||'Inténtalo de nuevo'}`;
-      snack(msg,'⚠️');
-      closePhotoIDScanner();
-      return;
-    }
-
-    const rawText = data?.content?.[0]?.text || '';
-    let extracted = {};
-    try{
-      // Strip any accidental markdown
-      const clean = rawText.replace(/```json|```/g,'').trim();
-      extracted = JSON.parse(clean);
-    }catch(e){
-      console.warn('PID JSON parse error:', e, rawText);
-      snack('⚠️ No se pudo leer el formato de la IA','⚠️');
-      extracted = {};
-    }
-
-    _showPIDResult(extracted, dataURL);
-
-  }catch(err){
-    _hidePIDProcessing();
-    snack('⚠️ Error de conexión al analizar','⚠️');
-    console.warn('PID fetch error:', err);
-    closePhotoIDScanner();
-  }
-}
-
-function _hidePIDProcessing(){
-  document.getElementById('pid-processing')?.classList.remove('on');
-  document.getElementById('pid-capture-btn').disabled = false;
-}
-
-/* ── Show result ── */
-function _showPIDResult(data, dataURL){
-  // Close camera overlay
-  document.getElementById('pid-overlay')?.classList.remove('on');
-
-  // Show thumbnail
-  const thumb = document.getElementById('pid-thumb');
-  if(dataURL){ thumb.src = dataURL; thumb.style.display='block'; }
-  else{ thumb.style.display='none'; }
-
-  // Confidence badge / no-AI notice
-  const isNoAI = !!data._noai;
-  const conf = data.confianza || 'media';
-  const confMap = { alta:'pid-conf-high', media:'pid-conf-med', baja:'pid-conf-low' };
-  const confLabel = { alta:'Alta confianza ✅', media:'Confianza media ⚠️', baja:'Revisa los datos' };
-  document.getElementById('pid-res-sub').innerHTML = isNoAI
-    ? '⚠️ Sin API Key — llena los campos manualmente &nbsp;<button onclick="openAI();setTimeout(openAIKeySheet,300)" style="font-size:10px;font-weight:800;background:rgba(99,102,241,.3);color:var(--a3);border:none;border-radius:6px;padding:2px 8px;cursor:pointer">🔑 Configurar</button>'
-    : `Revisa y completa antes de guardar &nbsp;<span class="pid-conf-badge ${confMap[conf]}">${confLabel[conf]}</span>`;
-
-  // Fields to show / edit
-  const fields = [
-    { key:'nombre', lbl:'Nombre', ph:'APELLIDO APELLIDO NOMBRE', full:true },
-    { key:'curp',   lbl:'CURP',   ph:'XXXX000000XXXXXX00', mono:true },
-    { key:'fnac',   lbl:'Nacimiento', ph:'YYYY-MM-DD', type:'date' },
-    { key:'dom',    lbl:'Domicilio', ph:'Calle / Av.' },
-    { key:'col',    lbl:'Colonia',  ph:'Colonia' },
-    { key:'seccion',lbl:'Sección',  ph:'0000', mono:true },
-    { key:'tel',    lbl:'Teléfono', ph:'492-000-0000', mono:true },
-  ];
-
-  const fieldsEl = document.getElementById('pid-res-fields');
-  fieldsEl.innerHTML = fields.map(f=>`
-    <div class="pid-res-field-row">
-      <span class="pid-res-lbl">${f.lbl}</span>
-      <input class="pid-res-inp${f.mono?' mono':''}" id="pid-f-${f.key}"
-        type="${f.type||'text'}" placeholder="${f.ph}"
-        value="${_esc(data[f.key]||'')}"
-        ${f.full?'style="font-weight:700"':''} />
-    </div>`).join('');
-
-  // CURP auto-parse if available
-  if(data.curp){ try{ onCURPInput(data.curp); }catch{} }
-
-  // Reset program select
-  const tipoSel = document.getElementById('pid-tipo-sel');
-  if(tipoSel){ tipoSel.value=''; tipoSel.style.borderColor='var(--b2)'; }
-  const note = document.getElementById('pid-no-prog-note');
-  if(note) note.style.display='none';
-  document.getElementById('pid-folio-inp').value = '';
-
-  // Show result overlay
-  document.getElementById('pid-result-overlay').classList.add('on');
-}
-
-/* ── Program toggle ── */
-function onPIDTipoChange(sel){
-  const note = document.getElementById('pid-no-prog-note');
-  if(note) note.style.display = sel.value === 'NINGUNO' ? 'block' : 'none';
-  // Visual border feedback
-  sel.style.borderColor = sel.value === 'NINGUNO' ? 'rgba(248,113,113,.6)' : sel.value ? 'var(--ind)' : 'var(--b2)';
-}
-
-/* ── Save record ── */
-function savePIDRecord(){
-  if(typeof requirePerm==='function' && !requirePerm('editRecord','Guardar registros requiere una cuenta')) return;
-
-  const nombre = (document.getElementById('pid-f-nombre')?.value||'').trim().toUpperCase();
-  if(!nombre){ snack('⚠️ El nombre es requerido','⚠️'); return; }
-
-  const tipo = (document.getElementById('pid-tipo-sel')?.value||'');
-  if(!tipo){ snack('⚠️ Selecciona el programa o "No tiene programa"','⚠️'); return; }
-
-  const curp = (document.getElementById('pid-f-curp')?.value||'').trim().toUpperCase();
-  const fnac = document.getElementById('pid-f-fnac')?.value || '';
-  const dom  = (document.getElementById('pid-f-dom')?.value||'').trim();
-  const col  = (document.getElementById('pid-f-col')?.value||'').trim();
-  const sec  = (document.getElementById('pid-f-seccion')?.value||'').trim();
-  const tel  = (document.getElementById('pid-f-tel')?.value||'').trim();
-  const folioRaw = (document.getElementById('pid-folio-inp')?.value||'').trim().toUpperCase();
-
-  // Auto-generate folio if empty
-  const folio = folioRaw || ('F-' + String(nxtId()).padStart(4,'0'));
-
-  const newId = nxtId();
-  const rec = {
-    id: newId,
-    folio,
-    tipo: tipo === 'NINGUNO' ? '' : tipo,
-    nombre,
-    curp,
-    fnac,
-    tel,
-    dom,
-    num: '',
-    col,
-    seccion: sec,
-    area: '',
-    ruta: '',
-    visita: 'Pendiente',
-    uso: 'Mexico',
-    estatus: tipo === 'NINGUNO' ? 'Sin programa' : 'Activo',
-    obs: tipo === 'NINGUNO' ? 'Sin programa al momento del registro' : '',
-    photo: _pidImageB64 ? ('data:image/jpeg;base64,' + _pidImageB64) : null,
-    txtColor: '',
-    fecha: today(),
-    ult: '',
-    dup: false,
-  };
-
-  R.push(rec);
-  H.push({
-    id: Date.now(),
-    folio,
-    nombre,
-    cambios: 'Beneficiario registrado vía escáner de foto · ID #' + newId + (tipo === 'NINGUNO' ? ' · Sin programa' : ' · Programa: '+tipo),
-    motivo: 'Scanner de credencial',
-    resp: 'Usuario',
-    fecha: nowStr(),
-    tipo: 'new'
-  });
-
-  detectDups(); svR(); svH();
-  render(curTab); upHdr();
-
-  document.getElementById('pid-result-overlay')?.classList.remove('on');
-  snack('✅ ' + nombre.split(' ')[0] + ' registrado correctamente','✅');
-}
-
-/* ── Helper ── */
-function _esc(str){ return String(str||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-/* Ensure pid-form-btn shows in add/edit mode same as scan-form-btn */
-(function patchPIDBtns(){
-  const check=()=>{
-    if(typeof window.openShAdd==='function'&&!window._v35PIDBtnPatched){
-      window._v35PIDBtnPatched=true;
-      const origAdd=window.openShAdd;
-      window.openShAdd=function(){
-        origAdd.apply(this,arguments);
-        const r=document.getElementById('scan-btns-row');
-        if(r)r.style.display='grid';
-      };
-    }
-  };
-  setTimeout(check,300); setTimeout(check,900);
-})();
-
-/* ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── */
-
-/* Ensure scan button shows/hides when editing vs adding */
-(function patchScanBtn(){
-  const check=()=>{
-    if(typeof window.openShAdd==='function'&&!window._v32ScanPatched){
-      window._v32ScanPatched=true;
-      const origAdd=window.openShAdd;
-      const origEdit=window.openEditSh;
-      window.openShAdd=function(){
-        origAdd.apply(this,arguments);
-        const btn=document.getElementById('scan-form-btn');
-        if(btn)btn.style.display='flex';
-      };
-      if(typeof origEdit==='function'){
-        window.openEditSh=function(id){
-          origEdit.apply(this,arguments);
-          // Keep scan btn visible for editing too (to update fields)
-          const btn=document.getElementById('scan-form-btn');
-          if(btn)btn.style.display='flex';
-        };
-      }
-    }
-  };
-  setTimeout(check,300);setTimeout(check,900);
-})();
-
-
-
-/* ── 1. LONG-PRESS CONTEXT MENU ── */
-let _ctxTimer=null, _ctxActive=false;
-
-function _ctxMenuItems(recordId){
-  const r=R.find(x=>x.id===recordId);
-  if(!r) return [];
-  const items=[];
-  if(can('markVisit')) items.push({ico:'✅',lbl:'Marcar visitado',cls:'success',fn:`detSetField(${recordId},'visita','Si')`});
-  if(can('editRecord')) items.push({ico:'✏️',lbl:'Editar',cls:'info',fn:`openEditSh(${recordId})`});
-  if(can('editRecord')) items.push({ico:'📋',lbl:'Duplicar registro',cls:'info',fn:`duplicateRecord(${recordId})`});
-  items.push({ico:'📞',lbl:'Llamar',cls:'info',fn:`window.location='tel:${r.tel||""}'`});
-  items.push({ico:'📋',lbl:'Copiar nombre',cls:'info',fn:`copyToClipboard('${r.nombre.replace(/'/g,"\\'")}','Nombre')`});
-  if(can('deleteRecord')) items.push({ico:'🗑️',lbl:'Eliminar',cls:'danger',fn:`confDel(${recordId})`});
-  return items;
-}
-
-function showCtxMenu(e, recordId){
-  removeCtxMenu();
-  _ctxActive=true;
-  if(navigator.vibrate) navigator.vibrate(30);
-  const items=_ctxMenuItems(recordId);
-  const overlay=document.createElement('div');
-  overlay.className='ctx-overlay';
-  overlay.onclick=removeCtxMenu;
-  document.body.appendChild(overlay);
-  const menu=document.createElement('div');
-  menu.className='ctx-menu';
-  menu.id='ctx-menu';
-  const x=Math.min(e.clientX||e.touches?.[0]?.clientX||100, window.innerWidth-200);
-  const y=Math.min(e.clientY||e.touches?.[0]?.clientY||200, window.innerHeight-items.length*50);
-  menu.style.cssText=`left:${x}px;top:${y}px;`;
-  menu.innerHTML=items.map(it=>`<div class="ctx-item ${it.cls||''}" onclick="removeCtxMenu();${it.fn}"><span class="ctx-ico">${it.ico}</span>${it.lbl}</div>`).join('');
-  document.body.appendChild(menu);
-}
-
-function removeCtxMenu(){
-  document.getElementById('ctx-menu')?.remove();
-  document.querySelectorAll('.ctx-overlay').forEach(e=>e.remove());
-  _ctxActive=false;
-}
-
-function initLongPress(el, recordId){
-  if(el.dataset.lp) return;
-  el.dataset.lp='1';
-  let timer=null;
-  const start=e=>{
-    timer=setTimeout(()=>{showCtxMenu(e,recordId);},500);
-  };
-  const cancel=()=>{clearTimeout(timer);};
-  el.addEventListener('touchstart',start,{passive:true});
-  el.addEventListener('touchend',cancel,{passive:true});
-  el.addEventListener('touchmove',cancel,{passive:true});
-  el.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,recordId);});
-}
-
-/* ── 2. DUPLICATE RECORD ── */
-function duplicateRecord(id){
-  const r=R.find(x=>x.id===id);if(!r)return;
-  const newR={
-    ...r,
-    id:     Date.now(),
-    folio:  r.folio+'-COPIA',
-    fecha:  today(),
-    ult:    nowStr(),
-    dup:    false,
-    photo:  null,
-  };
-  R.push(newR);
-  H.push({id:Date.now()+1,folio:newR.folio,nombre:newR.nombre,cambios:'Duplicado desde '+r.folio,motivo:'Duplicar',resp:authDisplayName||authUsername,fecha:nowStr(),tipo:'new'});
-  detectDups();svR();svH();upHdr();renderList();renderInicio();
-  snack('📋 Registro duplicado: '+newR.folio,'📋');
-  haptic([15,10,15]);
-}
-
-/* ── 3. AUTOCOMPLETE for colonias/secciones ── */
-const _coloniasCache=()=>[...new Set(R.map(r=>r.col).filter(Boolean))].sort();
-const _seccionesCache=()=>[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
-const _rutasCache=()=>[...new Set(R.map(r=>r.ruta).filter(Boolean))].sort();
-
-function attachAutocomplete(inputId, listFn){
-  const input=document.getElementById(inputId);if(!input)return;
-  if(input.dataset.ac)return;input.dataset.ac='1';
-  let acDiv=null;
-  input.addEventListener('input',()=>{
-    const val=input.value.toLowerCase().trim();
-    if(acDiv){acDiv.remove();acDiv=null;}
-    if(!val||val.length<1)return;
-    const opts=listFn().filter(s=>s.toLowerCase().includes(val)).slice(0,6);
-    if(!opts.length)return;
-    acDiv=document.createElement('div');acDiv.className='autocomplete-list';
-    acDiv.innerHTML=opts.map(s=>`<div class="ac-item" onmousedown="event.preventDefault()" onclick="document.getElementById('${inputId}').value='${s.replace(/'/g,"\'")}';this.closest('.autocomplete-list')?.remove()">${s.replace(new RegExp('('+val.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<span class=\"ac-highlight\">$1</span>')}</div>`).join('');
-    input.parentNode.style.position='relative';
-    input.parentNode.appendChild(acDiv);
-  });
-  input.addEventListener('blur',()=>setTimeout(()=>{acDiv?.remove();acDiv=null;},200));
-}
-
-/* ── 4. FIELD HINTS ── */
-function addFieldHints(){
-  const hints={
-    'e-folio':  'Ej: 7913768 · 8 dígitos',
-    'e-nombre': 'Apellido Paterno Materno Nombre',
-    'e-tel':    'Con lada: 492-123-4567',
-    'e-curp':   '18 caracteres (ABCD123456HABCDE01)',
-    'e-col':    'Colonia o localidad',
-    'e-seccion':'Sección electoral (ej: 615)',
-  };
-  Object.entries(hints).forEach(([id,hint])=>{
-    const el=document.getElementById(id);
-    if(!el||el.parentNode.querySelector('.fi-hint'))return;
-    const h=document.createElement('div');h.className='fi-hint';h.textContent=hint;
-    el.parentNode.insertBefore(h,el.nextSibling);
-  });
-}
-
-/* ── 5. SESSION TIMEOUT WARNING ── */
-const SESSION_WARN_MINS=30;
-let _sessionTimer=null, _sessionWarnShown=false;
-
-function resetSessionTimer(){
-  clearTimeout(_sessionTimer);_sessionWarnShown=false;
-  const bar=document.getElementById('session-bar');
-  if(bar)bar.classList.remove('show');
-  if(isGuest()||!authUsername)return;
-  _sessionTimer=setTimeout(()=>{
-    _sessionWarnShown=true;
-    const bar=document.getElementById('session-bar');
-    if(bar){bar.classList.add('show');}
-    else{snack('⚠️ Sesión por expirar — toca para continuar','⚠️');}
-  },SESSION_WARN_MINS*60*1000);
-}
-function extendSession(){
-  resetSessionTimer();
-  snack('✅ Sesión extendida','✅');
-}
-
-/* ── 6. ANIMATED COUNTER ── */
-
-/* ── 7. BACKUP REMINDER ── */
-const BACKUP_REMIND_KEY='px_last_backup_remind';
-const BACKUP_REMIND_DAYS=7;
-
-function checkBackupReminder(){
-  const last=parseInt(localStorage.getItem(BACKUP_REMIND_KEY)||'0');
-  const daysSince=(Date.now()-last)/(1000*60*60*24);
-  if(daysSince>=BACKUP_REMIND_DAYS&&R.length>0&&isCreator()){
-    setTimeout(()=>{
-      const el=document.getElementById('backup-reminder');
-      if(el)el.classList.add('show');
-    },3000);
-  }
-  // Auto-compress history if storage > 75%
-  _checkStorageQuota();
-}
-function _checkStorageQuota(){
-  try{
-    const kb=parseFloat(calcStorageKB());
-    const pct=kb/5120*100;
-    if(pct>90){
-      // Critical: trim history to last 50 entries and show alert
-      if(H.length>50){H=H.slice(-50);svH();}
-      snack('⚠️ Almacenamiento al '+pct.toFixed(0)+'% — historial comprimido','⚠️');
-    } else if(pct>75){
-      // Warning: trim history to last 100 entries silently
-      if(H.length>100){H=H.slice(-100);svH();}
-    }
-  }catch{}
-}
-function dismissBackupReminder(){
-  localStorage.setItem(BACKUP_REMIND_KEY,Date.now().toString());
-  const el=document.getElementById('backup-reminder');
-  if(el)el.classList.remove('show');
-}
-function doBackupNow(){
-  dismissBackupReminder();dlBackupJSON();
-}
-
-/* ── 8. COVERAGE BY SECTION for stats ── */
-function buildCoverageBySection(){
-  const secs={};
-  R.forEach(r=>{
-    const s=r.seccion||'Sin sección';
-    if(!secs[s])secs[s]={total:0,vis:0};
-    secs[s].total++;
-    if(r.visita==='Si'||r.visita==='Sí')secs[s].vis++;
-  });
-  return Object.entries(secs)
-    .map(([s,d])=>({sec:s,...d,pct:d.total?Math.round(d.vis/d.total*100):0}))
-    .sort((a,b)=>b.pct-a.pct)
-    .slice(0,10);
-}
-
-/* ── 9. TOP COLONIAS ── */
-function buildTopColonias(n=5){
-  const map={};
-  R.forEach(r=>{const c=r.col||'Sin colonia';map[c]=(map[c]||0)+1;});
-  return Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,n);
-}
-
-/* ── 10. MONTHLY CHART ── */
-function buildMonthlyData(months=6){
-  const result=[];
-  const now=new Date();
-  for(let i=months-1;i>=0;i--){
-    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-    const label=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.getMonth()];
-    const ym=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    const count=R.filter(r=>(r.fecha||'').startsWith(ym)).length;
-    result.push({label,count,ym,isCurrent:i===0});
-  }
-  return result;
-}
-
-/* ── 11. AGE FILTER ── */
-function calcAge(fnac){
-  if(!fnac)return null;
-  const b=new Date(fnac+'T00:00:00'),n=new Date();
-  let a=n.getFullYear()-b.getFullYear();
-  if(n.getMonth()-b.getMonth()<0||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))a--;
-  return a;
-}
-let _ageMin=0,_ageMax=120;
-function filterByAge(records){
-  if(_ageMin===0&&_ageMax===120)return records;
-  return records.filter(r=>{
-    const a=calcAge(r.fnac);
-    if(a===null)return true;
-    return a>=_ageMin&&a<=_ageMax;
-  });
-}
-
-/* ── 12. RECORD COLOR LABELS ── */
-const REC_COLORS=['','#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
-function openColorPicker(recordId){
-  const r=R.find(x=>x.id===recordId);if(!r)return;
-  const cur=r.txtColor||'';
-  const html2=`<div class="rec-color-dots">
-    ${REC_COLORS.map(c=>`<div class="rec-color-dot${c===cur?' selected':''}" style="background:${c||'var(--card)'};border:2px solid var(--b2)${c===cur?';border-color:var(--txt)':''}" onclick="setRecColor(${recordId},'${c}')"></div>`).join('')}
-  </div>`;
-  conf2('🎨 Color del nombre',html2,null,null);
-}
-function setRecColor(id,color){
-  const r=R.find(x=>x.id===id);if(!r)return;
-  r.txtColor=color;r.ult=nowStr();svR();
-  closeAllSheets();
-  setTimeout(()=>openDet(id),300);
-  snack('🎨 Color actualizado','🎨');
-}
-
-/* ── 13. INLINE EDIT FROM LIST CARD ── */
-let _qEditActive=null;
-function toggleQuickEdit(recordId){
-  const wrap=document.getElementById('qedit-'+recordId);
-  if(!wrap)return;
-  if(_qEditActive&&_qEditActive!==recordId){
-    const prev=document.getElementById('qedit-'+_qEditActive);
-    if(prev)prev.classList.remove('open');
-  }
-  const open=wrap.classList.toggle('open');
-  _qEditActive=open?recordId:null;
-  if(open){
-    const inp=wrap.querySelector('.rec-qe-input');
-    if(inp){inp.focus();inp.select();}
-  }
-}
-function saveQuickEdit(recordId){
-  const wrap=document.getElementById('qedit-'+recordId);
-  const inp=wrap?.querySelector('.rec-qe-input');
-  if(!inp||!inp.value.trim())return;
-  const r=R.find(x=>x.id===recordId);if(!r)return;
-  const oldName=r.nombre;
-  r.nombre=inp.value.trim().toUpperCase();
-  r.ult=nowStr();
-  H.push({id:Date.now(),folio:r.folio,nombre:r.nombre,cambios:`Nombre: "${oldName}" → "${r.nombre}"`,motivo:'Edición rápida',resp:authDisplayName||authUsername,fecha:nowStr(),tipo:'edit'});
-  svR();svH();detectDups();
-  wrap.classList.remove('open');_qEditActive=null;
-  renderList();snack('✏️ Nombre actualizado','✏️');haptic([15]);
-}
-
-/* ── 14. FAILED LOGIN NOTIFICATION ── */
-function notifyFailedLogin(username, attempts){
-  if(isCreator()&&Notification.permission==='granted'){
-    setTimeout(()=>{
-      try{
-        new Notification('⚠️ Intento de acceso fallido',{
-          body:`Usuario "${username}" intentó entrar (intento ${attempts})`,
-          icon:'icon-192.png',tag:'login-fail'
-        });
-      }catch(e){}
-    },500);
-  }
-}
-
-/* ── 15. USAGE ANALYTICS ── */
-function buildUsageStats(){
-  const today2=today();
-  const logins=JSON.parse(localStorage.getItem('px_access_log_v1')||'[]');
-  const todayLogins=logins.filter(l=>l.ts&&l.ts.includes(new Date().toLocaleDateString('es-MX'))).length;
-  const last7=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const ds=d.toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit'});
-    const count=logins.filter(l=>l.ts&&l.ts.includes(ds)).length;
-    last7.push({ds:['Do','Lu','Ma','Mi','Ju','Vi','Sá'][d.getDay()],count});
-  }
-  return {todayLogins,last7,totalLogins:logins.length,totalRecords:R.length};
-}
-
-/* ── 16. PHOTO PINCH-TO-ZOOM ── */
-function initPhotoZoom(imgEl){
-  if(!imgEl||imgEl.dataset.zoom)return;
-  imgEl.dataset.zoom='1';
-  let scale=1,startDist=0;
-  imgEl.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){
-      startDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    }
-  },{passive:true});
-  imgEl.addEventListener('touchmove',e=>{
-    if(e.touches.length===2){
-      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-      scale=Math.min(3,Math.max(1,scale*(dist/startDist)));
-      startDist=dist;
-      imgEl.style.transform=`scale(${scale})`;
-      imgEl.style.transformOrigin='center center';
-    }
-  },{passive:true});
-  imgEl.addEventListener('touchend',e=>{
-    if(e.touches.length<2&&scale>1){
-      setTimeout(()=>{imgEl.style.transform='';scale=1;},1000);
-    }
-  },{passive:true});
-}
-
-/* ── 17. DARK/LIGHT TOGGLE IN HEADER ── */
-function quickToggleTheme(){
-  const isDark=['cosmos','aurora','solar','midnight','carbon','campo'].includes(curTheme);
-  applyTheme(isDark?'arctic':'cosmos');
-  haptic([15]);
-}
-
-/* ── 18. ANIMATED STAT NUMBERS (on stats page load) ── */
-
-/* ── 19. MAP LINK from address ── */
-function openMapForRecord(id){
-  const r=R.find(x=>x.id===id);if(!r)return;
-  const addr=[r.dom,r.num?'#'+r.num:'',r.col,'Jerez Zacatecas Mexico'].filter(Boolean).join(' ');
-  const url='https://maps.google.com/?q='+encodeURIComponent(addr);
-  window.open(url,'_blank');
-}
-
-/* ── 20. SAVED FILTER PRESETS ── */
-const FILTER_PRESETS_KEY='px_filter_presets';
-function saveFilterPreset(name){
-  const presets=JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY)||'[]');
-  presets.push({name,fT,fS,fSort,savedAt:Date.now()});
-  if(presets.length>10)presets.splice(0,1);
-  localStorage.setItem(FILTER_PRESETS_KEY,JSON.stringify(presets));
-  snack('💾 Filtro guardado: '+name,'💾');
-}
-function loadFilterPreset(preset){
-  fT=preset.fT||'todos';fS=preset.fS||'todos';fSort=preset.fSort||'az';
-  renderList();snack('🔖 Filtro: '+preset.name,'🔖');
-}
-function getFilterPresets(){
-  return JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY)||'[]');
-}
-
-/* ── 21. SECTION FILTER DROPDOWN (colonias) ── */
-function getColoniasList(){
-  return [...new Set(R.map(r=>r.col).filter(Boolean))].sort();
-}
-function filterByColonia(col){
-  fS='col_'+col;fT='todos';renderList();
-  snack('📍 Colonia: '+col,'📍');
-}
-
-/* ── 22. PULL-DOWN TO CLOSE SHEET ── */
-function initSheetPullClose(sheetId){
-  const sheet=document.getElementById(sheetId);if(!sheet)return;
-  if(sheet.dataset.pullClose)return;
-  sheet.dataset.pullClose='1';
-  let startY=0,pulling=false;
-  const hdl=sheet.querySelector('.hdl');
-  if(!hdl)return;
-  hdl.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;pulling=true;},{passive:true});
-  hdl.addEventListener('touchmove',e=>{
-    if(!pulling)return;
-    const dy=e.touches[0].clientY-startY;
-    if(dy>0) sheet.style.transform=`translateY(${Math.min(dy*.4,60)}px)`;
-  },{passive:true});
-  hdl.addEventListener('touchend',e=>{
-    if(!pulling)return;pulling=false;
-    const dy=e.changedTouches[0].clientY-startY;
-    sheet.style.transform='';
-    if(dy>80){closeSheet(sheetId);haptic([20,10,20]);}
-  },{passive:true});
-}
-
-/* ── 23. DOUBLE TAP TO EDIT INLINE ── */
-function initDoubleTapEdit(el, recordId, field){
-  if(el.dataset.dblEdit)return;
-  el.dataset.dblEdit='1';
-  let lastTap=0;
-  el.addEventListener('click',e=>{
-    const now=Date.now();
-    if(now-lastTap<350){
-      e.stopPropagation();
-      inlineEdit(recordId,field,el.textContent,'text',el.textContent);
-    }
-    lastTap=now;
-  });
-}
-
-/* ── 24. FILTER BY AGE RANGE in search ── */
-function applyAgeFilter(min,max){
-  _ageMin=parseInt(min)||0;
-  _ageMax=parseInt(max)||120;
-  const lbl=document.getElementById('age-filter-display');
-  if(lbl)lbl.textContent=min+' – '+max+' años';
-  renderList();
-}
-
-/* ── 25. IMPORT PROGRESS FEEDBACK ── */
-function _showImportProgress(current, total){
-  const pct=Math.round(current/total*100);
-  snack(`📥 Importando… ${current}/${total} (${pct}%)`, '📥');
-}
-
-/* ── 26. RECORD TEMPLATES ── */
-const REC_TEMPLATES=[
-  {name:'👴 Adulto Mayor (PAM)',defaults:{tipo:'PAM',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
-  {name:'♿ Discapacidad (PCD)', defaults:{tipo:'PCD',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
-  {name:'✈️ Migrante USA',      defaults:{tipo:'PAM',visita:'Pendiente',estatus:'Activo',uso:'Estados Unidos'}},
-  {name:'🎒 Becas (JCF)',        defaults:{tipo:'JCF',visita:'Pendiente',estatus:'Activo',uso:'Mexico'}},
-];
-function applyTemplate(idx){
-  const tmpl=REC_TEMPLATES[idx];if(!tmpl)return;
-  Object.entries(tmpl.defaults).forEach(([k,v])=>{
-    if(k==='tipo'){TG.tip=v;}
-    else if(k==='visita'){TG.vis=v;}
-    else if(k==='estatus'){TG.est=v;}
-    else if(k==='uso'){TG.uso=v;}
-  });
-  snack('📋 Plantilla: '+tmpl.name,'📋');
-  haptic([10]);
-}
-
-/* ── 27. STATS ENHANCEMENTS — inject after renderStats ── */
-function _enhanceStats(){
-  // Add coverage section
-  const cov=buildCoverageBySection();
-  const topCol=buildTopColonias(5);
-  const monthly=buildMonthlyData(6);
-  const maxMonth=Math.max(1,...monthly.map(m=>m.count));
-  const sc=document.getElementById('stats-content');if(!sc)return;
-
-  const covHtml=cov.length?`<div class="ch-card" style="margin-top:12px">
-    <div class="ch-title">📍 Cobertura por sección</div>
-    ${cov.map(s=>`<div class="sec-cov-row">
-      <div class="sec-cov-lbl">Sec. ${s.sec}</div>
-      <div class="sec-cov-bar-wrap"><div class="sec-cov-bar" style="width:${s.pct}%;background:${s.pct>70?'var(--grn)':s.pct>40?'var(--amb)':'var(--red)'}"></div></div>
-      <div class="sec-cov-pct" style="color:${s.pct>70?'var(--grn)':s.pct>40?'var(--amb)':'var(--red)'}">${s.pct}%</div>
-    </div>`).join('')}
-  </div>`:'';
-
-  const topColHtml=topCol.length?`<div class="ch-card" style="margin-top:12px">
-    <div class="ch-title">🏘️ Top colonias</div>
-    ${topCol.map(([col,n],i)=>`<div class="top-col-item">
-      <div class="top-col-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div>
-      <div class="top-col-name">${col}</div>
-      <div class="top-col-n">${n}</div>
-    </div>`).join('')}
-  </div>`:'';
-
-  const monthHtml=`<div class="ch-card" style="margin-top:12px">
-    <div class="ch-title">📅 Registros por mes</div>
-    <div class="month-chart">
-      ${monthly.map(m=>`<div class="mc-col">
-        <div class="mc-n">${m.count||''}</div>
-        <div class="mc-bar" style="height:${Math.round(m.count/maxMonth*72)||2}px;background:${m.isCurrent?'var(--a)':'var(--b3)'}"></div>
-        <div class="mc-lbl" style="${m.isCurrent?'color:var(--a2)':''}">${m.label}</div>
-      </div>`).join('')}
-    </div>
-  </div>`;
-
-  sc.insertAdjacentHTML('beforeend', monthHtml+covHtml+topColHtml);
-  // v32: Heatmap
-  if(!document.getElementById('v32-heatmap')){
-    const hm=renderHeatmap();
-    if(hm){const d=document.createElement('div');d.id='v32-heatmap';d.innerHTML=hm;sc.appendChild(d);}
-  }
-  animateStats();
-}
-
-/* ── 28. SWIPE BETWEEN TABS (horizontal swipe on main) ── */
-const TAB_ORDER=['inicio','registros','buscar','visitas','estadisticas','general'];
-let _swipeTabStartX=0, _swipeTabStartY=0, _swipeTabActive=false;
-
-function initTabSwipe(){
-  const main=document.getElementById('main');if(!main||main.dataset.tabSwipe)return;
-  main.dataset.tabSwipe='1';
-  main.addEventListener('touchstart',e=>{
-    _swipeTabStartX=e.touches[0].clientX;
-    _swipeTabStartY=e.touches[0].clientY;
-    _swipeTabActive=true;
-  },{passive:true});
-  main.addEventListener('touchend',e=>{
-    if(!_swipeTabActive)return;_swipeTabActive=false;
-    const dx=e.changedTouches[0].clientX-_swipeTabStartX;
-    const dy=Math.abs(e.changedTouches[0].clientY-_swipeTabStartY);
-    if(Math.abs(dx)<60||dy>40)return; // not horizontal enough
-    const ci=TAB_ORDER.indexOf(curTab);
-    if(ci<0)return;
-    const next=dx<0?TAB_ORDER[ci+1]:TAB_ORDER[ci-1];
-    if(next){go(next);haptic([8]);}
-  },{passive:true});
-}
-
-/* ── 29. SMART SEARCH SUGGESTIONS ── */
-function buildSearchSuggestions(query){
-  if(!query||query.length<1)return [];
-  const q=query.toLowerCase();
-  const colonias=[...new Set(R.map(r=>r.col).filter(Boolean))].filter(c=>c.toLowerCase().includes(q));
-  const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))].filter(s=>s.includes(q));
-  return [...colonias.slice(0,3),...secs.slice(0,3)];
-}
-
-/* ── 30. AUTO-DETECT DARK MODE CHANGE ── */
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=>{
-  if(curTheme==='auto') applyTheme('auto');
-});
-
-
-/* ════════════════════════════════════════════════════════════════
-   v32 MEJORAS ADICIONALES JS
-   ════════════════════════════════════════════════════════════════ */
-
-/* ── 1. QR CODE SHARE (genera QR de la URL de la app) ── */
-async function showQRShare(){
-  // Dinamically load QR library
-  if(!window.QRCode){
-    await new Promise((res,rej)=>{
-      const s=document.createElement('script');
-      s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-      s.onload=res;s.onerror=rej;
-      document.head.appendChild(s);
-    });
-  }
-  const url=window.location.href.split('?')[0];
-  const overlay=document.createElement('div');
-  overlay.className='qr-overlay';
-  overlay.innerHTML=`
-    <div class="qr-card">
-      <div class="qr-title">📲 Compartir app</div>
-      <div class="qr-sub">Escanea para abrir PensionadosMX</div>
-      <div id="qr-canvas-wrap" style="margin:0 auto 16px;width:180px;height:180px"></div>
-      <div style="font-size:11px;color:var(--sft);margin-bottom:14px;word-break:break-all">${url}</div>
-      <div style="display:flex;gap:8px;justify-content:center">
-        <button class="qr-close" onclick="this.closest('.qr-overlay').remove()">Cerrar</button>
-        <button class="qr-close" style="background:var(--a);color:#fff;border-color:var(--a)" onclick="copyToClipboard('${url}','URL de la app')">📋 Copiar link</button>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
-  setTimeout(()=>{
-    try{
-      new QRCode(document.getElementById('qr-canvas-wrap'),{
-        text:url,width:180,height:180,
-        colorDark:'#ffffff',colorLight:'#1a1f2e',
-        correctLevel:QRCode.CorrectLevel.M
-      });
-    }catch(e){document.getElementById('qr-canvas-wrap').textContent=url;}
-  },100);
-}
-
-/* ── 2. VOICE SEARCH (real Web Speech API) ── */
-let _speechRec=null;
-function toggleVoiceSearch(){
-  const micBtn=document.getElementById('srch-mic');
-  const sq=document.getElementById('sq');
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
-    snack('⚠️ Voz no disponible en este navegador','⚠️');return;
-  }
-  if(_speechRec){
-    _speechRec.stop();_speechRec=null;
-    if(micBtn)micBtn.classList.remove('recording');
-    return;
-  }
-  const SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;
-  _speechRec=new SpeechRec();
-  _speechRec.lang='es-MX';
-  _speechRec.continuous=false;
-  _speechRec.interimResults=true;
-  _speechRec.onstart=()=>{
-    if(micBtn)micBtn.classList.add('recording');
-    haptic([15,10,15]);
-    snack('🎤 Escuchando…','🎤');
-  };
-  _speechRec.onresult=e=>{
-    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
-    if(sq){sq.value=transcript;sq.dispatchEvent(new Event('input'));}
-  };
-  _speechRec.onerror=()=>{
-    if(micBtn)micBtn.classList.remove('recording');
-    _speechRec=null;snack('⚠️ No se entendió. Intenta de nuevo','⚠️');
-  };
-  _speechRec.onend=()=>{
-    if(micBtn)micBtn.classList.remove('recording');
-    _speechRec=null;
-    // Execute search after voice
-    const q=sq?.value?.trim();
-    if(q&&q.length>1){addSrchHistory(q);execSrch(q);}
-  };
-  _speechRec.start();
-}
-
-/* ── 3. OFFLINE ACTION QUEUE ── */
-const OFFLINE_QUEUE_KEY='px_offline_queue';
-let _offlineQueue=JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||'[]');
-
-function queueOfflineAction(type, data){
-  _offlineQueue.push({type,data,ts:Date.now()});
-  localStorage.setItem(OFFLINE_QUEUE_KEY,JSON.stringify(_offlineQueue));
-  _updateOfflineQueueBadge();
-}
-function _updateOfflineQueueBadge(){
-  const badge=document.getElementById('offline-queue-badge');
+/* ══════════════════════════════════════════════════════════
+   v37 — INDICADOR DE CAMBIOS OFFLINE PENDIENTES DE SYNC
+   ══════════════════════════════════════════════════════════ */
+const PENDING_KEY = 'px_pending_sync_v1';
+function getPendingCount(){ return parseInt(localStorage.getItem(PENDING_KEY)||'0'); }
+function setPendingCount(n){ localStorage.setItem(PENDING_KEY,String(Math.max(0,n))); updateSyncBadge(); }
+function incPending(){ setPendingCount(getPendingCount()+1); }
+function clearPending(){ setPendingCount(0); }
+
+function updateSyncBadge(){
+  const n=getPendingCount();
+  const badge=document.getElementById('sync-pending-badge');
   if(!badge)return;
-  if(_offlineQueue.length>0&&!navigator.onLine){
-    badge.querySelector('span').textContent=`${_offlineQueue.length} cambio${_offlineQueue.length>1?'s':''} pendiente${_offlineQueue.length>1?'s':''} de sincronizar`;
-    badge.classList.add('show');
-  } else {
-    badge.classList.remove('show');
-    if(_offlineQueue.length===0)badge.classList.remove('show');
-  }
-}
-async function flushOfflineQueue(){
-  if(!_offlineQueue.length||!navigator.onLine)return;
-  snack(`☁️ Sincronizando ${_offlineQueue.length} cambios…`,'☁️');
-  _offlineQueue=[];
-  localStorage.removeItem(OFFLINE_QUEUE_KEY);
-  _updateOfflineQueueBadge();
-  if(fbIsConfigured()&&isCreator())await fbSyncNow();
-}
-window.addEventListener('online',()=>{
-  document.getElementById('pwa-offline')?.classList.remove('show');
-  flushOfflineQueue();
-});
-window.addEventListener('offline',()=>{
-  document.getElementById('pwa-offline')?.classList.add('show');
-  _updateOfflineQueueBadge();
-});
-
-/* ── 4. WHATSAPP BULK MESSAGES ── */
-function sendWhatsAppBulk(){
-  const selected=batchSel||new Set();
-  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
-  const records=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
-  const withPhone=records.filter(r=>r.tel);
-  if(!withPhone.length){snack('⚠️ Los registros seleccionados no tienen teléfono','⚠️');return;}
-  conf2(
-    `💬 WhatsApp a ${withPhone.length} beneficiarios`,
-    `<div style="margin-bottom:10px;font-size:13px;color:var(--sft)">Se abrirá WhatsApp para cada uno. Escribe el mensaje:</div>
-     <textarea id="wa-bulk-msg" style="width:100%;min-height:80px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:13px;outline:none;resize:none;box-sizing:border-box" placeholder="Hola {nombre}, le contactamos del programa {programa}…">Hola {nombre}, le contactamos del programa {programa} para confirmar su información. Por favor comuníquese con nosotros. Gracias.</textarea>`,
-    ()=>{
-      const template=document.getElementById('wa-bulk-msg')?.value||'Hola {nombre}';
-      withPhone.forEach((r,i)=>{
-        setTimeout(()=>{
-          const msg=template
-            .replace('{nombre}',r.nombre.split(' ')[0])
-            .replace('{programa}',r.tipo)
-            .replace('{folio}',r.folio);
-          const tel=r.tel.replace(/[^0-9]/g,'');
-          window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(msg)}`,'_blank');
-        },i*500);
-      });
-      snack(`💬 Abriendo WhatsApp para ${withPhone.length} contactos`,'💬');
-    },
-    `Enviar a ${withPhone.length}`
-  );
-}
-
-/* ── WhatsApp recordatorio individual ── */
-function sendWhatsAppReminder(id){
-  const r=R.find(x=>x.id===id);if(!r||!r.tel)return;
-  const tel=r.tel.replace(/[^0-9]/g,'');
-  const nombre=r.nombre.split(' ')[0];
-  const msg=`Hola ${nombre}, le contactamos del programa ${r.tipo}${r.folio?' (Folio: '+r.folio+')':''} para saludarle y confirmar que se encuentra bien. Cualquier duda estamos a sus órdenes. ¡Que tenga un excelente día!`;
-  conf2(
-    `💬 WhatsApp a ${nombre}`,
-    `<div style="font-size:13px;color:var(--sft);margin-bottom:10px">Mensaje a enviar:</div>
-     <textarea id="wa-ind-msg" style="width:100%;min-height:70px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:12px;outline:none;resize:none;box-sizing:border-box">${msg}</textarea>`,
-    ()=>{
-      const finalMsg=document.getElementById('wa-ind-msg')?.value||msg;
-      window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(finalMsg)}`,'_blank');
-    },
-    'Abrir WhatsApp'
-  );
-}
-  const selected=batchSel||new Set();
-  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
-  const records=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
-  const withPhone=records.filter(r=>r.tel);
-  if(!withPhone.length){snack('⚠️ Los registros seleccionados no tienen teléfono','⚠️');return;}
-  conf2(
-    `💬 WhatsApp a ${withPhone.length} beneficiarios`,
-    `<div style="margin-bottom:10px;font-size:13px;color:var(--sft)">Se abrirá WhatsApp para cada uno. Escribe el mensaje:</div>
-     <textarea id="wa-bulk-msg" style="width:100%;min-height:80px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:13px;outline:none;resize:none;box-sizing:border-box" placeholder="Hola {nombre}, le contactamos del programa {programa}…">Hola {nombre}, le contactamos del programa {programa} para confirmar su información. Por favor comuníquese con nosotros. Gracias.</textarea>`,
-    ()=>{
-      const template=document.getElementById('wa-bulk-msg')?.value||'Hola {nombre}';
-      withPhone.forEach((r,i)=>{
-        setTimeout(()=>{
-          const msg=template
-            .replace('{nombre}',r.nombre.split(' ')[0])
-            .replace('{programa}',r.tipo)
-            .replace('{folio}',r.folio);
-          const tel=r.tel.replace(/[^0-9]/g,'');
-          window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(msg)}`,'_blank');
-        },i*500);
-      });
-      snack(`💬 Abriendo WhatsApp para ${withPhone.length} contactos`,'💬');
-    },
-    `Enviar a ${withPhone.length}`
-  );
-}
-
-/* ── 5. BULK ASSIGN SECTION ── */
-function openBulkAssignSection(){
-  const selected=batchSel||new Set();
-  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
-  const secs=[...new Set(R.map(r=>r.seccion).filter(Boolean))].sort();
-  const customSec=`<input id="bulk-sec-custom" class="fi" style="margin-bottom:8px" placeholder="Nueva sección (ej: 615)" type="text"/>`;
-  const grid=`<div class="section-assign-grid">${secs.map(s=>`<div class="sec-assign-btn" onclick="applyBulkSection('${s}')">${s}</div>`).join('')}</div>`;
-  conf2(`📍 Asignar sección a ${selected.size} registros`,
-    customSec+grid,
-    ()=>{
-      const custom=document.getElementById('bulk-sec-custom')?.value?.trim();
-      if(custom)applyBulkSection(custom);
-    },
-    'Usar sección personalizada'
-  );
-}
-function applyBulkSection(sec){
-  const selected=batchSel||new Set();
-  let count=0;
-  selected.forEach(id=>{
-    const r=R.find(x=>x.id===id);
-    if(r){r.seccion=sec;r.ult=nowStr();count++;}
-  });
-  svR();detectDups();renderList();
-  closeAllSheets();
-  snack(`📍 ${count} registros → Sección ${sec}`,'📍');
-  haptic([20,10,20]);
-}
-
-/* ── 6. GPS LOCATION para domicilio ── */
-function getGPSLocation(callback){
-  const btn=document.getElementById('gps-field-btn');
-  if(btn)btn.classList.add('loading');
-  if(!navigator.geolocation){snack('❌ GPS no disponible','❌');return;}
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      if(btn)btn.classList.remove('loading');
-      const {latitude:lat,longitude:lon}=pos.coords;
-      const coordStr=`${lat.toFixed(5)},${lon.toFixed(5)}`;
-      if(callback)callback(lat,lon,coordStr);
-      else{
-        copyToClipboard(coordStr,'Coordenadas GPS');
-        // Open Maps with location
-        window.open(`https://maps.google.com/?q=${lat},${lon}`,'_blank');
-      }
-      haptic([15,10,15]);
-    },
-    err=>{
-      if(btn)btn.classList.remove('loading');
-      snack('⚠️ No se pudo obtener ubicación: '+err.message,'⚠️');
-    },
-    {enableHighAccuracy:true,timeout:10000}
-  );
-}
-
-/* ── 7. BULK FLOAT BAR (replaces and enhances batchBar) ── */
-function renderBulkBar(){
-  const count=(batchSel||new Set()).size;
-  let bar=document.getElementById('bulk-float-bar');
-  if(!bar){
-    bar=document.createElement('div');
-    bar.id='bulk-float-bar';bar.className='bulk-float-bar';
-    document.body.appendChild(bar);
-  }
-  if(!count||!batchMode){bar.classList.remove('show');return;}
-  bar.classList.add('show');
-  bar.innerHTML=`
-    <span class="bfb-count">✓ ${count} seleccionado${count>1?'s':''}</span>
-    <button class="bfb-btn green" onclick="markBatchVisit()">✅ Visita</button>
-    <button class="bfb-btn wa" onclick="sendWhatsAppBulk()">💬 WA</button>
-    <button class="bfb-btn blue" onclick="openBulkAssignSection()">📍 Sección</button>
-    <button class="bfb-btn blue" onclick="dlBatchCSV()">⬇️ CSV</button>
-    <button class="bfb-btn red" onclick="confBatchDel()">🗑️</button>
-    <button class="bfb-btn" onclick="batchMode=false;batchSel=new Set();renderList();renderBulkBar()" style="font-size:16px;padding:7px 10px">✕</button>`;
-}
-
-function dlBatchCSV(){
-  const selected=batchSel||new Set();
-  if(!selected.size)return;
-  const recs=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
-  const rows=[COLS,...recs.map(rowData)];
-  const csv=rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');
-  dlFile('Seleccion_'+today()+'.csv','data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv));
-  snack('\u2B07\uFE0F '+recs.length+' registros exportados','\u2B07\uFE0F');
-}
-
-/* ── 8. LOADING STATE for pages ── */
-function showPageLoading(containerId, msg='Cargando…'){
-  const el=document.getElementById(containerId);
-  if(el) el.innerHTML=`<div class="page-loading"><div class="page-loading-ring"></div><div class="page-loading-txt">${msg}</div></div>`;
-}
-
-/* ── 9. ERROR BOUNDARY wrapper ── */
-function safeRender(fn, containerId, fallbackMsg='Error al cargar'){
-  try{
-    fn();
-  }catch(e){
-    console.error('Render error:',e);
-    const el=document.getElementById(containerId);
-    if(el) el.innerHTML=`<div class="page-error"><div class="page-error-ico">⚠️</div><div class="page-error-title">Error al cargar</div><div class="page-error-sub">${fallbackMsg}<br><small style="color:var(--mut)">${e.message}</small></div><button onclick="${fn.name}&&${fn.name}()" class="btn btn-s" style="margin-top:12px">Reintentar</button></div>`;
+  if(n>0&&fbIsConfigured&&!_fbConnected){
+    badge.textContent=n+' sin sync';
+    badge.style.display='inline-flex';
+  }else{
+    badge.style.display='none';
+    if(n>0&&_fbConnected) clearPending();
   }
 }
 
-/* ── 10. CHANGELOG / WHAT'S NEW ── */
-const CHANGELOG=[
-  {version:'v34 — Edición Suprema+',items:[
-    '🔑 Gestión de API Key — configura tu clave Anthropic directamente en el chat IA',
-    '📅 Calendario visual en pestaña Visitas con eventos y visitas programadas',
-    '📊 Importación nativa de Excel (.xlsx) sin necesidad de convertir a CSV',
-    '💬 WhatsApp individual — envía mensaje personalizado desde el detalle del registro',
-    '🔎 Filtros edad y duplicados ahora funcionan en la búsqueda avanzada',
-    '🔧 Compresión automática del historial cuando el almacenamiento supera el 75%',
-    '🐛 Corrección de ternario roto en exportación PDF',
-    '⚡ Service Worker v34 — excluye llamadas API Anthropic del caché offline',
-    '📱 Manifest con shortcuts: "Nuevo registro" y "Buscar" desde el ícono de la app',
-    '🏷️ Versión consistente v34 en toda la interfaz',
-  ]},
-  {version:'v32-v33 SUPREMA',items:[
-    'Presencia en tiempo real — ve quién está conectado',
-    'Asistente IA con Claude — análisis en lenguaje natural',
-    'Sistema de logros (10 badges desbloqueables)',
-    'Cola de prioridad inteligente con scoring automático',
-    'Mapa de calor de cobertura por sección',
-    'Escáner de INE/credencial con cámara',
-    'WhatsApp masivo a seleccionados',
-    'Exportar PDF imprimible con resumen',
-    'Widget de cumpleaños del mes en inicio',
-    'Atajos de teclado: / buscar · N nuevo · A IA · Esc cerrar',
-  ]},
-];
-function showChangelog(){
-  const html2=CHANGELOG.map(v=>`
-    <div class="changelog-card">
-      <div class="cl-version">${v.version}</div>
-      ${v.items.map(i=>`<div class="cl-item">${i}</div>`).join('')}
-    </div>`).join('');
-  conf2('📋 Novedades',html2,null,null);
-}
-
-/* ── 11. TAB POSITION INDICATOR DOTS ── */
-const MAIN_TABS=['inicio','registros','buscar','visitas','estadisticas','general'];
-function updateTabDots(){
-  const dots=document.querySelectorAll('.tab-pos-dot');
-  const idx=MAIN_TABS.indexOf(curTab);
-  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
-}
-
-/* ── 12. PRINT MULTIPLE RECORDS ── */
-function printBatch(){
-  const selected=batchSel||new Set();
-  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
-  const recs=[...selected].map(id=>R.find(r=>r.id===id)).filter(Boolean);
-  const win=window.open('','_blank');
-  const body=recs.map(r=>`
-    <div style="border:1px solid #ccc;border-radius:8px;padding:16px;margin-bottom:16px;page-break-inside:avoid">
-      <h2 style="margin:0 0 8px;font-size:16px">${r.nombre}</h2>
-      <p style="margin:0;font-size:13px;color:#666">${r.tipo} · ${r.folio} · ID: ${r.id}</p>
-      <hr style="margin:10px 0">
-      <table style="width:100%;font-size:12px;border-collapse:collapse">
-        <tr><td><b>Teléfono:</b></td><td>${r.tel||'—'}</td><td><b>Sección:</b></td><td>${r.seccion||'—'}</td></tr>
-        <tr><td><b>Domicilio:</b></td><td colspan="3">${r.dom||''} ${r.num?'#'+r.num:''} ${r.col||''}</td></tr>
-        <tr><td><b>Estatus:</b></td><td>${r.estatus}</td><td><b>Visita:</b></td><td>${r.visita}</td></tr>
-        ${r.obs?`<tr><td><b>Obs:</b></td><td colspan="3">${r.obs}</td></tr>`:''}
-      </table>
-    </div>`).join('');
-  win.document.write(`<!DOCTYPE html><html><head><title>PensionadosMX — ${recs.length} registros</title><style>body{font-family:Arial,sans-serif;padding:20px;max-width:800px;margin:0 auto}@media print{button{display:none}}</style></head><body><h1 style="font-size:18px;margin-bottom:20px">Pensionados MX · ${recs.length} registros · ${new Date().toLocaleDateString('es-MX')}</h1>${body}<button onclick="window.print()" style="padding:10px 20px;margin-top:16px;cursor:pointer">🖨️ Imprimir</button></body></html>`);
-  win.document.close();
-}
-
-/* ── 13. SEARCH IN SECTION ── */
-function searchInSection(sec){
-  go('buscar');
-  setTimeout(()=>{
-    sfFilter='sec_'+sec;
-    const sq=document.getElementById('sq');
-    if(sq)sq.value='';
-    execSrch('',true);
-    snack('📍 Sección '+sec,'📍');
-  },100);
-}
-
-/* ── 14. APP VERSION + BUILD INFO ── */
-const APP_VERSION='v32 SUPREMA';
-const APP_BUILD=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
-function showAppInfo(){
-  conf2('ℹ️ Sobre PensionadosMX',`
-    <div style="text-align:center;padding:10px 0">
-      <div style="font-size:36px;margin-bottom:10px">🛡️</div>
-      <div style="font-size:18px;font-weight:900;margin-bottom:4px">PensionadosMX</div>
-      <div style="font-size:13px;color:var(--a2);font-family:'Fira Code',monospace;margin-bottom:16px">${APP_VERSION}</div>
-      <div style="font-size:11px;color:var(--sft)">Jerez, Zacatecas · Programas sociales</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0">
-      <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
-        <div style="font-size:20px;font-weight:900;color:var(--a2)">${R.length}</div>
-        <div style="font-size:10px;color:var(--sft);font-weight:700;text-transform:uppercase">Beneficiarios</div>
-      </div>
-      <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
-        <div style="font-size:20px;font-weight:900;color:var(--grn)">${R.filter(r=>r.visita==='Si').length}</div>
-        <div style="font-size:10px;color:var(--sft);font-weight:700;text-transform:uppercase">Visitados</div>
-      </div>
-    </div>
-    <button onclick="showChangelog();closeAllSheets()" class="btn btn-s" style="width:100%;margin-top:4px">📋 Ver novedades</button>
-  `,null,null);
-}
-
-/* ── 15. HOOK: Replace voice search mic button handler ── */
-(function hookVoiceMic(){
-  // Will be called after DOM loads
-  document.addEventListener('DOMContentLoaded',()=>{
-    const mic=document.getElementById('srch-mic');
-    if(mic) mic.onclick=toggleVoiceSearch;
-  });
-  // Also hook after go('buscar')
-})();
-
-/* ═══════════════════════════════════════════════════
-   GENERAL SECTION v30 — Full Implementation
-   ═══════════════════════════════════════════════════ */
-
-const GEN_PREFS_KEY = 'px_gen_prefs_v1';
-const GEN_SUB_KEY   = 'px_gen_sub';
-
-/* ── Preferencias ── */
-function getGenPrefs(){
-  return JSON.parse(localStorage.getItem(GEN_PREFS_KEY)||'{"haptic":true,"confirmDel":true,"showDups":true}');
-}
-function saveGenPrefs(p){ localStorage.setItem(GEN_PREFS_KEY,JSON.stringify(p)); }
-
-function toggleGenPref(key){
-  const p=getGenPrefs(); p[key]=!p[key]; saveGenPrefs(p);
-  const tog=document.getElementById('tog-'+key);
-  if(tog) tog.classList.toggle('on',p[key]);
-  if(navigator.vibrate&&p.haptic) navigator.vibrate(15);
-  snack(p[key]?'✅ Activado':'⭕ Desactivado');
-}
-
-/* ── Calcular storage ── */
-function calcStorageKB(){
-  let bytes=0;
-  try{ for(const k in localStorage){if(Object.prototype.hasOwnProperty.call(localStorage,k)) bytes+=((localStorage[k]||'').length+k.length)*2;}}catch{}
-  return (bytes/1024).toFixed(1);
-}
-
-/* ── Render principal ── */
-function renderGeneral(){
-  // Firebase status
-  fbUpdateUI(fbIsConfigured()&&_fbConnected);
-  // Profile avatar & name
-  const name=authUsername||'Usuario';
-  const av=document.getElementById('gen-avatar');       if(av) av.textContent=name[0]?.toUpperCase()||'?';
-  const pn=document.getElementById('gen-profile-name'); if(pn) pn.textContent=isGuest()?'Invitado':name;
-  const pr=document.getElementById('gen-profile-role'); if(pr) pr.textContent=isGuest()?'Modo solo lectura':'Administrador · PensionadosMX v34';
-
-  // Stats strip
-  const vis=R.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
-  const pct=R.length?Math.round(vis/R.length*100):0;
-  const streak=_getStreak();
-  const kb=calcStorageKB();
-  _setTxt('gst-total',   R.length);
-  _setTxt('gst-vis',     vis);
-  _setTxt('gst-streak',  streak.count);
-  _setTxt('gst-storage', kb+'KB');
-
-  // Ring progress
-  const ring=document.getElementById('gen-ring-fill');
-  const rv  =document.getElementById('gen-ring-val');
-  if(ring){ const off=113-(113*pct/100); setTimeout(()=>ring.style.strokeDashoffset=off,120); }
-  if(rv)   rv.textContent=pct+'%';
-
-  // Theme label
-  const t=THEMES.find(x=>x.id===curTheme);
-  _setTxt('gen-cur-theme', t?.nm||curTheme);
-
-  // Preference toggles
-  const p=getGenPrefs();
-  ['haptic','confirmDel','showDups'].forEach(k=>{
-    const el=document.getElementById('tog-'+k);
-    if(el) el.classList.toggle('on',!!p[k]);
-  });
-  // Notification toggle
-  const notifTog=document.getElementById('tog-notif');
-  const notifSub=document.getElementById('gen-notif-sub');
-  const notifGranted='Notification' in window && Notification.permission==='granted';
-  if(notifTog) notifTog.classList.toggle('on',notifGranted);
-  if(notifSub) notifSub.textContent=notifGranted?'✅ Activadas — cumpleaños, meta, pendientes':'Toca para activar alertas diarias';
-
-  // Meta sub-label
-  const m=_getMeta();
-  _setTxt('gen-meta-sub', m.goal+' visitas / día');
-
-  // Storage sub-label
-  const pctStore=Math.min(100,(parseFloat(kb)/5120*100)).toFixed(1);
-  _setTxt('gen-storage-sub', kb+' KB usados de ~5 MB ('+pctStore+'%)');
-
-  // Access log count
-  const logCnt=getAccessLog().length;
-  _setTxt('gen-row-log-sub', logCnt+' registros en bitácora');
-
-  // User info row
-  const creds=getAuthCreds();
-  _setTxt('gen-row-user-sub', creds?'@'+creds.user+(creds.email?' · '+creds.email.replace(/(.{2}).+(@)/,'$1…$2'):''):'Sin cuenta configurada');
-
-  // Session label
-  const sess=getSession()||{};
-  const mins=sess.ts?Math.round((Date.now()-sess.ts)/60000):0;
-  const sinceStr=mins<1?'Recién iniciada':mins<60?mins+' min':Math.floor(mins/60)+'h '+mins%60+'m';
-  _setTxt('gen-session-since','Activa hace '+sinceStr+' · '+name);
-
-  // FAQ
-  renderGenFAQ();
-}
-
-function _setTxt(id,val){ const el=document.getElementById(id); if(el) el.textContent=val; }
-
-/* ── FAQ accordion ── */
-const GEN_FAQ=[
-  {q:'¿Cómo agrego un beneficiario?',
-   a:'Toca el botón azul ＋ Agregar en la parte inferior. Llena el formulario con los datos y presiona Guardar. El folio se asigna automáticamente.',
-   ico:'➕', clr:'rgba(59,130,246,.15)'},
-  {q:'¿Los datos se guardan sin internet?',
-   a:'Sí. PensionadosMX es 100% offline. Todos los datos se guardan localmente en tu dispositivo y no requieren conexión para funcionar.',
-   ico:'📡', clr:'rgba(34,197,94,.12)'},
-  {q:'¿Cómo exporto a Excel o CSV?',
-   a:'Ve a Exportar en la barra de pestañas superior, o toca el acceso rápido en Inicio. Puedes exportar CSV, XLSX o una copia de seguridad JSON.',
-   ico:'📊', clr:'rgba(16,185,129,.12)'},
-  {q:'¿Cómo importo registros desde un archivo?',
-   a:'Ve a la pestaña Importar. Descarga la plantilla CSV, complétala y súbela. La app detecta posibles duplicados antes de confirmar.',
-   ico:'⬆️', clr:'rgba(245,158,11,.12)'},
-  {q:'¿Cómo cambio el tema o los colores?',
-   a:'Desde esta sección toca "Tema de color" o "Apariencia". También puedes usar el ícono 🎨 en el encabezado de cualquier pantalla.',
-   ico:'🎨', clr:'rgba(139,92,246,.12)'},
-  {q:'¿Cómo activo la verificación por código (OTP)?',
-   a:'En la pantalla de inicio de sesión, ve a la pestaña 📧 Email. Crea una cuenta gratis en emailjs.com, pega los IDs y activa el OTP.',
-   ico:'📧', clr:'rgba(99,102,241,.12)'},
-  {q:'¿Cómo cambio mi contraseña?',
-   a:'En la pantalla de inicio de sesión, ve a la pestaña ⚙️ Cuenta. Verifica con tus credenciales actuales y establece la nueva contraseña.',
-   ico:'🔑', clr:'rgba(239,68,68,.12)'},
-  {q:'¿Qué pasa si olvido mi contraseña?',
-   a:'Si configuraste un correo y tienes el OTP activo, puedes recuperar acceso. Si no, necesitas restablecer los datos desde la Zona Peligrosa.',
-   ico:'⚠️', clr:'rgba(249,115,22,.12)'},
-];
-
-let _genFaqOpen=null;
-function renderGenFAQ(){
-  const c=document.getElementById('gen-faq-list'); if(!c)return;
-  c.innerHTML=GEN_FAQ.map((f,i)=>`
-    <div class="gen-faq-item">
-      ${i>0?'<div class="gen-row-div"></div>':''}
-      <div class="gen-faq-q" onclick="toggleGenFAQ(${i})">
-        <div class="gen-faq-ico" style="background:${f.clr}">${f.ico}</div>
-        <div class="gen-faq-title">${f.q}</div>
-        <div class="gen-faq-arr${_genFaqOpen===i?' open':''}" id="gfa-${i}">›</div>
-      </div>
-      <div class="gen-faq-body${_genFaqOpen===i?' open':''}" id="gfb-${i}">
-        <div class="gen-faq-text">${f.a}</div>
-      </div>
-    </div>`).join('');
-}
-
-function toggleGenFAQ(i){
-  _genFaqOpen=(_genFaqOpen===i)?null:i;
-  renderGenFAQ();
-}
-
-/* ── Sub-panels ── */
-function openGenSub(id){
-  const map={
-    perfil:    _openSubPerfil,
-    meta:      _openSubMeta,
-    storage:   _openSubStorage,
-    changelog: _openSubChangelog,
-    reset:     _openSubReset,
+// Patch svR to count pending changes when offline
+const _origSvR=window.svR;
+if(typeof _origSvR==='function'){
+  window.svR=function(){
+    _origSvR();
+    if(fbIsConfigured&&fbIsConfigured()&&!_fbConnected&&!navigator.onLine) incPending();
   };
-  if(map[id]) map[id](); else snack('Próximamente','ℹ️');
 }
-
-/* — Perfil sub-panel — */
-function _openSubPerfil(){
-  const creds=getAuthCreds();
-  conf2(
-    '👤 Cambiar credenciales',
-    creds
-      ? `Usuario actual: <b>${creds.user}</b><br>Email: <b>${creds.email||'Sin email'}</b><br><br>Para cambiar, ve a la pantalla de inicio de sesión → pestaña ⚙️ Cuenta.`
-      : 'No hay cuenta configurada. Ve al login → ⚙️ Cuenta para crear una.',
-    ()=>{ doLogout(); setTimeout(()=>showSlide('as-creator'),200); },
-    'Ir a cambiar'
-  );
-}
-
-/* — Meta diaria sub-panel — */
-function _openSubMeta(){
-  const m=_getMeta();
-  // Build a quick picker using conf2-style dialog
-  const opts=[5,8,10,15,20,25,30,40,50];
-  const html=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">`+
-    opts.map(n=>`<button onclick="setMetaGoal(${n});closeAllSheets();snack('🎯 Meta: ${n} visitas','🎯');renderGeneral()"
-      style="padding:12px 4px;border-radius:12px;border:2px solid ${m.goal===n?'var(--a)':'var(--b2)'};
-      background:${m.goal===n?'var(--a)':'var(--card)'};color:${m.goal===n?'#fff':'var(--txt)'};
-      font-size:15px;font-weight:800;cursor:pointer;font-family:var(--fnt)">${n}</button>`).join('')+
-    `</div>`;
-  conf2('🎯 Meta diaria de visitas',
-    'Selecciona cuántas visitas quieres completar cada día:'+html,
-    null, null);
-}
-
-/* — Storage sub-panel — */
-function _openSubStorage(){
-  const keys=[
-    {k:K.r,    lbl:'📋 Registros',   clr:'var(--a)'},
-    {k:K.h,    lbl:'📝 Historial',   clr:'var(--ind)'},
-    {k:K.v,    lbl:'🚗 Visitas',     clr:'var(--grn)'},
-    {k:K.e,    lbl:'📊 Estadísticas',clr:'var(--org)'},
-    {k:ELOG_KEY,lbl:'🔐 Accesos',    clr:'var(--red)'},
-    {k:'px_streak',lbl:'🔥 Racha',   clr:'var(--amb)'},
-  ];
-  let rows='<div style="margin-top:12px">';
-  let total=0;
-  keys.forEach(({k,lbl,clr})=>{
-    const raw=localStorage.getItem(k)||'';
-    const kb=((raw.length*2)/1024).toFixed(2);
-    total+=parseFloat(kb);
-    const pct=Math.min(100,(parseFloat(kb)/100*100)).toFixed(0);
-    rows+=`<div style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px">
-        <span>${lbl}</span><span style="color:var(--sft);font-family:'Fira Code',monospace">${kb} KB</span>
-      </div>
-      <div style="background:var(--b1);border-radius:4px;height:5px;overflow:hidden">
-        <div style="height:100%;width:${Math.max(2,pct)}%;background:${clr};border-radius:4px;transition:width .6s"></div>
-      </div></div>`;
-  });
-  rows+=`<div style="border-top:1px solid var(--b1);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;font-size:13px;font-weight:800">
-    <span>Total</span><span style="font-family:'Fira Code',monospace;color:var(--a2)">${total.toFixed(2)} KB</span>
-  </div></div>`;
-  conf2('🗂️ Almacenamiento local', 'Datos guardados por clave:'+rows, null, null);
-}
-
-/* — Changelog sub-panel — */
-function _openSubChangelog(){
-  const items=[
-    {ico:'🎨',bg:'rgba(99,102,241,.15)', title:'Auth UI rediseñado',     desc:'Pantalla de login con animaciones, gradientes y patrón de puntos'},
-    {ico:'6️⃣',bg:'rgba(59,130,246,.15)', title:'OTP en 6 cajas',          desc:'Auto-avance, pegar código, animación de éxito/error'},
-    {ico:'📊',bg:'rgba(34,197,94,.15)',  title:'Barra de progreso OTP',   desc:'Cambia de color conforme se acerca al límite de tiempo'},
-    {ico:'💪',bg:'rgba(245,158,11,.15)', title:'Medidor de contraseña',   desc:'4 niveles de fortaleza con colores en pantalla de cuenta'},
-    {ico:'🔴',bg:'rgba(239,68,68,.15)',  title:'Puntos de intentos fallidos',desc:'5 indicadores visuales antes del bloqueo de 15 min'},
-    {ico:'⏳',bg:'rgba(139,92,246,.15)', title:'Botón con spinner',       desc:'Estado de carga visible, sin doble clic accidental'},
-    {ico:'📱',bg:'rgba(16,185,129,.15)', title:'"Recordarme" 30 días',    desc:'Sesión persistente entre recargas con localStorage'},
-    {ico:'⚙️',bg:'rgba(71,85,105,.15)',  title:'Sección General',         desc:'Perfil, ajustes, FAQ, almacenamiento y acerca de'},
-  ];
-  const html='<div style="margin-top:12px">'+
-    items.map(it=>`<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1)">
-      <div style="width:30px;height:30px;border-radius:9px;background:${it.bg};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">${it.ico}</div>
-      <div><div style="font-size:12px;font-weight:800;margin-bottom:2px">${it.title}</div>
-        <div style="font-size:11px;color:var(--sft);line-height:1.4">${it.desc}</div></div>
-    </div>`).join('')+
-    '</div>';
-  conf2('📋 Novedades v30', html, null, null);
-}
-
-/* — Reset sub-panel — */
-function _openSubReset(){
-  conf2(
-    '⚠️ Borrar todos los datos',
-    '¿Estás completamente seguro? Esta acción eliminará TODOS los registros, historial y configuraciones. <b style="color:var(--red)">No se puede deshacer.</b>',
-    ()=>{
-      const keysToKeep=['px_auth_v1','px_emailcfg_v1','px_theme','px_accent','px_accent_grad','px_fz','px_bgbright'];
-      const saved={};
-      keysToKeep.forEach(k=>{const v=localStorage.getItem(k);if(v)saved[k]=v;});
-      localStorage.clear();
-      Object.entries(saved).forEach(([k,v])=>localStorage.setItem(k,v));
-      R=[];H=[];V=[];E=[];svR();svH();svV();
-      detectDups();upHdr();renderInicio();
-      snack('🗑️ Datos borrados correctamente','🗑️');
-      go('inicio');
-    },
-    '⚠️ Borrar todo'
-  );
-}
-
-/* ── Compartir info ── */
-function copyAppInfo(){
-  const kb=calcStorageKB();
-  const streak=_getStreak();
-  const vis=R.filter(r=>r.visita==='Si'||r.visita==='Sí').length;
-  const txt=[
-    '📱 Pensionados MX v34',
-    '━━━━━━━━━━━━━━━━━━',
-    `👥 Registros: ${R.length}`,
-    `✅ Visitados: ${vis} (${R.length?Math.round(vis/R.length*100):0}%)`,
-    `🔥 Racha: ${streak.count} días (mejor: ${streak.best})`,
-    `💾 Almacenado: ${kb} KB`,
-    `📅 Fecha: ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}`,
-  ].join('\n');
-  if(navigator.share){
-    navigator.share({title:'Pensionados MX v34',text:txt}).catch(()=>{});
-  } else if(navigator.clipboard){
-    navigator.clipboard.writeText(txt).then(()=>snack('📋 Copiado al portapapeles','📋'));
-  } else {
-    snack('📋 '+txt.slice(0,60)+'…','📋');
-  }
-}
-
-</script>
-
-<!-- ═══ ID SCANNER v32 ═══ -->
-<div class="scan-overlay" id="scan-overlay">
-  <div class="scan-hdr">
-    <div style="font-size:22px">📷</div>
-    <div class="scan-hdr-title">Escanear ID / CURP</div>
-    <button class="scan-hdr-close" onclick="closeIDScanner()">✕</button>
-  </div>
-  <div class="scan-video-wrap" id="scan-video-wrap">
-    <video class="scan-video" id="scan-video" playsinline autoplay muted></video>
-    <div class="scan-ui">
-      <div class="scan-dark-top"></div>
-      <div class="scan-row">
-        <div class="scan-dark-side"></div>
-        <div class="scan-frame-outer">
-          <div class="scan-frame">
-            <div class="scan-corner tl"></div>
-            <div class="scan-corner tr"></div>
-            <div class="scan-corner bl"></div>
-            <div class="scan-corner br"></div>
-            <div class="scan-line" id="scan-line"></div>
-          </div>
-        </div>
-        <div class="scan-dark-side"></div>
-      </div>
-      <div class="scan-dark-bottom"></div>
-    </div>
-  </div>
-  <div class="scan-status">
-    <div class="scan-status-txt" id="scan-status-txt">Apunta la cámara al código QR o código de barras</div>
-    <div class="scan-formats">
-      <span class="scan-fmt-pill">📱 QR Code</span>
-      <span class="scan-fmt-pill">📋 PDF417</span>
-      <span class="scan-fmt-pill">🔢 Code 128</span>
-      <span class="scan-fmt-pill">🆔 INE / CURP</span>
-    </div>
-    <button class="scan-manual-btn" onclick="openManualCURP()">✍️ Ingresar CURP manualmente</button>
-  </div>
-</div>
-
-<!-- Scan result preview -->
-<div class="scan-result-overlay" id="scan-result-overlay">
-  <div class="scan-result-sheet">
-    <div class="scan-result-title">✅ <span>Datos detectados</span></div>
-    <div class="scan-result-sub" id="scan-result-sub">Revisa los datos antes de usarlos</div>
-    <div id="scan-result-fields"></div>
-    <details style="margin-top:8px">
-      <summary style="font-size:10px;color:var(--mut);cursor:pointer;font-weight:700">Ver texto raw del código</summary>
-      <div class="scan-result-raw" id="scan-result-raw"></div>
-    </details>
-    <button class="scan-use-btn" onclick="applyScanResult()">✅ Usar estos datos</button>
-    <button class="scan-retry-btn" onclick="retryScan()">🔄 Escanear de nuevo</button>
-  </div>
-</div>
-
-<!-- ═══ PHOTO ID SCANNER v35 ═══ -->
-<div class="pid-overlay" id="pid-overlay">
-  <div class="pid-hdr">
-    <div style="font-size:22px">📸</div>
-    <div class="pid-hdr-title">Fotografiar Credencial</div>
-    <button class="pid-hdr-close" onclick="closePhotoIDScanner()">✕</button>
-  </div>
-  <div class="pid-video-wrap" id="pid-video-wrap" style="position:relative;flex:1;overflow:hidden;background:#000">
-    <video class="pid-video" id="pid-video" playsinline autoplay muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
-    <div class="pid-guide">
-      <div class="pid-guide-label">Coloca la credencial dentro del marco</div>
-      <div class="pid-card-frame">
-        <div class="pid-card-border">
-          <div class="pid-corner tl"></div>
-          <div class="pid-corner tr"></div>
-          <div class="pid-corner bl"></div>
-          <div class="pid-corner br"></div>
-          <div class="pid-scan-line" id="pid-scan-line"></div>
-        </div>
-      </div>
-      <div class="pid-hint">📋 Frente de la credencial · buena iluminación</div>
-    </div>
-    <!-- Processing overlay -->
-    <div class="pid-processing" id="pid-processing">
-      <div class="pid-proc-ico">🤖</div>
-      <div class="pid-proc-label">Analizando con IA…</div>
-      <div class="pid-proc-sub">Extrayendo datos de la credencial</div>
-    </div>
-  </div>
-  <div class="pid-footer">
-    <button class="pid-capture-btn" id="pid-capture-btn" onclick="capturePhotoID()">
-      <span style="font-size:22px">📸</span>
-      <span>Capturar foto</span>
-    </button>
-    <button class="pid-file-btn" onclick="document.getElementById('pid-file-inp').click()">🖼 Elegir de galería</button>
-    <input type="file" id="pid-file-inp" accept="image/*" style="display:none" onchange="handlePIDFile(event)"/>
-    <canvas id="pid-canvas" style="display:none"></canvas>
-    <div class="pid-side-note">La imagen se analiza localmente con tu API Key de Anthropic</div>
-  </div>
-</div>
-
-<!-- Photo ID quick-save result sheet -->
-<div class="pid-result-overlay" id="pid-result-overlay">
-  <div class="pid-result-sheet">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <div style="font-size:20px">✅</div>
-      <div style="flex:1">
-        <div style="font-size:16px;font-weight:800">Datos detectados</div>
-        <div style="font-size:11px;color:var(--sft)" id="pid-res-sub">Revisa y completa antes de guardar</div>
-      </div>
-      <button onclick="closePIDResult()" style="background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--sft);cursor:pointer">✕</button>
-    </div>
-
-    <!-- Foto miniatura -->
-    <img id="pid-thumb" class="pid-photo-thumb" src="" alt="Foto credencial" style="display:none"/>
-
-    <!-- Campos extraídos editables -->
-    <div id="pid-res-fields"></div>
-
-    <!-- Separador -->
-    <div style="border-top:1.5px solid var(--b2);margin:14px 0 12px"></div>
-
-    <!-- Programa -->
-    <div style="font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📋 Registro del programa</div>
-
-    <div style="margin-bottom:10px">
-      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Programa</label>
-      <select id="pid-tipo-sel" onchange="onPIDTipoChange(this)" style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;-webkit-appearance:none;transition:.2s">
-        <option value="">— Seleccionar programa —</option>
-        <option value="NINGUNO">❌ No tiene programa</option>
-        <option value="PAM">👴 PAM – Pensión para el Bienestar (Adulto Mayor)</option>
-        <option value="PCD">♿ PCD – Pensión para Personas con Discapacidad</option>
-        <option value="JCF">🎓 JCF – Jóvenes Construyendo el Futuro</option>
-        <option value="MT">👩 MT – Madres Trabajadoras</option>
-        <option value="BBJ">📚 BBJ – Becas Benito Juárez</option>
-      </select>
-      <div id="pid-no-prog-note" style="display:none;margin-top:6px;padding:8px 12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:8px;font-size:11px;font-weight:700;color:#f87171">
-        Se registrará con estatus "Sin programa"
-      </div>
-    </div>
-
-    <div style="margin-bottom:12px">
-      <label style="font-size:12px;font-weight:700;color:var(--sft);display:block;margin-bottom:6px">Folio (opcional)</label>
-      <input id="pid-folio-inp" type="text" placeholder="F-0001 (se asigna automático si se deja vacío)"
-        style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;box-sizing:border-box"/>
-    </div>
-
-    <button class="scan-use-btn" onclick="savePIDRecord()" style="margin-top:0">💾 Guardar beneficiario</button>
-    <button class="scan-retry-btn" onclick="retryPIDPhoto()">📸 Tomar otra foto</button>
-  </div>
-</div>
-
-<!-- ═══ AI ASSISTANT v34 ═══ -->
-<div class="ai-sheet" id="ai-sheet">
-  <div class="ai-hdr">
-    <div class="ai-hdr-ico">🤖</div>
-    <div class="ai-hdr-info">
-      <div class="ai-hdr-title">Asistente IA · PensionadosMX</div>
-      <div class="ai-hdr-sub" id="ai-hdr-sub">Análisis inteligente de tus beneficiarios</div>
-    </div>
-    <button class="ai-hdr-btn" onclick="openAIKeySheet()" title="Configurar API Key" style="background:none;border:1px solid var(--b2);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--sft);cursor:pointer;margin-right:6px" id="ai-key-btn">🔑</button>
-    <button class="ai-hdr-close" onclick="closeAI()">✕</button>
-  </div>
-  <!-- API Key setup panel (inline) -->
-  <div id="ai-key-panel" style="display:none;padding:16px;background:var(--s1);border-bottom:1px solid var(--b1)">
-    <div style="font-size:11px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🔑 API Key de Anthropic</div>
-    <input id="ai-key-inp" type="password" placeholder="sk-ant-api03-..." autocomplete="off"
-      style="width:100%;background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:var(--fnt);outline:none;margin-bottom:8px"/>
-    <div style="display:flex;gap:7px">
-      <button onclick="saveAIKey()" style="flex:1;background:var(--a);color:#fff;border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt)">💾 Guardar</button>
-      <button onclick="clearAIKey()" style="flex:1;background:var(--s2);color:var(--sft);border:1px solid var(--b2);border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fnt)">🗑 Borrar</button>
-    </div>
-    <div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">Tu clave se guarda solo en este dispositivo (localStorage). Obtenla en <b style="color:var(--sft)">console.anthropic.com</b></div>
-  </div>
-  <div class="ai-msgs" id="ai-msgs"></div>
-  <div class="ai-suggestions" id="ai-sugs"></div>
-  <div class="ai-input-bar">
-    <input class="ai-inp" id="ai-inp" type="text" placeholder="Pregunta sobre tus beneficiarios…" autocomplete="off" autocorrect="off" onkeydown="if(event.key==='Enter')aiSend()"/>
-    <button class="ai-send" id="ai-send-btn" onclick="aiSend()">➤</button>
-  </div>
-</div>
-<button class="ai-fab" id="ai-fab" onclick="openAI()" title="Asistente IA">
-  <span class="ai-fab-pulse"></span>
-  🤖
-</button>
-<canvas class="confetti-canvas" id="confetti-canvas" style="display:none"></canvas>
-
-<div class="sw-update-bar" id="sw-update-bar"><span>🔄 Nueva versión disponible</span><button onclick="navigator.serviceWorker.getRegistration().then(r=>{r&&r.waiting&&r.waiting.postMessage({type:'SKIP_WAITING'})});this.closest('[id=sw-update-bar]').style.display='none'" style="background:rgba(255,255,255,.2);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:8px;padding:5px 13px;cursor:pointer;font-family:var(--fnt)">Actualizar</button></div>
-<!-- Offline queue badge -->
-<div class="offline-queue-badge" id="offline-queue-badge">
-  <span>0 cambios pendientes</span>
-  <button onclick="flushOfflineQueue()" style="background:rgba(0,0,0,.2);border:none;color:#000;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:var(--fnt)">Sincronizar</button>
-</div>
-<!-- Tab position indicator dots -->
-<div class="tab-pos-indicator" id="tab-dots">
-  <div class="tab-pos-dot active"></div>
-  <div class="tab-pos-dot"></div>
-  <div class="tab-pos-dot"></div>
-  <div class="tab-pos-dot"></div>
-  <div class="tab-pos-dot"></div>
-  <div class="tab-pos-dot"></div>
-</div>
-<div class="pwa-offline" id="pwa-offline">📡 Sin conexión — Todos los datos están guardados en tu dispositivo</div>
-<div class="pwa-install-bar" id="pwa-install-bar">
-  <div class="pwa-install-txt">📲 Instala Pensionados MX<br><span style="opacity:.8;font-size:10px">Acceso rápido desde tu pantalla</span></div>
-  <button class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
-  <button class="pwa-install-close" onclick="hidePWABar()">✕</button>
-</div>
-<script>
-/* ════════════════════════════════════════════════
-   PULL-TO-REFRESH v31
-   Desliza hacia abajo en Inicio para actualizar
-   ════════════════════════════════════════════════ */
-
-(function initPullToRefresh(){
-  const mainEl=document.getElementById('main');
-  if(!mainEl) return;
-
-  // Create indicator
-  const ptr=document.createElement('div');
-  ptr.className='ptr-indicator'; ptr.id='ptr-indicator';
-  ptr.innerHTML='↓'; mainEl.style.position='relative';
-  mainEl.prepend(ptr);
-
-  let startY=0, pulling=false, triggered=false;
-  const THRESHOLD=60;
-
-  mainEl.addEventListener('touchstart',e=>{
-    if(mainEl.scrollTop>10) return; // Only when at top
-    startY=e.touches[0].clientY; pulling=true; triggered=false;
-  },{passive:true});
-
-  mainEl.addEventListener('touchmove',e=>{
-    if(!pulling||mainEl.scrollTop>2) return;
-    const dy=e.touches[0].clientY-startY;
-    if(dy<10) return;
-    ptr.classList.add('pulling');
-    if(dy>THRESHOLD&&!triggered){
-      ptr.innerHTML='↻';triggered=true;
-      if(navigator.vibrate) navigator.vibrate(15);
-    } else if(dy<=THRESHOLD){
-      ptr.innerHTML='↓';triggered=false;
-    }
-  },{passive:true});
-
-  mainEl.addEventListener('touchend',()=>{
-    if(!pulling) return; pulling=false;
-    if(triggered){
-      ptr.classList.add('refreshing');ptr.innerHTML='↻';
-      // Refresh action
-      setTimeout(()=>{
-        if(typeof fbIsConfigured==='function'&&fbIsConfigured()&&!isCreator()){
-          fbPullData().then(()=>{
-            ptr.classList.remove('refreshing','pulling');ptr.innerHTML='↓';
-            snack('☁️ Datos actualizados','☁️');
-          });
-        } else {
-          detectDups();upHdr();renderInicio();
-          ptr.classList.remove('refreshing','pulling');ptr.innerHTML='↓';
-          snack('✅ Actualizado','✅');
-        }
-      },600);
-    } else {
-      ptr.classList.remove('pulling');ptr.innerHTML='↓';
-    }
-  },{passive:true});
-})();
+// Clear pending when Firebase syncs
+document.addEventListener('fb-synced',()=>clearPending());
+setTimeout(updateSyncBadge,2000);
+setInterval(updateSyncBadge,30000);
 
 // Offline detection
 window.addEventListener('online',  ()=>document.getElementById('pwa-offline').classList.remove('show'));
@@ -13400,7 +11546,7 @@ function exportPDFReport(){
   .bar-fill{height:8px;border-radius:3px;background:#1d4ed8;}
   @media print{body{margin:0;}button{display:none;}}</style></head><body>
   <div style="display:flex;justify-content:space-between;align-items:flex-start">
-    <div><h1>📋 Reporte PensionadosMX v34</h1><div class="meta">${fecha}</div></div>
+    <div><h1>📋 Reporte PensionadosMX v36</h1><div class="meta">${fecha}</div></div>
     <button onclick="window.print()" style="background:#1d4ed8;color:#fff;border:none;border-radius:7px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer">🖨️ Imprimir</button>
   </div>
   <div class="kpi-grid">
@@ -13419,7 +11565,7 @@ function exportPDFReport(){
   ${R.filter(r=>r.estatus==='Activo').slice(0,200).map(r=>`<tr><td style="font-family:monospace">${r.folio}</td><td>${r.nombre}</td><td>${r.tipo}</td><td>${r.seccion||'—'}</td><td>${r.visita==='Si'?'✅':r.visita==='Pendiente'?'⏳':'❌'}</td><td>${r.estatus}</td></tr>`).join('')}
   ${R.filter(r=>r.estatus==='Activo').length>200?`<tr><td colspan="6" style="text-align:center;color:#666;font-style:italic">... y ${R.filter(r=>r.estatus==='Activo').length-200} más (muestra limitada a 200 en PDF)</td></tr>`:''}
   </table>
-  <div style="margin-top:20px;color:#999;font-size:10px;text-align:center">Generado por PensionadosMX v34 · ${fecha}</div>
+  <div style="margin-top:20px;color:#999;font-size:10px;text-align:center">Generado por PensionadosMX v36 · ${fecha}</div>
   </body></html>`);
   win.document.close();
 }
@@ -13463,6 +11609,126 @@ function exportPDFReport(){
     }
   },500);
 })();
+
+/* ════════════════════════════════════════════════
+   v37 — WHATSAPP TEMPLATES + BULK ACTIONS
+   ════════════════════════════════════════════════ */
+
+const WA_TEMPLATES = {
+  PAM: 'Buen día {nombre}, le saluda el equipo del programa Adulto Mayor (PAM). Le contactamos para recordarle que puede acudir a nuestras oficinas o comunicarse con nosotros para cualquier duda sobre su apoyo. Folio: {folio}.',
+  PCD: 'Buen día {nombre}, le contacta el programa de Personas con Discapacidad (PCD). Le recordamos que estamos para apoyarle. Si tiene alguna necesidad o duda, por favor contáctenos. Folio: {folio}.',
+  JCF: 'Hola {nombre}, te saluda el equipo de Jóvenes Construyendo el Futuro. Te recordamos que puedes acudir con nosotros para cualquier consulta sobre tu programa. Folio: {folio}.',
+  MT:  'Buen día {nombre}, le saluda el equipo del programa Madres. Le recordamos que estamos a sus órdenes para apoyarle. Cualquier duda, no dude en comunicarse. Folio: {folio}.',
+  BBJ: 'Hola {nombre}, te contacta el equipo de Becas Benito Juárez. Te recordamos seguir al corriente con tus estudios. Estamos para cualquier duda. Folio: {folio}.',
+  _default: 'Hola {nombre}, le contactamos del programa {programa} para confirmar su información y saludarle. Por favor comuníquese con nosotros. Folio: {folio}.',
+};
+function _getWATemplate(tipo){ return WA_TEMPLATES[tipo]||WA_TEMPLATES._default; }
+function _selectWATpl(tipo,btn){
+  var ta=document.getElementById('wa-bulk-msg');
+  if(ta) ta.value=_getWATemplate(tipo);
+  btn.closest('div').querySelectorAll('button').forEach(function(b){b.style.background='var(--s2)';});
+  btn.style.background='var(--a)';
+}
+
+function sendWhatsAppBulk(){
+  var selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  var records=[...selected].map(function(id){return R.find(function(r){return r.id===id;});}).filter(Boolean);
+  var withPhone=records.filter(function(r){return r.tel;});
+  if(!withPhone.length){snack('⚠️ Sin teléfono en la selección','⚠️');return;}
+  var progCount={};
+  records.forEach(function(r){progCount[r.tipo]=(progCount[r.tipo]||0)+1;});
+  var dominantProg=Object.entries(progCount).sort(function(a,b){return b[1]-a[1];})[0]?.[0]||'_default';
+  var defaultTpl=_getWATemplate(dominantProg);
+  var tplBtns=Object.entries(WA_TEMPLATES).filter(function(e){return e[0]!=='_default';}).map(function(e){
+    var k=e[0]; var p=P[k]||{ico:'📋'};
+    var isActive=k===dominantProg;
+    return '<button type="button" onclick="_selectWATpl(\'' +k+ '\',this)" style="flex:1;min-width:50px;padding:7px 3px;background:'+(isActive?'var(--a)':'var(--s2)')+';color:var(--txt);border:1.5px solid var(--b2);border-radius:9px;font-size:10px;font-weight:800;cursor:pointer;font-family:var(--fnt);transition:.15s">'+p.ico+' '+k+'</button>';
+  }).join('');
+  conf2(
+    '💬 WhatsApp a '+withPhone.length+' beneficiarios',
+    '<div style="margin-bottom:6px;font-size:11px;font-weight:800;color:var(--t2)">Plantilla por programa:</div>'
+    +'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">'+tplBtns+'</div>'
+    +'<div style="margin-bottom:6px;font-size:10px;color:var(--sft)">Variables: <code style="background:var(--s2);padding:1px 4px;border-radius:4px">{nombre}</code> <code style="background:var(--s2);padding:1px 4px;border-radius:4px">{programa}</code> <code style="background:var(--s2);padding:1px 4px;border-radius:4px">{folio}</code></div>'
+    +'<textarea id="wa-bulk-msg" style="width:100%;min-height:90px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:12px;outline:none;resize:none;box-sizing:border-box;line-height:1.5">'+defaultTpl+'</textarea>'
+    +'<div style="font-size:10px;color:var(--mut);margin-top:6px">⏱ 0.6s entre mensajes · '+withPhone.length+' de '+records.length+' tienen teléfono</div>',
+    function(){
+      var template=document.getElementById('wa-bulk-msg')?.value||'Hola {nombre}';
+      withPhone.forEach(function(r,i){
+        setTimeout(function(){
+          var msg=template
+            .replace(/{nombre}/g,r.nombre.split(' ')[0])
+            .replace(/{programa}/g,r.tipo)
+            .replace(/{folio}/g,r.folio||'');
+          var tel=r.tel.replace(/[^0-9]/g,'');
+          window.open('https://wa.me/52'+tel+'?text='+encodeURIComponent(msg),'_blank');
+        },i*600);
+      });
+      snack('💬 Enviando WA a '+withPhone.length+' contactos','💬');
+    },
+    'Enviar a '+withPhone.length
+  );
+}
+
+function sendWhatsAppReminder(id){
+  var r=R.find(function(x){return x.id===id;});if(!r||!r.tel)return;
+  var tel=r.tel.replace(/[^0-9]/g,'');
+  var nombre=r.nombre.split(' ')[0];
+  var msg=_getWATemplate(r.tipo).replace(/{nombre}/g,nombre).replace(/{programa}/g,r.tipo).replace(/{folio}/g,r.folio||'');
+  conf2(
+    '💬 WhatsApp a '+nombre,
+    '<div style="font-size:13px;color:var(--sft);margin-bottom:10px">Mensaje:</div>'
+    +'<textarea id="wa-ind-msg" style="width:100%;min-height:80px;background:var(--s2);border:1.5px solid var(--b2);border-radius:12px;color:var(--txt);padding:10px;font-family:var(--fnt);font-size:12px;outline:none;resize:none;box-sizing:border-box;line-height:1.5">'+msg+'</textarea>',
+    function(){
+      var finalMsg=document.getElementById('wa-ind-msg')?.value||msg;
+      window.open('https://wa.me/52'+tel+'?text='+encodeURIComponent(finalMsg),'_blank');
+    },
+    'Abrir WhatsApp'
+  );
+}
+
+/* ── Sync pending badge update ── */
+function updateSyncBadge(){
+  var n=getPendingCount();
+  var badge=document.getElementById('sync-pending-badge');
+  if(!badge)return;
+  var fbOk=typeof fbIsConfigured==='function'&&fbIsConfigured();
+  if(n>0&&fbOk&&!_fbConnected){
+    badge.textContent=n+' sin sync';
+    badge.style.display='inline-flex';
+  }else{
+    badge.style.display='none';
+    if(n>0&&typeof _fbConnected!=='undefined'&&_fbConnected) clearPending();
+  }
+}
+
+
+setTimeout(updateSyncBadge,3000);
+setInterval(updateSyncBadge,30000);
+
+
+/* ── v37: Asignar sección masiva ── */
+function openBulkAssignSection(){
+  var selected=batchSel||new Set();
+  if(!selected.size){snack('⚠️ Selecciona registros primero','⚠️');return;}
+  var secs=[...new Set(R.map(function(r){return r.seccion;}).filter(Boolean))].sort();
+  var customInput='<input id="bulk-sec-custom" class="fi" style="margin-bottom:8px" placeholder="Sección (ej: 615)" type="text"/>';
+  var grid='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">'+secs.map(function(s){return '<button type="button" onclick="applyBulkSection(\'' +s+ '\')" style="padding:9px 4px;background:var(--s2);color:var(--a2);border:1.5px solid var(--b2);border-radius:9px;font-size:12px;font-weight:800;cursor:pointer;font-family:\'Fira Code\',monospace">'+s+'</button>';}).join('')+'</div>';
+  conf2('📍 Asignar sección a '+selected.size+' registros',
+    customInput+grid,
+    function(){var custom=document.getElementById('bulk-sec-custom')?.value?.trim();if(custom)applyBulkSection(custom);},
+    'Usar personalizada'
+  );
+}
+function applyBulkSection(sec){
+  var selected=batchSel||new Set();
+  var count=0;
+  selected.forEach(function(id){var r=R.find(function(x){return x.id===id;});if(r){r.seccion=sec;r.ult=nowStr();count++;}});
+  svR();detectDups();if(typeof renderList==='function')renderList();
+  exitBatch();snack('📍 '+count+' registros asignados a sección '+sec,'📍');
+  if(typeof fbIsConfigured==='function'&&fbIsConfigured())fbPushData();
+}
+</script>
 
 </body>
 </html>

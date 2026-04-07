@@ -1,7 +1,7 @@
 {
-  "name": "Pensionados MX v34",
+  "name": "Pensionados MX v36",
   "short_name": "PensionadosMX",
-  "description": "Gestión de beneficiarios de programas sociales con IA integrada · v34",
+  "description": "Gestión de beneficiarios de programas sociales con IA integrada · v36",
   "start_url": "./",
   "display": "standalone",
   "orientation": "any",
@@ -32,14 +32,24 @@
       "short_name": "Nuevo",
       "description": "Agregar un beneficiario",
       "url": "./?action=new",
-      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Buscar",
       "short_name": "Buscar",
       "description": "Buscar beneficiarios",
       "url": "./?tab=buscar",
-      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "screenshots": [],
