@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Pensionados MX"/>
 <meta name="theme-color" id="meta-tc" content="#05090f"/>
-<title>Pensionados MX v36</title>
+<title>Pensionados MX v37</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ========== THEMES ========== */
@@ -325,19 +325,39 @@ body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;mi
 .stat-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
 .scard{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:12px 10px 10px;cursor:pointer;transition:.15s;text-align:center;}
 .scard:active{transform:scale(.95);opacity:.85;}
+.scard-ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;font-size:16px;margin-bottom:6px;}
 .scard-n{font-size:24px;font-weight:800;font-family:'Fira Code',monospace;line-height:1;margin-bottom:3px;}
-.scard-l{font-size:8px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
+.scard-l{font-size:8px;font-weight:800;color:var(--sft);text-transform:uppercase;letter-spacing:.5px;}
 .prog-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;}
 .pp{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:8px 2px 6px;text-align:center;cursor:pointer;transition:.15s;border-bottom:2px solid transparent;}
 .pp:active{transform:scale(.93);}
 .pp-ico{font-size:14px;display:block;margin-bottom:2px;}
 .pp-code{font-size:7px;font-weight:800;letter-spacing:.4px;}
 .pp-n{font-size:12px;font-weight:800;font-family:'Fira Code',monospace;margin-top:1px;}
-.pp.pam{border-bottom-color:#60a5fa;}.pp.pam .pp-code,.pp.pam .pp-n{color:#60a5fa;}
-.pp.pcd{border-bottom-color:#4ade80;}.pp.pcd .pp-code,.pp.pcd .pp-n{color:#4ade80;}
-.pp.jcf{border-bottom-color:#fb923c;}.pp.jcf .pp-code,.pp.jcf .pp-n{color:#fb923c;}
-.pp.mt {border-bottom-color:#f472b6;}.pp.mt  .pp-code,.pp.mt  .pp-n{color:#f472b6;}
-.pp.bbj{border-bottom-color:#a78bfa;}.pp.bbj .pp-code,.pp.bbj .pp-n{color:#a78bfa;}
+.prog-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;}
+.pp{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 4px 8px;text-align:center;cursor:pointer;transition:.18s;border-bottom:2px solid transparent;position:relative;overflow:hidden;}
+.pp:active{transform:scale(.91);opacity:.85;}
+/* icon badge wrapper */
+.pp-ico-wrap{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:12px;margin-bottom:5px;font-size:17px;transition:.18s;}
+.pp-ico{font-size:17px;display:block;line-height:1;}
+.pp-code{font-size:7px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-top:1px;}
+.pp-n{font-size:13px;font-weight:800;font-family:'Fira Code',monospace;margin-top:2px;line-height:1;}
+/* per-program coloring */
+.pp.pam .pp-ico-wrap{background:rgba(96,165,250,.18);}
+.pp.pam .pp-code,.pp.pam .pp-n{color:#60a5fa;}
+.pp.pam{border-bottom-color:#60a5fa;}
+.pp.pcd .pp-ico-wrap{background:rgba(74,222,128,.18);}
+.pp.pcd .pp-code,.pp.pcd .pp-n{color:#4ade80;}
+.pp.pcd{border-bottom-color:#4ade80;}
+.pp.jcf .pp-ico-wrap{background:rgba(251,146,60,.18);}
+.pp.jcf .pp-code,.pp.jcf .pp-n{color:#fb923c;}
+.pp.jcf{border-bottom-color:#fb923c;}
+.pp.mt  .pp-ico-wrap{background:rgba(244,114,182,.18);}
+.pp.mt  .pp-code,.pp.mt  .pp-n{color:#f472b6;}
+.pp.mt{border-bottom-color:#f472b6;}
+.pp.bbj .pp-ico-wrap{background:rgba(167,139,250,.18);}
+.pp.bbj .pp-code,.pp.bbj .pp-n{color:#a78bfa;}
+.pp.bbj{border-bottom-color:#a78bfa;}
 .pend-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--b1);border-left:3px solid var(--amb);border-radius:var(--r2);margin-bottom:6px;cursor:pointer;transition:.15s;}
 .pend-item:active{transform:scale(.98);}
 .pend-av{width:36px;height:36px;border-radius:10px;background:#1e1a08;color:var(--amb);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
@@ -689,10 +709,12 @@ body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;mi
 .conf-box h3{font-size:15px;font-weight:800;margin-bottom:6px;}
 .conf-box p{font-size:12px;color:var(--sft);margin-bottom:16px;line-height:1.4;}
 .conf-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.empty{text-align:center;padding:38px 14px;}
-.empty-ico{font-size:44px;margin-bottom:12px;opacity:.35;}
-.empty h3{font-size:15px;font-weight:800;color:var(--sft);margin-bottom:4px;}
-.empty p{font-size:12px;color:var(--mut);}
+.empty{text-align:center;padding:44px 16px;}
+.empty-ico{font-size:48px;margin-bottom:14px;opacity:.3;filter:grayscale(.4);}
+.empty h3{font-size:16px;font-weight:800;color:var(--sft);margin-bottom:6px;letter-spacing:-.2px;}
+.empty p{font-size:12px;color:var(--mut);line-height:1.6;max-width:200px;margin:0 auto;}
+.empty .empty-cta{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:var(--lg);color:#fff;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--fnt);box-shadow:0 4px 14px rgba(59,130,246,.35);}
+.empty .empty-cta:active{transform:scale(.95);}
 
 /* ── v13 NEW FEATURES ── */
 /* Search delete bar */
@@ -863,30 +885,48 @@ body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;mi
 [data-theme=arctic] .alert-names span,[data-theme=campo] .alert-names span{background:#fecaca;}
 
 /* ── v18: TARJETAS COMPACTAS TIPO LISTA ── */
-.rec{background:var(--card);border:none;border-radius:0;overflow:hidden;box-shadow:none;border-bottom:1px solid var(--b1);}
+.rec{background:var(--card);border:none;border-radius:0;overflow:hidden;box-shadow:none;border-bottom:1px solid var(--b1);transition:background .12s;}
 .rec:first-child{border-radius:var(--r) var(--r) 0 0;}
 .rec:last-child{border-radius:0 0 var(--r) var(--r);border-bottom:none;}
 .recs{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);box-shadow:0 2px 12px rgba(0,0,0,.18);}
-.rec-bar{height:0;border-bottom:none;}/* ocultar barra de color superior */
-.rec-body{padding:10px 12px 8px;}
-.rec-top{margin-bottom:4px;}
-.av{width:44px;height:44px;border-radius:12px;}
-.av-photo{width:44px;height:44px;border-radius:12px;}
-/* Nombre con letter-spacing cómodo para MAYÚSCULAS */
-.rec-name{font-size:13px;font-weight:700;letter-spacing:.3px;line-height:1.2;}
-.rec-folio{font-size:10px;margin-top:1px;}
-/* Info grid 3 col más compacto */
+.rec-bar{height:0;border-bottom:none;}
+.rec-body{padding:12px 14px 9px;cursor:pointer;transition:background .12s;}
+.rec-body:active{background:var(--c2);}
+.rec-top{display:flex;align-items:center;gap:11px;margin-bottom:0;}
+/* gradient avatar */
+.av{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;background:var(--av-bg,var(--s2));color:var(--av-clr,var(--a2));border:1.5px solid var(--av-clr,var(--b2))22;}
+.av-grad{background:linear-gradient(135deg,var(--av-bg,var(--s2)),color-mix(in srgb,var(--av-bg,var(--s2)) 60%,var(--av-clr,var(--a2))))!important;box-shadow:0 2px 8px color-mix(in srgb,var(--av-clr,var(--a2)) 30%,transparent);}
+.av-photo{width:46px;height:46px;border-radius:13px;object-fit:cover;flex-shrink:0;}
+/* Nombre */
+.rec-name{font-size:13.5px;font-weight:700;letter-spacing:.1px;line-height:1.25;color:var(--txt);}
+.rec-folio{font-size:10px;color:var(--sft);font-family:'Fira Code',monospace;margin-top:2px;}
+.rec-badges-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-top:5px;}
+.age-chip{background:rgba(59,130,246,.15);color:var(--a2);font-size:9px;font-weight:800;padding:1px 6px;border-radius:6px;font-family:'Fira Code',monospace;}
+/* Info grid 3 col */
 .rec-info{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:4px;}
-.ri{font-size:9px;}
-.ri span{font-size:8px;margin-bottom:0;}
-/* Acciones más pequeñas */
-.rec-acts{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:5px 10px 7px;border-top:1px solid var(--b1);}
-.ra{padding:6px 4px;font-size:9px;border-radius:8px;}
-/* border-left de color programa como único acento */
-.rec.est-activo{border-left:3px solid var(--grn);}
+.ri{font-size:9px;color:var(--sft);}
+.ri span{display:block;font-size:8px;color:var(--mut);font-weight:600;margin-bottom:1px;}
+/* Actions bar */
+.rec-acts{display:grid;grid-template-columns:1fr auto 1fr;gap:5px;padding:6px 12px 9px;border-top:1px solid var(--b1);}
+.ra{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 4px;border-radius:var(--r3);border:1.5px solid var(--b2);background:var(--s2);cursor:pointer;transition:.13s;font-size:10px;font-weight:800;letter-spacing:-.1px;font-family:var(--fnt);}
+.ra:active{transform:scale(.93);}
+.ra-ico{display:flex;align-items:center;flex-shrink:0;}
+.rec-wa-btn{display:flex;align-items:center;justify-content:center;width:38px;height:36px;border-radius:var(--r3);background:rgba(37,211,102,.12);border:1.5px solid rgba(37,211,102,.3);color:#25d366;text-decoration:none;transition:.13s;flex-shrink:0;}
+.rec-wa-btn:active{transform:scale(.93);background:rgba(37,211,102,.22);}
+.vis-si  {background:rgba(34,197,94,.1); border-color:rgba(34,197,94,.35);color:#4ade80;}
+.vis-no  {background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.35);color:#f87171;}
+.vis-pe  {background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:#fbbf24;}
+.uso-mx  {background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.35);color:#60a5fa;}
+.uso-usa {background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:#fbbf24;}
+.uso-baja{background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.35);color:#f87171;}
+.uso-rev {background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.35);color:#a78bfa;}
+/* status left-border */
+.rec.est-activo  {border-left:3px solid var(--grn);}
 .rec.est-inactivo{border-left:3px solid var(--mut);}
 .rec.est-pendiente{border-left:3px solid var(--amb);}
-.rec.est-baja{border-left:3px solid var(--red);}
+.rec.est-baja    {border-left:3px solid var(--red);}
+/* dup outline */
+.rec.dup{outline:1.5px solid rgba(239,68,68,.4);outline-offset:-1.5px;}
 /* Light theme recs */
 [data-theme=arctic] .recs,[data-theme=campo] .recs{box-shadow:0 2px 12px rgba(0,0,0,.08);}
 
@@ -1024,8 +1064,21 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 }
 .nb-dot.on{display:block;}
 .nb.on{color:var(--a2);}
-.nb.on .nb-ico-wrap{background:rgba(59,130,246,.12);}
+.nb.on .nb-ico-wrap{background:rgba(59,130,246,.15)!important;}
 .nb.on .nb-svg{stroke:var(--a2);filter:drop-shadow(0 0 6px var(--a));}
+/* ── filled vs outlined icon swap ── */
+.nb-svg-on{display:none;}
+.nb-svg-off{display:block;}
+.nb.on .nb-svg-on{display:block;fill:var(--a2);filter:drop-shadow(0 0 5px rgba(96,165,250,.45));}
+.nb.on .nb-svg-off{display:none;}
+/* admin state */
+.nb-admin .nb-svg{stroke:var(--vio)!important;}
+.nb-admin.on .nb-svg-on{fill:var(--vio)!important;filter:drop-shadow(0 0 6px var(--vio))!important;}
+.nb-admin.on .nb-ico-wrap{background:rgba(139,92,246,.18)!important;}
+.nb-admin.on{color:var(--vio)!important;}
+/* bigger tap target */
+.nb-ico-wrap{width:44px!important;height:32px!important;border-radius:16px!important;}
+.nb-svg{width:22px!important;height:22px!important;}
 
 /* Clock in header */
 .hdr-clock{
@@ -3981,6 +4034,80 @@ html,body{font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optim
 .ruta-num{width:22px;height:22px;border-radius:50%;background:var(--a);color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ruta-name{flex:1;font-size:12px;font-weight:700;color:var(--txt);}
 .ruta-col{font-size:10px;color:var(--sft);}
+
+/* ══ v37 ICON SYSTEM POLISH ══ */
+/* Bottom nav transition: icon slides up slightly on active */
+.nb .nb-svg-off,.nb .nb-svg-on{transition:transform .2s cubic-bezier(.34,1.56,.64,1),opacity .15s;}
+.nb.on .nb-svg-on{transform:translateY(-1px);}
+/* Nav label transition */
+.nb span{transition:color .18s,font-weight .18s;}
+.nb.on span{font-weight:800!important;}
+/* Program card hover glow */
+.pp{transition:transform .15s,box-shadow .15s,border-color .15s;}
+.pp:hover{box-shadow:0 4px 16px rgba(0,0,0,.25);}
+.pp.pam:hover{border-color:rgba(96,165,250,.4);}
+.pp.pcd:hover{border-color:rgba(74,222,128,.4);}
+.pp.jcf:hover{border-color:rgba(251,146,60,.4);}
+.pp.mt:hover{border-color:rgba(244,114,182,.4);}
+.pp.bbj:hover{border-color:rgba(167,139,250,.4);}
+/* Stat card icon pulse on hover */
+.scard:hover .scard-ico{transform:scale(1.1);}
+.scard-ico{transition:transform .18s cubic-bezier(.34,1.56,.64,1);}
+/* QR button icon bounce */
+.home-qr-btn:hover .home-qr-ico{animation:qrBounce .4s ease;}
+@keyframes qrBounce{0%{transform:scale(1);}50%{transform:scale(1.2) rotate(-8deg);}100%{transform:scale(1) rotate(0);}}
+/* Nav pill active glow */
+.nb.on .nb-ico-wrap{box-shadow:inset 0 1px 0 rgba(255,255,255,.1)!important;}
+/* Header user avatar */
+.hdr-user{width:34px;height:34px;border-radius:50%;background:var(--lg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;cursor:pointer;flex-shrink:0;position:relative;border:2px solid rgba(255,255,255,.15);transition:.15s;}
+.hdr-user:active{transform:scale(.93);}
+/* Smooth nav text clamp on small screens */
+@media(max-width:360px){.nb span{font-size:7.5px!important;}.nb-ico-wrap{width:38px!important;}}
+
+/* ── FAB pill ── */
+.fab{width:auto!important;border-radius:28px!important;padding:0 20px!important;gap:8px!important;font-size:14px!important;font-weight:800!important;letter-spacing:-.2px!important;}
+.fab svg{flex-shrink:0;}
+
+/* ── Batch bar icon buttons ── */
+.batch-btn{width:34px;height:34px;border-radius:9px;padding:0!important;display:inline-flex;align-items:center;justify-content:center;}
+.batch-bar-txt{letter-spacing:-.2px;}
+
+/* ── Record action buttons with SVG ── */
+.ra{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:10px;border:1px solid var(--b2);background:var(--s2);cursor:pointer;transition:.14s;font-size:10px;font-weight:700;}
+.ra svg{flex-shrink:0;}
+.ra:active{transform:scale(.92);opacity:.85;}
+
+/* ── WA button with SVG ── */
+.rec-wa-btn{width:38px;height:36px;border-radius:10px;background:rgba(37,211,102,.12);border:1.5px solid rgba(37,211,102,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.13s;text-decoration:none;color:rgba(37,211,102,.9);}
+.rec-wa-btn:active{transform:scale(.88);background:rgba(37,211,102,.25);}
+
+/* ── QR button — icon in rounded box ── */
+.home-qr-ico{width:44px;height:44px;border-radius:13px;background:rgba(99,102,241,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.home-qr-btn{border-radius:18px!important;box-shadow:0 2px 12px rgba(99,102,241,.12);}
+
+/* ── Batch bar — gradient background ── */
+.batch-bar{background:linear-gradient(135deg,var(--ind),var(--vio))!important;box-shadow:0 4px 18px rgba(99,102,241,.35)!important;border-radius:14px!important;}
+.batch-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,.15)!important;border:1px solid rgba(255,255,255,.2)!important;color:#fff!important;font-size:10px;font-weight:800;border-radius:9px;padding:7px 11px;cursor:pointer;font-family:var(--fnt);white-space:nowrap;transition:.13s;}
+.batch-btn:active{background:rgba(255,255,255,.3)!important;transform:scale(.94);}
+
+/* ── Hero card shimmer ── */
+.hero-card{border-radius:20px!important;overflow:hidden!important;position:relative;}
+.hero-card::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);animation:heroShine 4s ease-in-out infinite;pointer-events:none;}
+@keyframes heroShine{0%{left:-100%;}40%{left:120%;}100%{left:120%;}}
+
+/* ── Record card staggered entrance ── */
+@keyframes recIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.recs .rec{animation:recIn .2s ease both;}
+.recs .rec:nth-child(1){animation-delay:.03s;}
+.recs .rec:nth-child(2){animation-delay:.06s;}
+.recs .rec:nth-child(3){animation-delay:.09s;}
+.recs .rec:nth-child(4){animation-delay:.12s;}
+.recs .rec:nth-child(n+5){animation-delay:.15s;}
+
+/* ── Selec / CSV top bar buttons ── */
+.list-top-btn{display:inline-flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--b2);color:var(--sft);font-size:10px;font-weight:700;border-radius:8px;padding:5px 10px;cursor:pointer;font-family:var(--fnt);}
+.list-top-btn:active{background:var(--b1);}
+.list-top-btn svg{flex-shrink:0;}
 </style>
 <!-- FIX v35: jsQR precargado en head → SW lo cachea en install → funciona offline -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js" defer></script>
@@ -4311,11 +4438,11 @@ if('serviceWorker' in navigator){
     </div>
     <span id="sync-pending-badge" style="display:none;background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid #f59e0b60;font-size:9px;font-weight:800;border-radius:8px;padding:3px 7px;font-family:'Fira Code',monospace;cursor:pointer" onclick="openFbStatus()">0 sin sync</span>
     <div class="hdr-badge" id="hdr-n">0</div>
-    <div class="hdr-btn" id="appear-btn" title="Apariencia">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <div class="hdr-btn" id="appear-btn" title="Apariencia — tamaño fuente">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><text x="4" y="17" font-family="serif" font-size="13" font-weight="700" fill="currentColor" stroke="none">A</text><text x="12" y="19" font-family="serif" font-size="9" font-weight="700" fill="currentColor" stroke="none" opacity=".6">a</text></svg>
     </div>
-    <div class="hdr-btn" id="theme-btn" title="Cambiar tema">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <div class="hdr-btn" id="theme-btn" title="Cambiar tema de color">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 000 20c1.5 0 2-1.5 2-3 0-1-.5-1.5-.5-2.5 0-1.7 1.3-3 3-3h2.5c2.5 0 3-1 3-3a10 10 0 00-10-8.5z"/></svg>
     </div>
     <div class="hdr-user" id="hdr-user-btn" onclick="openUserMenu()" title="Mi cuenta">U
       <div class="hdr-presence-badge" id="hdr-presence-badge"></div>
@@ -4356,7 +4483,13 @@ if('serviceWorker' in navigator){
 
     <!-- v35: Botón escanear QR/INE integrado en pantalla principal -->
     <button class="home-qr-btn" onclick="openIDScanner()">
-      <span class="home-qr-ico">📷</span>
+      <span class="home-qr-ico">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="16" width="5" height="5" rx="1"/>
+          <rect x="4.5" y="4.5" width="2" height="2" fill="currentColor" stroke="none"/><rect x="17.5" y="4.5" width="2" height="2" fill="currentColor" stroke="none"/><rect x="4.5" y="17.5" width="2" height="2" fill="currentColor" stroke="none"/>
+          <path d="M16 16h2v2h-2zM18 18h2v2h-2zM16 20h2M20 16v2"/>
+        </svg>
+      </span>
       <div class="home-qr-txt">
         <div class="home-qr-title">Escanear INE / QR / CURP</div>
         <div class="home-qr-sub">Funciona sin internet · Llena el formulario automático</div>
@@ -4408,11 +4541,21 @@ if('serviceWorker' in navigator){
     <div class="sort-bar" id="sort-bar"></div>
     <div class="batch-bar" id="batch-bar">
       <span class="batch-bar-txt" id="batch-txt">0 seleccionados</span>
-      <button class="batch-btn" onclick="batchMarkVisited()">✅ Visit.</button>
-      <button class="batch-btn" style="color:#25d366" onclick="sendWhatsAppBulk()">💬 WA</button>
-      <button class="batch-btn" onclick="batchExport()">⬇️ CSV</button>
-      <button class="batch-btn" onclick="batchDelete()" style="background:rgba(239,68,68,.25)">🗑️</button>
-      <button class="batch-btn" onclick="exitBatch()">✕</button>
+      <button class="batch-btn" onclick="batchMarkVisited()" title="Marcar visitados">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </button>
+      <button class="batch-btn" style="color:#25d366" onclick="sendWhatsAppBulk()" title="WhatsApp masivo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      </button>
+      <button class="batch-btn" onclick="batchExport()" title="Exportar CSV">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      </button>
+      <button class="batch-btn" onclick="batchDelete()" style="background:rgba(239,68,68,.3)" title="Eliminar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+      </button>
+      <button class="batch-btn" onclick="exitBatch()" title="Cancelar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
       <div class="sh2" id="list-sh" style="margin-bottom:0">Registros</div>
@@ -5240,70 +5383,123 @@ if('serviceWorker' in navigator){
   </div><!-- /p-admin -->
 
 </div>
-<button class="fab" id="fab" onclick="openShAdd()" style="width:auto;border-radius:28px;padding:0 22px;gap:8px;font-size:14px;letter-spacing:-.2px"><span style="font-size:20px;line-height:1">＋</span><span style="font-size:13px;font-weight:800">Agregar</span></button>
+<button class="fab" id="fab" onclick="openShAdd()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  <span>Agregar</span>
+</button>
 <div class="bnav">
+  <!-- INICIO -->
   <button class="nb on" id="nb-inicio" onclick="go('inicio')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/>
+      <!-- filled home for active, outlined for inactive — toggled via CSS -->
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10.5L12 4l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V10.5z"/>
+        <path d="M9 21V14h6v7"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 3.2L3 9.6V21h6v-7h6v7h6V9.6L12 3.2z" opacity=".9"/>
+        <rect x="9" y="14" width="6" height="7" rx="1" fill="white" opacity=".25"/>
       </svg>
       <div class="nb-dot" id="nb-dot-inicio"></div>
     </div>
     <span>Inicio</span>
   </button>
+
+  <!-- REGISTROS -->
   <button class="nb" id="nb-registros" onclick="go('registros')">
     <div class="nb-ico-wrap">
       <div class="nb-count" id="nb-count-registros"></div>
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h1M9 13h6M9 17h6"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="3" width="14" height="18" rx="2"/>
+        <path d="M9 8h6M9 12h6M9 16h4"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <rect x="5" y="3" width="14" height="18" rx="2" opacity=".9"/>
+        <path d="M9 8h6M9 12h6M9 16h4" stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".7"/>
       </svg>
       <div class="nb-dot" id="nb-dot-registros"></div>
     </div>
     <span>Registros</span>
   </button>
+
+  <!-- VISITAS -->
   <button class="nb" id="nb-visitas" onclick="go('visitas')">
     <div class="nb-ico-wrap">
       <div class="nb-count" id="nb-count-visitas" style="background:var(--amb)"></div>
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s-8-5.6-8-11a8 8 0 0116 0c0 5.4-8 11-8 11z"/><circle cx="12" cy="11" r="3"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21C12 21 5 15.5 5 9.5a7 7 0 0114 0c0 6-7 11.5-7 11.5z"/>
+        <circle cx="12" cy="9.5" r="2.5"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 21C12 21 5 15.5 5 9.5a7 7 0 0114 0c0 6-7 11.5-7 11.5z" opacity=".9"/>
+        <circle cx="12" cy="9.5" r="2.5" fill="white" opacity=".6"/>
       </svg>
       <div class="nb-dot" id="nb-dot-visitas"></div>
     </div>
     <span>Visitas</span>
   </button>
+
+  <!-- BUSCAR -->
   <button class="nb" id="nb-buscar" onclick="go('buscar')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10.5" cy="10.5" r="6.5"/>
+        <path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+        <circle cx="10.5" cy="10.5" r="6.5" fill="currentColor" opacity=".9" stroke="none"/>
+        <circle cx="10.5" cy="10.5" r="3.5" fill="white" opacity=".3" stroke="none"/>
+        <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2.2"/>
       </svg>
       <div class="nb-dot" id="nb-dot-buscar"></div>
     </div>
     <span>Buscar</span>
   </button>
+
+  <!-- ESTADÍSTICAS -->
   <button class="nb" id="nb-estadisticas" onclick="go('estadisticas')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="7" rx="1"/><rect x="12" y="9" width="3" height="11" rx="1"/><rect x="17" y="5" width="3" height="15" rx="1"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="14" width="4" height="7" rx="1"/>
+        <rect x="10" y="9" width="4" height="12" rx="1"/>
+        <rect x="17" y="4" width="4" height="17" rx="1"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <rect x="3" y="14" width="4" height="7" rx="1" opacity=".55"/>
+        <rect x="10" y="9" width="4" height="12" rx="1" opacity=".75"/>
+        <rect x="17" y="4" width="4" height="17" rx="1" opacity=".95"/>
       </svg>
       <div class="nb-dot" id="nb-dot-estadisticas"></div>
     </div>
     <span>Stats</span>
   </button>
+
+  <!-- CONFIG -->
   <button class="nb" id="nb-general" onclick="go('general')">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" opacity=".9"/>
+        <circle cx="12" cy="12" r="3" fill="white" opacity=".5"/>
       </svg>
       <div class="nb-dot" id="nb-dot-general"></div>
     </div>
     <span>Config</span>
   </button>
+
   <!-- ADMIN NAV — hidden until creator login -->
   <button class="nb nb-admin" id="nb-admin" onclick="go('admin')" style="display:none">
     <div class="nb-ico-wrap">
-      <svg class="nb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      <svg class="nb-svg nb-svg-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3c-1.5 3.5-5 5-8 5 0 7 3.5 11 8 13 4.5-2 8-6 8-13-3 0-6.5-1.5-8-5z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+      <svg class="nb-svg nb-svg-on" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 3c-1.5 3.5-5 5-8 5 0 7 3.5 11 8 13 4.5-2 8-6 8-13-3 0-6.5-1.5-8-5z" opacity=".9"/>
+        <path d="M9 12l2 2 4-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       </svg>
       <div class="nb-dot nb-dot-pulse" id="nb-dot-admin"></div>
     </div>
@@ -6082,8 +6278,6 @@ function recCard(r){
   const vc=VIS[r.visita]||VIS['Pendiente'];
   const uc=USO[r.uso]||USO['Mexico'];
   const estCls={'Activo':'est-activo','Inactivo':'est-inactivo','Pendiente':'est-pendiente','Baja':'est-baja'}[r.estatus]||'';
-  // Days since last visit
-  const days=r.visita==='Si'&&r.ult?daysSince(r.ult?.slice(0,10)):null;
   let daysBadge='';
   if(r.visita==='Pendiente'){
     const ds=r.fecha?daysSince(r.fecha):null;
@@ -6092,36 +6286,31 @@ function recCard(r){
       daysBadge=`<span class="days-badge ${cls}">hace ${ds}d</span>`;
     }
   }
-  // Photo or initials
   const avatarHtml=r.photo
-    ?`<img class="av-photo" src="${r.photo}" alt="${r.nombre}" style="border-color:${p.clr}60"/>`
-    :`<div class="av" style="background:${p.bg};color:${p.clr};width:56px;height:56px;border-radius:14px">${ini(r.nombre)}</div>`;
+    ?`<img class="av-photo" src="${r.photo}" alt="${r.nombre}" style="border:2px solid ${p.clr}50"/>`
+    :`<div class="av av-grad" style="--av-clr:${p.clr};--av-bg:${p.bg}">${ini(r.nombre)}</div>`;
+  const visIcons={'Si':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>','No':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>','Pendiente':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>'};
+  const visIcon=visIcons[r.visita]||'';
+  const waIcon='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.78-.88-2.06-.98s-.47-.15-.67.15-.77.98-.94 1.18-.35.22-.65.07a8.16 8.16 0 01-2.4-1.48 9 9 0 01-1.66-2.07c-.17-.3 0-.46.13-.61s.3-.35.44-.52a2 2 0 00.3-.5.55.55 0 000-.52c-.07-.15-.67-1.62-.92-2.22s-.49-.5-.67-.51h-.57a1.1 1.1 0 00-.8.37A3.35 3.35 0 007 9.38a5.83 5.83 0 001.22 3.08A13.35 13.35 0 0013.35 17a15 15 0 002.05.76 4.93 4.93 0 002.27.14 3.07 3.07 0 002.02-1.42 2.5 2.5 0 00.17-1.42c-.07-.12-.27-.19-.57-.34zM12 2A10 10 0 002.46 16.35L2 22l5.8-.5A10 10 0 1012 2z"/></svg>';
   return `<div class="rec${r.dup?' dup':''} ${estCls}">
-    <div class="rec-bar" style="background:${p.clr}40;border-bottom:2px solid ${p.clr}60"></div>
     <div class="rec-body" data-id="${r.id}" onclick="batchMode?toggleBatchRec(${r.id}):_toggleRecTray(${r.id})" oncontextmenu="if(!batchMode){enterBatch();toggleBatchRec(${r.id});}return false;">
       <div class="rec-top">
         ${avatarHtml}
         <div class="rec-meta">
           <div class="rec-name" style="${r.txtColor?'color:'+r.txtColor:''}">${r.nombre}</div>
-          <div class="rec-folio">${r.folio} · ID ${r.id} · ${p.ico} ${r.tipo}${r.seccion?' · Sec.'+r.seccion:''}${(()=>{if(!r.fnac)return'';try{const a=Math.floor((new Date()-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));return a>0&&a<120?' · <span style="color:var(--a2);font-weight:700">'+a+'a</span>'  :''}catch{return''}})()}</div>
+          <div class="rec-folio">${r.folio} · <span style="color:${p.clr}">${p.ico} ${r.tipo}</span>${r.seccion?' · Sec.'+r.seccion:''}${(()=>{if(!r.fnac)return'';try{const a=Math.floor((new Date()-new Date(r.fnac+'T00:00:00'))/(365.25*24*3600*1000));return a>0&&a<120?' · <span class="age-chip">'+a+'a</span>':''}catch{return''}})()}</div>
+          <div class="rec-badges-row">
+            <span class="bdg ${sc}">${r.estatus}</span>
+            ${r.dup?'<span class="dup-tag">DUP</span>':''}
+            ${daysBadge}
+          </div>
         </div>
-        ${r.dup?'<span class="dup-tag">⚠️ DUP</span>':daysBadge}
-      </div>
-      <div class="bdgs">
-        <span class="bdg" style="background:${p.bg};color:${p.clr}">${p.ico} ${r.tipo}</span>
-        <span class="bdg ${sc}">${r.estatus}</span>
-      </div>
-      <div class="rec-info">
-        <div class="ri"><span>Teléfono</span>${maskPhone(r.tel)}</div>
-        <div class="ri"><span>Colonia</span>${r.col||'—'}</div>
-        <div class="ri"><span>Domicilio</span>${(r.dom||'—')+' '+(r.num?'#'+r.num:'')}</div>
-        <div class="ri"><span>Observaciones</span>${r.obs||'—'}</div>
       </div>
     </div>
     <div class="rec-acts">
-      <button class="ra ${vc.cls}" onclick="cycleVis(${r.id},event)"><span class="ri2">${vc.ico}</span> ${vc.lbl}</button>
-      ${r.tel?`<a class="rec-wa-btn" href="https://wa.me/52${r.tel.replace(/[^0-9]/g,'')}" target="_blank" onclick="event.stopPropagation()">💬</a>`:''}
-      <button class="ra ${uc.cls}" onclick="cycleUso(${r.id},event)"><span class="ri2">${uc.ico}</span> ${uc.lbl}</button>
+      <button class="ra ${vc.cls}" onclick="cycleVis(${r.id},event)"><span class="ra-ico">${visIcon}</span>${vc.lbl}</button>
+      ${r.tel?`<a class="rec-wa-btn" href="https://wa.me/52${r.tel.replace(/[^0-9]/g,'')}" target="_blank" onclick="event.stopPropagation()">${waIcon}</a>`:''}
+      <button class="ra ${uc.cls}" onclick="cycleUso(${r.id},event)"><span class="ra-ico">${uc.ico}</span>${uc.lbl}</button>
     </div>
   </div>`;
 }
@@ -6264,16 +6453,19 @@ function _renderInicioInner(){
   // 3 STAT CARDS
   document.getElementById('stats-row3').innerHTML=`
     <div class="scard" onclick="openDupMgr()">
+      <div class="scard-ico" style="background:rgba(239,68,68,.15);color:var(--red)">⚠️</div>
       <div class="scard-n" style="color:var(--red)">${dups}</div>
-      <div class="scard-l">⚠️ Dup.</div>
+      <div class="scard-l">Duplicados</div>
     </div>
     <div class="scard" onclick="openQF('usa','✈️ Migrantes USA')">
+      <div class="scard-ico" style="background:rgba(245,158,11,.15);color:var(--amb)">✈️</div>
       <div class="scard-n" style="color:var(--amb)">${usa}</div>
-      <div class="scard-l">✈️ USA</div>
+      <div class="scard-l">Migrantes</div>
     </div>
     <div class="scard" onclick="openQF('pendientes','⏳ Pendientes')">
+      <div class="scard-ico" style="background:rgba(249,115,22,.15);color:var(--org)">⏳</div>
       <div class="scard-n" style="color:var(--org)">${pend}</div>
-      <div class="scard-l">⏳ Pend.</div>
+      <div class="scard-l">Pendientes</div>
     </div>`;
 
   // DONUT removido
@@ -6286,7 +6478,7 @@ function _renderInicioInner(){
   document.getElementById('prog-row').innerHTML=Object.entries(P).map(([k,p])=>{
     const cnt=R.filter(r=>r.tipo===k).length;
     return `<div class="pp ${p.cls}" onclick="openQF('prog_${k}','${p.ico} ${k}')">
-      <span class="pp-ico">${p.ico}</span>
+      <div class="pp-ico-wrap"><span class="pp-ico">${p.ico}</span></div>
       <div class="pp-code">${k}</div>
       <div class="pp-n">${cnt}</div>
     </div>`;
