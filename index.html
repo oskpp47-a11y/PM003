@@ -11,8 +11,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Pensionados MX"/>
 <meta name="theme-color" id="meta-tc" content="#05090f"/>
-<title>Pensionados MX v37</title>
+<title>Pensionados MX v38</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 /* ========== THEMES ========== */
 :root{--r:16px;--r2:12px;--r3:8px;--nh:62px;--st:env(safe-area-inset-top,44px);--sb:env(safe-area-inset-bottom,20px);--fnt:'Inter',sans-serif;--fnt2:'Fira Code',monospace;}
@@ -818,6 +820,19 @@ body{display:block;}#app-shell{display:none;flex-direction:column;height:100%;mi
 [data-theme=arctic] .ri,[data-theme=campo] .ri{color:var(--sft);}
 [data-theme=arctic] .ri span,[data-theme=campo] .ri span{color:var(--mut);}
 
+/* ── MAPA PAGE ── */
+#map-container{height:calc(100vh - 200px);min-height:320px;border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);margin-bottom:12px;}
+.map-bar{display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;}
+.map-filter-chip{background:var(--card);border:1.5px solid var(--b1);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;color:var(--sft);}
+.map-filter-chip.on{border-color:var(--a);color:var(--a);background:rgba(77,158,255,.1);}
+.map-stat{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:8px 12px;font-size:12px;font-weight:700;color:var(--sft);white-space:nowrap;}
+.map-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.map-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--sft);}
+.map-leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.gps-btn{display:flex;align-items:center;gap:6px;background:rgba(77,158,255,.12);border:1.5px solid var(--a);border-radius:var(--r2);padding:9px 14px;color:var(--a);font-size:13px;font-weight:700;cursor:pointer;transition:.15s;width:100%;}
+.gps-btn:active{opacity:.7;}
+.gps-coords{font-family:'Fira Code',monospace;font-size:11px;color:var(--grn);background:rgba(0,200,100,.08);border-radius:8px;padding:6px 10px;margin-top:6px;display:none;}
+.det-mini-map{height:160px;border-radius:var(--r2);overflow:hidden;border:1px solid var(--b1);margin-bottom:8px;}
 /* ── SECCIONES PAGE ── */
 .sec-pg-header{margin-bottom:12px;}
 .sec-pg-search{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--b2);border-radius:16px;padding:10px 14px;transition:.2s;}
@@ -4458,6 +4473,7 @@ if('serviceWorker' in navigator){
   <button class="tab" onclick="go('descargar')">⬇️ Exportar</button>
   <button class="tab" onclick="go('importar')">⬆️ Importar</button>
   <button class="tab" onclick="go('secciones')">🗺️ Secciones</button>
+  <button class="tab" onclick="go('mapa')">📍 Mapa</button>
   <button class="tab" style="display:none" onclick="go('historial')">📜 Historial</button>
   <button class="tab" style="display:none" onclick="go('accesos')">🔐 Accesos</button>
   <button class="tab" onclick="go('general')">⚙️ General</button>
@@ -4899,6 +4915,28 @@ if('serviceWorker' in navigator){
     <div id="sec-pg-list"></div>
   </div>
   <!-- HISTORIAL -->
+  <!-- MAPA DE BENEFICIARIOS -->
+  <div class="pg" id="p-mapa">
+    <div class="map-bar">
+      <div id="map-count" class="map-stat">📍 0 con GPS</div>
+      <button class="map-filter-chip on" id="mf-all" onclick="mapFilter('all')">Todos</button>
+      <button class="map-filter-chip" id="mf-PAM" onclick="mapFilter('PAM')">PAM</button>
+      <button class="map-filter-chip" id="mf-PCD" onclick="mapFilter('PCD')">PCD</button>
+      <button class="map-filter-chip" id="mf-JCF" onclick="mapFilter('JCF')">JCF</button>
+      <button class="map-filter-chip" id="mf-MT" onclick="mapFilter('MT')">MT</button>
+      <button class="map-filter-chip" id="mf-BBJ" onclick="mapFilter('BBJ')">BBJ</button>
+    </div>
+    <div class="map-legend">
+      <div class="map-leg-item"><div class="map-leg-dot" style="background:#4d9eff"></div>PAM</div>
+      <div class="map-leg-item"><div class="map-leg-dot" style="background:#a855f7"></div>PCD</div>
+      <div class="map-leg-item"><div class="map-leg-dot" style="background:#f97316"></div>JCF</div>
+      <div class="map-leg-item"><div class="map-leg-dot" style="background:#22c55e"></div>MT</div>
+      <div class="map-leg-item"><div class="map-leg-dot" style="background:#f43f5e"></div>BBJ</div>
+    </div>
+    <div id="map-container"></div>
+    <div style="font-size:11px;color:var(--mut);text-align:center;margin-top:6px">Solo aparecen beneficiarios con coordenadas GPS capturadas · Toca un marcador para ver detalle</div>
+  </div>
+
   <div class="pg" id="p-historial">
     <div style="display:flex;gap:8px;margin-bottom:11px">
       <button class="btn btn-s" style="flex:1;font-size:11px;padding:9px" onclick="dlHistCSV()">⬇️ Exportar CSV</button>
@@ -5686,6 +5724,16 @@ if('serviceWorker' in navigator){
   </div>
   <div class="fg"><label class="fl">📝 Observaciones / Notas</label><textarea class="fta" id="e-obs" placeholder="Notas adicionales…" style="height:64px"></textarea></div>
   <div class="fg"><label class="fl">📍 Sección</label><input class="fi" id="e-seccion" placeholder="617, 618…"/></div>
+  <div class="fg">
+    <label class="fl">🛰️ Coordenadas GPS</label>
+    <button type="button" class="gps-btn" onclick="captureGPS()">
+      <span id="gps-btn-ico">📍</span>
+      <span id="gps-btn-txt">Capturar ubicación actual</span>
+    </button>
+    <div class="gps-coords" id="gps-display"></div>
+    <input type="hidden" id="e-lat" value=""/>
+    <input type="hidden" id="e-lng" value=""/>
+  </div>
   <div class="fr2">
     <div class="fg"><label class="fl">🏘️ Área</label><input class="fi" id="e-area" placeholder="Norte, Sur, Centro…"/></div>
     <div class="fg"><label class="fl">🗺️ Ruta</label><input class="fi" id="e-ruta" placeholder="Ruta 1, A-3…"/></div>
@@ -6219,7 +6267,7 @@ document.getElementById('appear-btn').addEventListener('click',function(e){
 });
 
 /* ===== NAVIGATION ===== */
-const TABS=['inicio','registros','buscar','visitas','estadisticas','descargar','importar','secciones','historial','accesos','general','admin'];
+const TABS=['inicio','registros','buscar','visitas','estadisticas','descargar','importar','secciones','mapa','historial','accesos','general','admin'];
 let curTab='inicio';
 function go(tab){
   // Permission check for restricted tabs
@@ -6234,7 +6282,7 @@ function go(tab){
   }
   curTab=tab;
   // v36: actualizar subtítulo del header según tab
-  const _tabNames={inicio:'Panel principal',registros:'Lista de beneficiarios',buscar:'Búsqueda avanzada',visitas:'Control de visitas',estadisticas:'Estadísticas',descargar:'Exportar datos',importar:'Importar datos',secciones:'Secciones electorales',historial:'Historial de cambios',accesos:'Bitácora de accesos',general:'Configuración general',admin:'Panel de administrador'};
+  const _tabNames={inicio:'Panel principal',registros:'Lista de beneficiarios',buscar:'Búsqueda avanzada',visitas:'Control de visitas',estadisticas:'Estadísticas',descargar:'Exportar datos',importar:'Importar datos',secciones:'Secciones electorales',mapa:'Mapa de beneficiarios',historial:'Historial de cambios',accesos:'Bitácora de accesos',general:'Configuración general',admin:'Panel de administrador'};
   const _hdrSub=document.getElementById('hdr-sub-txt');
   if(_hdrSub)_hdrSub.textContent=_tabNames[tab]||tab;
   // Update presence with current tab
@@ -6247,7 +6295,7 @@ function go(tab){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   const nb=document.getElementById('nb-'+tab);if(nb)nb.classList.add('on');
   document.getElementById('main').scrollTop=0;
-  const noFab=['estadisticas','descargar','historial','secciones','importar','accesos','general','admin'].includes(tab);
+  const noFab=['estadisticas','descargar','historial','secciones','mapa','importar','accesos','general','admin'].includes(tab);
   document.getElementById('fab').style.display=noFab?'none':'flex';
   render(tab);
 }
@@ -6260,6 +6308,7 @@ function render(t){
   if(t==='descargar')     renderDL();
   if(t==='importar')      renderImportarPg();
   if(t==='secciones')     renderSecPg();
+  if(t==='mapa')          {initMapPg();setTimeout(()=>{if(_leafMap)_leafMap.invalidateSize();},350);}
   if(t==='historial')     renderHist();
   if(t==='accesos')       renderAccessLog();
   if(t==='general')       renderGeneral();
@@ -6738,6 +6787,10 @@ function openShAdd(){
     const el=document.getElementById('e-'+f);if(el)el.value='';
   });
   const _edDisp=document.getElementById('edad-display');if(_edDisp)_edDisp.style.display='none';
+  const _latEl=document.getElementById('e-lat');if(_latEl)_latEl.value='';
+  const _lngEl=document.getElementById('e-lng');if(_lngEl)_lngEl.value='';
+  const _gpsD=document.getElementById('gps-display');if(_gpsD){_gpsD.style.display='none';_gpsD.textContent='';}
+  const _gpsTxt=document.getElementById('gps-btn-txt');if(_gpsTxt)_gpsTxt.textContent='Capturar ubicación actual';
   document.getElementById('e-tipo').selectedIndex=0;
   TG.vis='Pendiente';TG.uso='Mexico';TG.est='Activo';
   setTGVal('vis','Pendiente');setTGVal('uso','Mexico');setTGVal('est','Activo');
@@ -6795,6 +6848,11 @@ function openEditSh(id){
   const eSecEl=document.getElementById('e-seccion');if(eSecEl)eSecEl.value=r.seccion||'';
   const eAreaEl=document.getElementById('e-area');if(eAreaEl)eAreaEl.value=r.area||'';
   const eRutaEl=document.getElementById('e-ruta');if(eRutaEl)eRutaEl.value=r.ruta||'';
+  const eLatEl=document.getElementById('e-lat');if(eLatEl)eLatEl.value=r.lat||'';
+  const eLngEl=document.getElementById('e-lng');if(eLngEl)eLngEl.value=r.lng||'';
+  const gpsDisp=document.getElementById('gps-display');
+  if(gpsDisp){if(r.lat&&r.lng){gpsDisp.style.display='block';gpsDisp.textContent='📍 '+r.lat.toFixed(6)+', '+r.lng.toFixed(6);}else{gpsDisp.style.display='none';gpsDisp.textContent='';}}
+  const gpsTxt=document.getElementById('gps-btn-txt');if(gpsTxt)gpsTxt.textContent=r.lat?'Actualizar ubicación':'Capturar ubicación actual';
   document.getElementById('e-reason').value='';
   TG.vis=r.visita||'Pendiente';TG.uso=r.uso||'Mexico';TG.est=r.estatus||'Activo';
   setTGVal('vis',TG.vis);setTGVal('uso',TG.uso);setTGVal('est',TG.est);
@@ -6858,6 +6916,8 @@ function doSaveRec(){
     txtColor: currentTxtColor||'',
     curp:   (document.getElementById('e-curp')?.value||'').trim().toUpperCase(),
     fnac:   document.getElementById('e-fnac')?.value||'',
+    lat:    parseFloat(document.getElementById('e-lat')?.value||'')||null,
+    lng:    parseFloat(document.getElementById('e-lng')?.value||'')||null,
   };
   if(editId){
     const r=R.find(x=>x.id===editId);
@@ -7054,6 +7114,12 @@ function openDet(id){
       </div>
       <div class="df" onclick="inlineEdit(${r.id},'ruta','${r.ruta||''}','text','Ruta')">
         <div class="dl">🗺️ Ruta</div><div class="dv" id="dv-ruta-${r.id}">${r.ruta||'—'}</div>
+      </div>
+      <div class="df${r.lat&&r.lng?'':' cact-disabled'}" onclick="${r.lat&&r.lng?`viewOnMap(${r.id})`:'captureGPSForRecord('+r.id+')'}" style="cursor:pointer">
+        <div class="dl">🛰️ GPS</div>
+        <div class="dv" style="font-family:'Fira Code',monospace;font-size:11px;color:${r.lat&&r.lng?'var(--grn)':'var(--mut)'}">
+          ${r.lat&&r.lng?r.lat.toFixed(5)+', '+r.lng.toFixed(5):'Sin coordenadas · Tap para capturar'}
+        </div>
       </div>
       <div class="df full" onclick="inlineEditSelect(${r.id},'tipo','${r.tipo}',['PAM','PCD','JCF','MT','BBJ'])">
         <div class="dl">📋 Programa</div><div class="dv" id="dv-tipo-${r.id}"><span style="color:${p.clr}">${p.ico} ${p.lbl}</span></div>
@@ -7836,6 +7902,8 @@ function procCSV(text,fname,out){
     fnac:   ['fechanacimiento','nacimiento','fnac','fechanac','dob'],
     estatus:['estatus','status','estado','situacion'],
     obs:    ['observacion','obs','notas','nota','comentarios','descripcion'],
+    lat:    ['lat','latitud','latitude'],
+    lng:    ['lng','lon','longitud','longitude'],
   };
   const ci={};
   Object.keys(FM).forEach(f=>{
@@ -7864,7 +7932,7 @@ function procCSV(text,fname,out){
     if(!nombre)return;
     const tipoR=gc(cells,'tipo').toUpperCase();
     const tipo=['PAM','PCD','JCF','MT','BBJ'].includes(tipoR)?tipoR:'PAM';
-    const inc={folio,nombre,tipo,tel:gc(cells,'tel'),dom:gc(cells,'dom'),num:gc(cells,'num'),col:gc(cells,'col'),seccion:gc(cells,'seccion'),area:gc(cells,'area'),ruta:gc(cells,'ruta'),curp:gc(cells,'curp').toUpperCase(),fnac:gc(cells,'fnac'),estatus:gc(cells,'estatus')||'Activo',obs:gc(cells,'obs')};
+    const inc={folio,nombre,tipo,tel:gc(cells,'tel'),dom:gc(cells,'dom'),num:gc(cells,'num'),col:gc(cells,'col'),seccion:gc(cells,'seccion'),area:gc(cells,'area'),ruta:gc(cells,'ruta'),curp:gc(cells,'curp').toUpperCase(),fnac:gc(cells,'fnac'),estatus:gc(cells,'estatus')||'Activo',obs:gc(cells,'obs'),lat:parseFloat(gc(cells,'lat'))||null,lng:parseFloat(gc(cells,'lng'))||null};
     if(exF.has(folio)){
       const exist=exF.get(folio);
       const LABELS={nombre:'Nombre',tel:'Teléfono',dom:'Domicilio',num:'Número',col:'Colonia',seccion:'Sección',area:'Área',ruta:'Ruta',curp:'CURP',estatus:'Estatus',obs:'Obs.',tipo:'Programa'};
@@ -7877,7 +7945,7 @@ function procCSV(text,fname,out){
     newF.add(folio);toAdd.push(inc);
   });
   toAdd.forEach(rec=>{
-    R.push({id:nxtId()+added,folio:rec.folio,nombre:rec.nombre,tipo:rec.tipo,tel:rec.tel,dom:rec.dom,num:rec.num,col:rec.col,seccion:rec.seccion,area:rec.area,ruta:rec.ruta,curp:rec.curp,fnac:rec.fnac,visita:'Pendiente',uso:'Mexico',estatus:rec.estatus,obs:rec.obs,fecha:today(),ult:'',dup:false});
+    R.push({id:nxtId()+added,folio:rec.folio,nombre:rec.nombre,tipo:rec.tipo,tel:rec.tel,dom:rec.dom,num:rec.num,col:rec.col,seccion:rec.seccion,area:rec.area,ruta:rec.ruta,curp:rec.curp,fnac:rec.fnac,visita:'Pendiente',uso:'Mexico',estatus:rec.estatus,obs:rec.obs,fecha:today(),ult:'',dup:false,lat:rec.lat||null,lng:rec.lng||null});
     added++;
   });
   detectDups();svR();upHdr();
@@ -11920,6 +11988,178 @@ function applyBulkSection(sec){
   exitBatch();snack('📍 '+count+' registros asignados a sección '+sec,'📍');
   if(typeof fbIsConfigured==='function'&&fbIsConfigured())fbPushData();
 }
+
+/* ========== GPS CAPTURE ========== */
+function captureGPS(){
+  const btn=document.getElementById('gps-btn-txt');
+  const ico=document.getElementById('gps-btn-ico');
+  const disp=document.getElementById('gps-display');
+  if(!navigator.geolocation){snack('GPS no disponible en este dispositivo','❌');return;}
+  if(btn)btn.textContent='Obteniendo ubicación…';
+  if(ico)ico.textContent='⏳';
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const lat=pos.coords.latitude;
+      const lng=pos.coords.longitude;
+      const acc=Math.round(pos.coords.accuracy);
+      const latEl=document.getElementById('e-lat');
+      const lngEl=document.getElementById('e-lng');
+      if(latEl)latEl.value=lat;
+      if(lngEl)lngEl.value=lng;
+      if(disp){
+        disp.style.display='block';
+        disp.textContent='📍 '+lat.toFixed(6)+', '+lng.toFixed(6)+' (±'+acc+'m)';
+      }
+      if(btn)btn.textContent='✅ Ubicación capturada · Actualizar';
+      if(ico)ico.textContent='✅';
+      snack('GPS capturado ±'+acc+'m','📍');
+    },
+    err=>{
+      if(btn)btn.textContent='Capturar ubicación actual';
+      if(ico)ico.textContent='📍';
+      const msgs={1:'Permiso denegado — activa GPS en Configuración',2:'Señal GPS no disponible',3:'Tiempo agotado — intenta de nuevo'};
+      snack(msgs[err.code]||'Error GPS','❌');
+    },
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  );
+}
+
+/* GPS directo desde vista de detalle (sin abrir el form) */
+function captureGPSForRecord(id){
+  const r=R.find(x=>x.id===id);
+  if(!r)return;
+  if(!navigator.geolocation){snack('GPS no disponible','❌');return;}
+  snack('Obteniendo GPS…','⏳');
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      r.lat=pos.coords.latitude;
+      r.lng=pos.coords.longitude;
+      r.ult=today()+' (GPS)';
+      svR();
+      if(typeof fbIsConfigured==='function'&&fbIsConfigured())fbPushData();
+      snack('GPS guardado ±'+Math.round(pos.coords.accuracy)+'m','📍');
+      // re-render detail if open
+      if(typeof openDet==='function')openDet(id);
+    },
+    err=>{
+      const msgs={1:'Permiso denegado',2:'Sin señal',3:'Tiempo agotado'};
+      snack(msgs[err.code]||'Error GPS','❌');
+    },
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  );
+}
+
+/* ========== MAPA DE BENEFICIARIOS ========== */
+const PROG_COLORS={PAM:'#4d9eff',PCD:'#a855f7',JCF:'#f97316',MT:'#22c55e',BBJ:'#f43f5e'};
+let _leafMap=null;
+let _leafMarkers=[];
+let _mapFilter='all';
+
+function makeCircleIcon(color){
+  return L.divIcon({
+    className:'',
+    html:`<div style="width:13px;height:13px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,.85);box-shadow:0 1px 5px rgba(0,0,0,.5)"></div>`,
+    iconSize:[13,13],
+    iconAnchor:[6,6],
+    popupAnchor:[0,-8]
+  });
+}
+
+function initMapPg(){
+  // Count how many have GPS
+  const withGPS=R.filter(r=>r.lat&&r.lng);
+  const countEl=document.getElementById('map-count');
+  if(countEl)countEl.textContent='📍 '+withGPS.length+' con GPS de '+R.length;
+
+  // Init Leaflet map centered on Jerez, Zacatecas
+  const container=document.getElementById('map-container');
+  if(!container)return;
+
+  if(!_leafMap){
+    // Default center: Jerez de García Salinas, Zacatecas
+    _leafMap=L.map('map-container',{zoomControl:true,attributionControl:false}).setView([22.6478,-102.9963],13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19,
+      attribution:'© OpenStreetMap'
+    }).addTo(_leafMap);
+    L.control.attribution({prefix:false,position:'bottomright'}).addTo(_leafMap);
+  }
+
+  renderMapMarkers();
+}
+
+function renderMapMarkers(){
+  if(!_leafMap)return;
+  // Remove existing markers
+  _leafMarkers.forEach(m=>_leafMap.removeLayer(m));
+  _leafMarkers=[];
+
+  const withGPS=R.filter(r=>r.lat&&r.lng&&(_mapFilter==='all'||r.tipo===_mapFilter));
+  if(!withGPS.length){
+    snack('Sin beneficiarios con GPS'+('' !==_mapFilter&&_mapFilter!=='all'?' para '+_mapFilter:''),'📍');
+    return;
+  }
+
+  const bounds=[];
+  withGPS.forEach(r=>{
+    const color=PROG_COLORS[r.tipo]||'#888';
+    const marker=L.marker([r.lat,r.lng],{icon:makeCircleIcon(color)});
+    const addr=[r.dom,r.num?'#'+r.num:'',r.col].filter(Boolean).join(' ')||'Sin domicilio';
+    const p=pg(r.tipo);
+    marker.bindPopup(`
+      <div style="font-family:Inter,sans-serif;min-width:160px">
+        <div style="font-weight:800;font-size:13px;margin-bottom:3px">${r.nombre}</div>
+        <div style="font-size:11px;color:#666;margin-bottom:4px">${p.ico||'📋'} ${r.tipo} · Sec.${r.seccion||'—'}</div>
+        <div style="font-size:11px;margin-bottom:6px">🏠 ${addr}</div>
+        <button onclick="closeMapAndOpenDetail(${r.id})" style="background:#4d9eff;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;width:100%">Ver detalle →</button>
+      </div>
+    `,{maxWidth:220});
+    marker.addTo(_leafMap);
+    _leafMarkers.push(marker);
+    bounds.push([r.lat,r.lng]);
+  });
+
+  if(bounds.length){
+    if(bounds.length===1){
+      _leafMap.setView(bounds[0],16);
+    } else {
+      _leafMap.fitBounds(bounds,{padding:[30,30]});
+    }
+  }
+}
+
+function mapFilter(prog){
+  _mapFilter=prog;
+  // Update chips
+  document.querySelectorAll('.map-filter-chip').forEach(c=>{
+    const id=c.id.replace('mf-','');
+    c.classList.toggle('on',id===prog);
+  });
+  renderMapMarkers();
+}
+
+function viewOnMap(id){
+  const r=R.find(x=>x.id===id);
+  if(!r||!r.lat||!r.lng){snack('Sin coordenadas GPS','❌');return;}
+  go('mapa');
+  setTimeout(()=>{
+    if(_leafMap){
+      _leafMap.setView([r.lat,r.lng],17);
+      const m=_leafMarkers.find(mk=>{const ll=mk.getLatLng();return Math.abs(ll.lat-r.lat)<0.0001&&Math.abs(ll.lng-r.lng)<0.0001;});
+      if(m)m.openPopup();
+    }
+  },400);
+}
+
+function closeMapAndOpenDetail(id){
+  if(_leafMap)_leafMap.closePopup();
+  if(typeof openDet==='function'){openDet(id);}
+}
+
+// Force Leaflet to recalculate size when tab becomes visible
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&_leafMap)setTimeout(()=>_leafMap.invalidateSize(),200);
+});
 </script>
 
 </body>
